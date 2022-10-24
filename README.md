@@ -13,7 +13,7 @@ Struktura folderów
 - TinyGP/Data - zawiera pliki na których pracuje TinyGP oraz pliki pomocnicze ("pythony")
 - TinyGP/pythonData - zawiera pliki .dat wygenerowane przez pytona
 - TinyGP/Results/Generated - zawiera wyniki ewolucji każdego z problemów. Podfolder Generated jest pozostałością po ręcznym przeglądaniu logów
-- TinyGP/Results/Generated/\*/Simplified - zawiera uproszczenia każdego z problemów dokonanego przez pythona
+- TinyGP/Results/Generated/\*/Simplified - zawiera uproszczenia każdego z problemów w postaci przyjaznej dla excela
   - pliki z dopiskiem result zawierają uproszczone formuły
   - pliki z dopiskiem time zawierają czas upraszczania w sekundach
 - TinyGP/Results/Generated/\*/Logs\* zawiera wynik z konsoli, które zawierają m.in. informację o ilości generacji i czasie obliczeń
@@ -22,9 +22,9 @@ Na końcu należy ręcznie, przy pomocy excela przekopiować zawartość plików
 
 ### Podsumowanie zadania 1 i zadania dodatkowego
 Ze względu na automatyzację procesu ewolucji, TinyGP był uruchamiany w każdej z 3 konfiguracji (Basic, Basic+Sin+Cos, Basic+Exp) dla wszystkich zadanych problemów.
-Trening był przyspieszony poprzez ograniczenie ilości generacji do 40, dlatego wyniki nie są idealne, ale zwykle nakreślają nadany w pliku dat cel, z wyjątkiem gdzie funkcja wystrzeliła z wartościami i dawała same wartości inf, które trzeba było pominąć. Zwykle się składało tak, że funkcja miała albo same normalne wartości, albo same inf.
+Trening był przyspieszony poprzez ograniczenie ilości generacji do 40, dlatego wyniki nie są idealne, ale zwykle nakreślają nadany w pliku dat cel, z wyjątkiem gdzie funkcja wystrzeliła z wartościami i dawała same wartości inf, które trzeba było pominąć. Zwykle się składało tak, że funkcja miała albo same normalne wartości, albo same inf. Ze względu na konwencjonalność rozwiązania, zamiast wprowadzać równania do excela, ostatni pipeline robi ewaluację i generuje csv z samych wartości.
 
-Na ten etap: obejrzenie materiałów zapewnionych przez prowadzącego, następnie ulepszenie TinyGP bez zrozumienia\* i napisanie pipeline'ów zajęło **10h** zegarowych.
+Obejrzenie materiałów załączonych do zadania, następnie ulepszenie TinyGP bez zrozumienia\* i napisanie pipeline'ów zajęło **10h** zegarowych.
 
 \* bez zrozumienia - kod da ulepszyć po prostu dopisując case'y tam gdzie były wypisane operacje bezmyślnie i kod się uruchamia. Co więcej, wyniki są całkiem sensowne, mimo tego że ciekawe rzeczy działy się pod spodem. To co prezentują excele aktualnie na repozytorium to wynik działania właśnie tego kodu.<br/>
 Jakie tam były bugi? Funkcje jednoargumentowe były traktowane jako dwuargumentowe, w efekcie przy krzyżowaniu zabierały one ze sobą najbliższe prawe poddrzewo, jeżeli nie bezpośredniego rodzica, to kolejnego. To sprawia że przy wklejeniu takiego genu w środek innego drzewa, efekt jest bardzo zbliżony do przelosowania prawych poddrzew wszystkich rodziców nowo doklejonego węzła.<br/>
