@@ -76,10 +76,11 @@ public class tiny_gp {
             case SUB:
             case MUL:
             case DIV:
+                return (traverse(buffer, traverse(buffer, ++buffercount)));
             case SIN:
             case COS:
             case EXP:
-                return (traverse(buffer, traverse(buffer, ++buffercount)));
+                return (traverse(buffer, ++buffercount));
         }
         return (0); // should never get here
     }
@@ -142,6 +143,9 @@ public class tiny_gp {
         char prim = (char) rd.nextInt(2);
         int one_child;
 
+        if (pos < 0)
+            return(-1);
+
         if (pos >= max)
             return (-1);
 
@@ -159,14 +163,14 @@ public class tiny_gp {
                 case SUB:
                 case MUL:
                 case DIV:
+                    buffer[pos] = prim;
+                    one_child = grow(buffer, pos + 1, max, depth - 1);
+                    return (grow(buffer, one_child, max, depth - 1));
                 case SIN:
                 case COS:
                 case EXP:
                     buffer[pos] = prim;
-                    one_child = grow(buffer, pos + 1, max, depth - 1);
-                    if (one_child < 0)
-                        return (-1);
-                    return (grow(buffer, one_child, max, depth - 1));
+                    return (grow(buffer, pos+1, max, depth - 1));
             }
         }
         return (0); // should never get here
