@@ -383,12 +383,15 @@ public class tiny_gp {
                         case SUB:
                         case MUL:
                         case DIV:
+                            parentcopy[mutsite] =
+                                    (char) (rd.nextInt(DIV - FSET_START + 1)
+                                            + FSET_START);
                         case SIN:
                         case COS:
                         case EXP:
                             parentcopy[mutsite] =
-                                    (char) (rd.nextInt(FSET_END - FSET_START + 1)
-                                            + FSET_START);
+                                    (char) (rd.nextInt(FSET_END - DIV)
+                                            + DIV + 1);
                     }
             }
         }
