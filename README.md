@@ -13,7 +13,7 @@ Struktura folderów
 - TinyGP/Data - zawiera pliki na których pracuje TinyGP oraz pliki pomocnicze ("pythony")
 - TinyGP/pythonData - zawiera pliki .dat wygenerowane przez pytona
 - TinyGP/Results/Generated - zawiera wyniki ewolucji każdego z problemów. Podfolder Generated jest pozostałością po ręcznym przeglądaniu logów
-- TinyGP/Results/Generated/\*/Simplified - zawiera uproszczenia każdego z problemów dokonanego przez pythona
+- TinyGP/Results/Generated/\*/Simplified - zawiera uproszczenia każdego z problemów w postaci przyjaznej dla excela
   - pliki z dopiskiem result zawierają uproszczone formuły
   - pliki z dopiskiem time zawierają czas upraszczania w sekundach
 - TinyGP/Results/Generated/\*/Logs\* zawiera wynik z konsoli, które zawierają m.in. informację o ilości generacji i czasie obliczeń
@@ -22,7 +22,7 @@ Na końcu należy ręcznie, przy pomocy excela przekopiować zawartość plików
 
 ### Podsumowanie zadania 1 i zadania dodatkowego
 Ze względu na automatyzację procesu ewolucji, TinyGP był uruchamiany w każdej z 3 konfiguracji (Basic, Basic+Sin+Cos, Basic+Exp) dla wszystkich zadanych problemów.
-Trening był przyspieszony poprzez ograniczenie ilości generacji do 40, dlatego wyniki nie są idealne, ale zwykle nakreślają nadany w pliku dat cel, z wyjątkiem gdzie funkcja wystrzeliła z wartościami i dawała same wartości inf, które trzeba było pominąć. Zwykle się składało tak, że funkcja miała albo same normalne wartości, albo same inf.
+Trening był przyspieszony poprzez ograniczenie ilości generacji do 40, dlatego wyniki nie są idealne, ale zwykle nakreślają nadany w pliku dat cel, z wyjątkiem gdzie funkcja wystrzeliła z wartościami i dawała same wartości inf, które trzeba było pominąć. Zwykle się składało tak, że funkcja miała albo same normalne wartości, albo same inf. Ze względu na konwencjonalność rozwiązania, zamiast wprowadzać równania do excela, ostatni pipeline robi ewaluację i generuje csv z samych wartości.
 
 Na ten etap: obejrzenie materiałów zapewnionych przez prowadzącego, następnie ulepszenie TinyGP bez zrozumienia\* i napisanie pipeline'ów zajęło **10h** zegarowych.
 
