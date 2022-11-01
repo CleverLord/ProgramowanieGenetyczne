@@ -2,13 +2,16 @@ grammar Tiny;
 
 program: (action)* | EOF ;
 
-action: (assignment | ifStatement | loop );
+action: (assignment | ifStatement | loop | read | write);
 
 // { }
 scope: '{' (action)* '}' ;
 
 // loop 10 { }
 loop: 'loop' INT scope ;
+
+read: 'read()'  ;
+write: 'write()'  ;
 
 // if (thing comp thing) { } ;
 ifStatement: 'if (' condition ')' scope ;
