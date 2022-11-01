@@ -1,44 +1,50 @@
 ﻿namespace SharpGP_Core.Tree;
 
-public class Expression : Node {
-	public ExpressionType type;
-	Variable variable
-	{
-		get => (Variable) children[0];
-		set => children = value.GetType() == typeof(Variable) ? new List<Node>(){value} : children;
-	}
-	Constant constant
-	{
-		get => (Constant) children[0];
-		set => children = value.GetType() == typeof(Constant) ? new List<Node>(){value} : children;
-	}
-	Expression expression
+public abstract class Expression : Node {
+	protected Expression expression
 	{
 		get => (Expression) children[0];
-		set => children[0] = value.GetType() == typeof(Expression) ? value : children[1];
+		set => children[0] = value.GetType() == typeof(Expression) ? value : children[0];
 	}
-	Operator opeartor
+	protected Operator opeartor
 	{
 		get => (Operator) children[1];
 		set => children[1] = value.GetType() == typeof(Operator) ? value : children[1];
 	}
-	Expression expression2
+	protected Expression expression2
 	{
 		get => (Expression) children[2];
 		set => children[2] = value.GetType() == typeof(Expression) ? value : children[2];
 	}
-
-	public double Evaluate()
-	{
-		if (type == ExpressionType.Constant) return constant.value;
-		if (type == ExpressionType.Variable) return variable.value;
-		if (type == ExpressionType.NestedExpression) return opeartor.Evaluate(expression.Evaluate(), expression2.Evaluate());
-		return 0; //should never happen
-	}
+	public abstract double Evaluate();
 }
 
-public enum ExpressionType {
-	Constant,
-	Variable,
-	NestedExpression,
+public class NestedExpression : Expression {
+	public NestedExpression(Expression expression, Operator opeartor, Expression expression2)
+	{
+		this.expression = expression;
+		this.opeartor = opeartor;
+		this.expression2 = expression2;
+	}
+	public override double Evaluate() => opeartor.Evaluate(expression.Evaluate(), expression2.Evaluate());
+}
+
+public class Variable : Expression {
+	public string name;
+	public double value = 0;
+	public Variable(string name) => this.name = name;
+	public override string ToString() => new String('\t', indend) + name;
+	public override double Evaluate() => value;
+}
+
+public class Constant : Expression {
+	public int value;
+	public Constant(int value) => this.value = value;
+	public override string ToString() => new String('\t', indend) + value;
+	public override double Evaluate() => value;
+}
+
+public class Read : Expression {
+	public override string ToString() => new String('\t', indend) + "read()";
+	public override double Evaluate() => ProgramInput.Pop();
 }

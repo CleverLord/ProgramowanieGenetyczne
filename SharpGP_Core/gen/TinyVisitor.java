@@ -70,6 +70,12 @@ public interface TinyVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpression(TinyParser.ExpressionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link TinyParser#nestedExp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNestedExp(TinyParser.NestedExpContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link TinyParser#operand}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

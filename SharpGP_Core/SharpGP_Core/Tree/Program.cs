@@ -17,26 +17,13 @@ public abstract class Action : Node {
 	public abstract void Invoke();
 }
 
+public static class ProgramInput {
+	private static List<int> input;
 
-public class Variable : Node {
-	public string name;
-	public double value = 0;
-
-	public override string ToString()
+	public static int Pop()
 	{
-		return new String('\t', indend) + name;
-	}
-	public Variable(string name)
-	{
-		this.name = name;
-	}
-}
-
-public class Constant : Node {
-	public int value;
-
-	public override string ToString()
-	{
-		return new String('\t', indend) + value;
+		var result = input[0];
+		input.RemoveAt(0);
+		return result;
 	}
 }

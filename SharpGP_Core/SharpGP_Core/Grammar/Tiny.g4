@@ -2,7 +2,7 @@ grammar Tiny;
 
 program: (action)* | EOF ;
 
-action: (assignment | ifStatement | loop | read | write);
+action: (assignment | ifStatement | loop | write );
 
 // { }
 scope: '{' (action)* '}' ;
@@ -11,7 +11,7 @@ scope: '{' (action)* '}' ;
 loop: 'loop' INT scope ;
 
 read: 'read()'  ;
-write: 'write()'  ;
+write: 'write' '(' expression ')' ';';
 
 // if (thing comp thing) { } ;
 ifStatement: 'if (' condition ')' scope ;
@@ -20,9 +20,11 @@ ifStatement: 'if (' condition ')' scope ;
 condition: expression compareOp expression ; //this must be evalueable to boolean
 
 // x_1 = (2+(3*4))
-assignment: VAR '=' expression ;
+assignment: VAR '=' expression ';' ;
 
-expression: INT | VAR | '(' expression operand expression ')' ; // this must evaluate to value
+expression: INT | VAR | nestedExp | read ; // this must evaluate to value
+
+nestedExp: '(' expression operand expression ')' ; // this also must evaluate to value
 
 operand: '*' | '/' | '+' | '-';
 compareOp: '==' | '!=' | '>' | '<' | '>=' | '<=';
