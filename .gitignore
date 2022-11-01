@@ -1,4 +1,5 @@
 TinyGP/out
 .idea/
 *-checkpoint.ipynb
-Debug/
+bin/
+obj/

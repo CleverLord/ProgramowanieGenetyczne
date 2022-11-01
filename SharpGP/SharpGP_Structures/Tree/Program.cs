@@ -3,7 +3,7 @@
 public class Program : Node {
 	public List<Action> Actions => children.Cast<Action>().ToList();
 	public List<Variable> variables => nodes.Where(x => x is Variable).Cast<Variable>().ToList();
-	protected List<Node> nodes => getNestedNodes();
+	protected List<Node> nodes => GetNestedNodes();
 	public void ClearVariables() {
 		nodes.Select(n => n as Variable).Where(v => v != null).ToList().ForEach(v => v.value = 0);
 	}

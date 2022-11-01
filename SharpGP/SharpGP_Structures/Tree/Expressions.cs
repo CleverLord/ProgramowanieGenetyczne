@@ -30,7 +30,7 @@ public abstract class Expression : Node {
 			case 2:
 				return new Read();
 		}
-		return null;//should never happen
+		return new Read();//should never happen
 	}
 }
 

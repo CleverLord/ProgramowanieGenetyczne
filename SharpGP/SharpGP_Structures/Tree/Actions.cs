@@ -5,7 +5,7 @@ public abstract class Action : Node {
 	
 	public static Action NewAction(Program ctx)
 	{
-		Action result=null;
+		Action? result=null;
 		switch (Generator.Generator.r.Next(0, 4)) {
 			case 0:
 				result = Assignment.NewAssignment(ctx);
@@ -20,7 +20,7 @@ public abstract class Action : Node {
 				result = Write.NewWrite(ctx);
 				break;
 		}
-		return result;
+		return result ?? Write.NewWrite(ctx); //write is just in case
 	}
 }
 
