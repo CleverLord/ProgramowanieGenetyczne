@@ -24,16 +24,16 @@ public abstract class Action : Node {
 	}
 }
 
-public class Loop : Action {
+public class Loop : Action, IGrowable {
 	Constant repeatTimes
 	{
 		get => (Constant) children[0];
-		set => children[0] = value.GetType() == typeof(Constant) ? value : children[0];
+		//set => children[0] = value.GetType() == typeof(Constant) ? value : children[0];
 	}
 	Scope scope
 	{
 		get => (Scope) children[1];
-		set => children[1] = value.GetType() == typeof(Scope) ? value : children[1];
+		//set => children[1] = value.GetType() == typeof(Scope) ? value : children[1];
 	}
 
 	public override string ToString()
@@ -41,7 +41,7 @@ public class Loop : Action {
 		UpdateIndent();
 		return new String('\t', indend) + "loop " + repeatTimes + scope;
 	}
-
+	
 	public override void Invoke()
 	{
 		for (int i = 0; i < repeatTimes.value; i++) scope.Invoke();
@@ -49,13 +49,17 @@ public class Loop : Action {
 
 	public Loop(Constant repeatTimes, Scope scope)
 	{
-		this.repeatTimes = repeatTimes;
-		this.scope = scope;
+		children = new List<Node> {repeatTimes, scope};
 	}
 
 	public static Action NewLoop(Program ctx)
 	{
 		return new Loop(Constant.NewConstant(ctx), new Scope());
+	}
+
+	public void Grow(Program ctx)
+	{
+		scope.Grow(ctx);
 	}
 }
 
@@ -63,12 +67,12 @@ public class IfStatement : Action {
 	Condition condition
 	{
 		get => (Condition) children[0];
-		set => children[0] = value.GetType() == typeof(Condition) ? value : children[0];
+		//set => children[0] = value.GetType() == typeof(Condition) ? value : children[0];
 	}
 	Scope scope
 	{
 		get => (Scope) children[1];
-		set => children[1] = value.GetType() == typeof(Scope) ? value : children[1];
+		//set => children[1] = value.GetType() == typeof(Scope) ? value : children[1];
 	}
 
 	public override string ToString()
@@ -84,8 +88,7 @@ public class IfStatement : Action {
 
 	public IfStatement(Condition condition, Scope scope)
 	{
-		this.condition = condition;
-		this.scope = scope;
+		children = new List<Node> {condition, scope};
 	}
 
 	public static IfStatement NewIfStatement(Program ctx)
@@ -95,16 +98,16 @@ public class IfStatement : Action {
 	}
 }
 
-public class Assignment : Action {
+public class Assignment : Action, IGrowable {
 	Variable variable
 	{
 		get => (Variable) children[0];
-		set => children[0] = value.GetType() == typeof(Variable) ? value : children[0];
+		//set => children[0] = value.GetType() == typeof(Variable) ? value : children[0];
 	}
 	Expression expression
 	{
 		get => (Expression) children[1];
-		set => children[1] = value.GetType() == typeof(Expression) ? value : children[1];
+		//set => children[1] = value.GetType() == typeof(Expression) ? value : children[1];
 	}
 
 	public override string ToString()
@@ -118,8 +121,7 @@ public class Assignment : Action {
 	}
 	public Assignment(Variable variable, Expression expression)
 	{
-		this.variable = variable;
-		this.expression = expression;
+		children = new List<Node> {variable, expression};
 	}
 	public static Assignment NewAssignment(Program ctx)
 	{
@@ -128,7 +130,7 @@ public class Assignment : Action {
 
 		return new Assignment(var, expr);
 	}
-	public override void Grow(Program ctx)
+	public void Grow(Program ctx)
 	{
 		expression.Grow(ctx);
 	}
@@ -138,17 +140,17 @@ public class Write : Action {
 	Expression expression
 	{
 		get => (Expression) children[0];
-		set => children[0] = value.GetType() == typeof(Expression) ? value : children[0];
+		//set => children[0] = value.GetType() == typeof(Expression) ? value : children[0];
 	}
 	public Write(Expression expr)
 	{
-		expression = expr;
+		children = new List<Node> {expr};
 	}
 
 	public override string ToString()
 	{
 		UpdateIndent();
-		return new String('\t', indend) + expression + " = " + expression;
+		return new String('\t', indend) + expression;
 	}
 	public override void Invoke()
 	{
@@ -161,7 +163,7 @@ public class Write : Action {
 	}
 }
 
-public class Scope : Node {
+public class Scope : Node, IGrowable {
 	public List<Action> actions => children.Select(c => c as Action).ToList();
 
 	public override string ToString()
@@ -176,13 +178,14 @@ public class Scope : Node {
 	{
 		actions.ForEach(a => a.Invoke());
 	}
-	public override void Grow(Program ctx)
+	public void Grow(Program ctx)
 	{
-		int target = Program.rand.Next(-1, children.Count);
+		List<IGrowable> growables = children.Where(c => c is IGrowable).Select(c => c as IGrowable).ToList();
+		int target = Program.rand.Next(-1, growables.Count);
 		if(target == -1) {
 			children.Add(Action.NewAction(ctx));
 		} else {
-			actions[target].Grow(ctx);
+			growables[target].Grow(ctx);
 		}
 	}
 }

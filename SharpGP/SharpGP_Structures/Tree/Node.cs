@@ -9,9 +9,9 @@ public abstract class Node {
 	{
 		var x = new List<Node>();
 		x.Add(this);
-		x.AddRange(children.SelectMany(n => n.GetNestedNodes()).ToList());
+		if(children != null)
+			x.AddRange(children.SelectMany(n => n.GetNestedNodes()).ToList());
 		return x;
 	}
-
-	public virtual void Grow(Program ctx){} //not every node can grow
+	
 }

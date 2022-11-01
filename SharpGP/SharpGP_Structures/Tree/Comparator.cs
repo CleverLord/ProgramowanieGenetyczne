@@ -4,17 +4,17 @@ public class Condition : Node {
 	Expression expression
 	{
 		get => (Expression) children[0];
-		set => children[0] = value.GetType() == typeof(Expression) ? value : children[0];
+		//set => children[0] = value.GetType() == typeof(Expression) ? value : children[0];
 	}
 	CompareOp compareOp
 	{
 		get => (CompareOp) children[1];
-		set => children[1] = value.GetType() == typeof(CompareOp) ? value : children[1];
+		//set => children[1] = value.GetType() == typeof(CompareOp) ? value : children[1];
 	}
 	Expression expression2
 	{
 		get => (Expression) children[2];
-		set => children[2] = value.GetType() == typeof(Expression) ? value : children[2];
+		//set => children[2] = value.GetType() == typeof(Expression) ? value : children[2];
 	}
 
 	public override string ToString()

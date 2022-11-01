@@ -1,21 +1,7 @@
 ﻿namespace SharpGP_Structures.Tree;
 
-public abstract class Expression : Node {
-	protected Expression expression
-	{
-		get => (Expression) children[0];
-		set => children[0] = value.GetType() == typeof(Expression) ? value : children[0];
-	}
-	protected Operator opeartor
-	{
-		get => (Operator) children[1];
-		set => children[1] = value.GetType() == typeof(Operator) ? value : children[1];
-	}
-	protected Expression expression2
-	{
-		get => (Expression) children[2];
-		set => children[2] = value.GetType() == typeof(Expression) ? value : children[2];
-	}
+public abstract class Expression : Node, IGrowable {
+	
 	public abstract double Evaluate();
 	public static Expression NewExpression(Program ctx)
 	{
@@ -32,19 +18,37 @@ public abstract class Expression : Node {
 		}
 		return new Read();//should never happen
 	}
+
+	public void Grow(Program ctx)
+	{
+		throw new NotImplementedException();
+	}
 }
 
-public class NestedExpression : Expression {
+public class NestedExpression : Expression, IGrowable {
+	protected Expression expression
+	{
+		get => (Expression) children[0];
+		//set => children[0] = value.GetType() == typeof(Expression) ? value : children[0];
+	}
+	protected Operator opeartor
+	{
+		get => (Operator) children[1];
+		//set => children[1] = value.GetType() == typeof(Operator) ? value : children[1];
+	}
+	protected Expression expression2
+	{
+		get => (Expression) children[2];
+		//set => children[2] = value.GetType() == typeof(Expression) ? value : children[2];
+	}
 	public NestedExpression(Expression expression, Operator opeartor, Expression expression2)
 	{
-		this.expression = expression;
-		this.opeartor = opeartor;
-		this.expression2 = expression2;
+		children = new List<Node>(){expression, opeartor, expression2};
 	}
 	public override double Evaluate() => opeartor.Evaluate(expression.Evaluate(), expression2.Evaluate());
 	public override string ToString() => $"({expression} {opeartor} {expression2})";
 
-	public override void Grow(Program ctx)
+	public new void Grow(Program ctx)
 	{
 		switch(Program.rand.Next(0, 2)) 
 		{
