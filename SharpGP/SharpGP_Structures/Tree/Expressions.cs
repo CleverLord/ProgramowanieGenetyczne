@@ -26,21 +26,10 @@ public abstract class Expression : Node, IGrowable {
 }
 
 public class NestedExpression : Expression, IGrowable {
-	protected Expression expression
-	{
-		get => (Expression) children[0];
-		//set => children[0] = value.GetType() == typeof(Expression) ? value : children[0];
-	}
-	protected Operator opeartor
-	{
-		get => (Operator) children[1];
-		//set => children[1] = value.GetType() == typeof(Operator) ? value : children[1];
-	}
-	protected Expression expression2
-	{
-		get => (Expression) children[2];
-		//set => children[2] = value.GetType() == typeof(Expression) ? value : children[2];
-	}
+	protected Expression expression => (Expression) children[0];
+	protected Operator opeartor => (Operator) children[1];
+	protected Expression expression2 => (Expression) children[2];
+	
 	public NestedExpression(Expression expression, Operator opeartor, Expression expression2)
 	{
 		children = new List<Node>(){expression, opeartor, expression2};

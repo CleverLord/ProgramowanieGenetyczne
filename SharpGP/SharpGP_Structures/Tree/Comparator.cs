@@ -1,21 +1,9 @@
 ﻿namespace SharpGP_Structures.Tree;
 
 public class Condition : Node {
-	Expression expression
-	{
-		get => (Expression) children[0];
-		//set => children[0] = value.GetType() == typeof(Expression) ? value : children[0];
-	}
-	CompareOp compareOp
-	{
-		get => (CompareOp) children[1];
-		//set => children[1] = value.GetType() == typeof(CompareOp) ? value : children[1];
-	}
-	Expression expression2
-	{
-		get => (Expression) children[2];
-		//set => children[2] = value.GetType() == typeof(Expression) ? value : children[2];
-	}
+	Expression expression => (Expression) children[0];
+	CompareOp compareOp => (CompareOp) children[1];
+	Expression expression2 => (Expression) children[2];
 
 	public override string ToString()
 	{
@@ -43,13 +31,8 @@ public class Condition : Node {
 		return false; // should never happen
 	}
 
-	public static Condition NewCondition(Program ctx)
-	{
-		Expression expression = Expression.NewExpression(ctx);
-		CompareOp compareOp = CompareOp.NewCompareOp(ctx);
-		Expression expression2 = Expression.NewExpression(ctx);
-		return new Condition() {children = new List<Node>() {expression, compareOp, expression2}};
-	}
+	public static Condition NewCondition(Program ctx) => new Condition()
+		{children = new List<Node>() {Expression.NewExpression(ctx), CompareOp.NewCompareOp(ctx), Expression.NewExpression(ctx)}};
 }
 
 public enum ComparatorEnum {
