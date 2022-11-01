@@ -1,9 +1,10 @@
-﻿namespace SharpGP_Core.Tree;
+﻿namespace SharpGP_Structures.Tree;
 
 public class Program : Node {
+	public static Random rand = new Random();
 	public List<Action> Actions => children.Cast<Action>().ToList();
 	public List<Variable> variables => nodes.Where(x => x is Variable).Cast<Variable>().ToList();
-	protected List<Node> nodes => GetNestedNodes();
+	public List<Node> nodes => GetNestedNodes();
 	public void ClearVariables() {
 		nodes.Select(n => n as Variable).Where(v => v != null).ToList().ForEach(v => v.value = 0);
 	}
@@ -17,7 +18,7 @@ public class Program : Node {
 
 	public void Grow()
 	{
-		int target = Generator.Generator.r.Next(-1, children.Count);
+		int target = Program.rand.Next(-1, children.Count);
 		if(target == -1) {
 			children.Add(Action.NewAction(this));
 		} else {

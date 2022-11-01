@@ -1,4 +1,4 @@
-﻿namespace SharpGP_Core.Tree;
+﻿namespace SharpGP_Structures.Tree;
 
 public abstract class Node {
 	protected List<Node> children = new List<Node>();

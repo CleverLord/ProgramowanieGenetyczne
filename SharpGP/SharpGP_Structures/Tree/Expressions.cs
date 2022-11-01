@@ -1,4 +1,4 @@
-﻿namespace SharpGP_Core.Tree;
+﻿namespace SharpGP_Structures.Tree;
 
 public abstract class Expression : Node {
 	protected Expression expression
@@ -19,7 +19,7 @@ public abstract class Expression : Node {
 	public abstract double Evaluate();
 	public static Expression NewExpression(Program ctx)
 	{
-		int expType = Generator.Generator.r.Next(0,3);
+		int expType = Program.rand.Next(0,3);
 		Variable? rand = Variable.Random(ctx); //null protection
 		switch (expType)
 		{
@@ -46,7 +46,7 @@ public class NestedExpression : Expression {
 
 	public override void Grow(Program ctx)
 	{
-		switch(Generator.Generator.r.Next(0, 2)) 
+		switch(Program.rand.Next(0, 2)) 
 		{
 			case 0:
 				expression.Grow(ctx);
@@ -67,13 +67,13 @@ public class Variable : Expression {
 
 	public static Variable RandomOrNew(Program ctx)
 	{
-		int varIdx = Generator.Generator.r.Next(-1,ctx.variables.Count);
+		int varIdx = Program.rand.Next(-1,ctx.variables.Count);
 		return varIdx == -1 ? new Variable(ctx.variables.Count) : ctx.variables[varIdx];
 	}
 	public static Variable? Random(Program ctx)
 	{
 		if(ctx.variables.Count == 0) return null;
-		int varIdx = Generator.Generator.r.Next(0,ctx.variables.Count);
+		int varIdx = Program.rand.Next(0,ctx.variables.Count);
 		return varIdx == -1 ? new Variable(ctx.variables.Count) : ctx.variables[varIdx];
 	}
 }
@@ -85,7 +85,7 @@ public class Constant : Expression {
 	public override double Evaluate() => value;
 	public static Constant NewConstant( Program ctx)
 	{
-		int value = Generator.Generator.r.Next(ctx.minConst, ctx.maxConst+1);
+		int value = Program.rand.Next(ctx.minConst, ctx.maxConst+1);
 		return new Constant(value);
 	}
 }

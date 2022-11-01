@@ -1,18 +1,17 @@
-﻿using SharpGP_Core.Tree;
-using Action = SharpGP_Core.Tree.Action;
+﻿using SharpGP_Structures.Tree;
+using Action = SharpGP_Structures.Tree.Action;
 
-namespace SharpGP_Core.Generator;
+namespace SharpGP_Structures.Generator;
 
-public class Generator {
-	public static Random r = new Random();
-	
-	private int minNodes = 12; // grow trees with at least 12 nodes
-	private int maxNodes = 15; // stop growing trees when they have 15 or more nodes
+public static class Generator {
+	public static Random rand = new Random();
+	private static int minNodes = 12; // grow trees with at least 12 nodes
 
-	public void Create()
+	public static Program GenerateProgram()
 	{
 		Program p = new Program();
-		p.maxConst = maxNodes;
-		p.minConst = minNodes;
+		while(p.nodes.Count<minNodes)
+			p.Grow();
+		return p;
 	}
 }

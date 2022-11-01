@@ -1,4 +1,4 @@
-﻿namespace SharpGP_Core.Tree;
+﻿namespace SharpGP_Structures.Tree;
 public class Condition : Node {
 	Expression expression
 	{
@@ -81,7 +81,7 @@ public class CompareOp : Node {
 	}
 	public CompareOp()
 	{
-		op = (ComparatorEnum) Generator.Generator.r.Next(0, 6);
+		op = (ComparatorEnum) Program.rand.Next(0, 6);
 	}
 	public static CompareOp NewCompareOp(Program ctx)
 	{

@@ -1,4 +1,4 @@
-﻿namespace SharpGP_Core.Tree;
+﻿namespace SharpGP_Structures.Tree;
 
 public abstract class Action : Node {
 	public abstract void Invoke();
@@ -6,7 +6,7 @@ public abstract class Action : Node {
 	public static Action NewAction(Program ctx)
 	{
 		Action? result=null;
-		switch (Generator.Generator.r.Next(0, 4)) {
+		switch (Program.rand.Next(0, 4)) {
 			case 0:
 				result = Assignment.NewAssignment(ctx);
 				break;
@@ -178,7 +178,7 @@ public class Scope : Node {
 	}
 	public override void Grow(Program ctx)
 	{
-		int target = Generator.Generator.r.Next(-1, children.Count);
+		int target = Program.rand.Next(-1, children.Count);
 		if(target == -1) {
 			children.Add(Action.NewAction(ctx));
 		} else {
