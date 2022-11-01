@@ -30,7 +30,7 @@ public class Loop : Action {
 	public override string ToString()
 	{
 		UpdateIndent();
-		return new String('\t', indend) + "loop " + repeatTimes +" {\n"+ scope + new String('\t', indend) + "}";
+		return new String('\t', indend) + "loop " + repeatTimes + " {\n" + scope + new String('\t', indend) + "}";
 	}
 	public override void Invoke(ProgramRunContext prc)
 	{
@@ -46,7 +46,7 @@ public class IfStatement : Action {
 	public override string ToString()
 	{
 		UpdateIndent();
-		return new String('\t', indend) + "if (" + condition + "){\n" + scope + "\n" + new String('\t', indend) + "}";
+		return new String('\t', indend) + "if (" + condition + "){\n" + scope + new String('\t', indend) + "}";
 	}
 	public override void Invoke(ProgramRunContext prc)
 	{
@@ -75,11 +75,11 @@ public class Write : Action, IGrowable {
 	public Write(Expression expr) => children = new List<Node> {expr};
 	public override string ToString()
 	{
-		return new String('\t', indend) + "write(" +expression+ ")";
+		return new String('\t', indend) + "write(" + expression + ");";
 	}
 	public override void Invoke(ProgramRunContext prc) => expression.Evaluate(prc);
 	public static Write NewWrite(Program ctx) => new Write(Expression.NewExpression(ctx));
-	public void Grow(Program ctx) => expression.Grown(ctx);
+	public void Grow(Program ctx) => expression = expression.Grown(ctx);
 }
 
 public class Scope : Node, IGrowable {
@@ -88,10 +88,11 @@ public class Scope : Node, IGrowable {
 	{
 		UpdateIndent();
 		String s = "";
-		foreach (var action in actions) s += action+"\n";
+		foreach (var action in actions) s += action + "\n";
 		return s;
 	}
 	public Scope() => children = new List<Node>();
+	public void Add(Action action) => children.Add(action);
 	public void Invoke(ProgramRunContext prc) => actions.ForEach(a => a.Invoke(prc));
 	public void Grow(Program ctx) => children.Add(Action.NewAction(ctx));
 }

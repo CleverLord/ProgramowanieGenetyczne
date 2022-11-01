@@ -3,17 +3,20 @@
 public class Program : Node, IGrowable {
 	public Random rand = new Random();
 	public List<Action> Actions => children.Cast<Action>().ToList();
-	public List<Variable> variables => nodes.Where(x => x is Variable).Cast<Variable>().ToList();
-
+	public List<String> variables => nodes.Where(x => x is Variable).Cast<Variable>().Select(x => x.ToString()).Distinct().ToList();
 	public List<Node> nodes => GetNestedNodes();
 	public List<IGrowable> growables => nodes.Where(x => x is IGrowable).Cast<IGrowable>().ToList();
 
-	public int minConst = -5;
+	public int minConst = 0;
 	public int maxConst = 5;
 
 	public Program()
 	{
 		children = new List<Node>();
+	}
+	public void AddAction(Action action)
+	{
+		children.Add(action);
 	}
 	public void Invoke(ProgramRunContext prc)
 	{

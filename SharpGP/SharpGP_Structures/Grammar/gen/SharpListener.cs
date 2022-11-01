@@ -140,4 +140,44 @@ public interface ISharpListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitNestedExp([NotNull] SharpParser.NestedExpContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="SharpParser.variable"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterVariable([NotNull] SharpParser.VariableContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="SharpParser.variable"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitVariable([NotNull] SharpParser.VariableContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="SharpParser.constant"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterConstant([NotNull] SharpParser.ConstantContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="SharpParser.constant"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitConstant([NotNull] SharpParser.ConstantContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="SharpParser.operand"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterOperand([NotNull] SharpParser.OperandContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="SharpParser.operand"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitOperand([NotNull] SharpParser.OperandContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="SharpParser.compareOp"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterCompareOp([NotNull] SharpParser.CompareOpContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="SharpParser.compareOp"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitCompareOp([NotNull] SharpParser.CompareOpContext context);
 }

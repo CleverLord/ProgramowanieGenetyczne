@@ -167,6 +167,54 @@ public partial class SharpBaseListener : ISharpListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitNestedExp([NotNull] SharpParser.NestedExpContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="SharpParser.variable"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterVariable([NotNull] SharpParser.VariableContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="SharpParser.variable"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitVariable([NotNull] SharpParser.VariableContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="SharpParser.constant"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterConstant([NotNull] SharpParser.ConstantContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="SharpParser.constant"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitConstant([NotNull] SharpParser.ConstantContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="SharpParser.operand"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterOperand([NotNull] SharpParser.OperandContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="SharpParser.operand"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitOperand([NotNull] SharpParser.OperandContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="SharpParser.compareOp"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterCompareOp([NotNull] SharpParser.CompareOpContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="SharpParser.compareOp"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitCompareOp([NotNull] SharpParser.CompareOpContext context) { }
 
 	/// <inheritdoc/>
 	/// <remarks>The default implementation does nothing.</remarks>

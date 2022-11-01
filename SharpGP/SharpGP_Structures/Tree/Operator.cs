@@ -17,5 +17,11 @@ public class Operator : Node {
 		}
 		return 0; //should never happen
 	}
-	public static Operator NewOperator(Program ctx) => new Operator() {op = operators[ctx.rand.Next(0, operators.Count)]};
+	public Operator(string op)
+	{
+		if (!operators.Contains(op))
+			throw new Exception("There was an attempt to create an Operator using string with value: " + op + "\n Only the following operators are allowed: +, -, *, /");
+		this.op = op;
+	}
+	public static Operator NewOperator(Program ctx) => new Operator(operators[ctx.rand.Next(0, operators.Count)]);
 }

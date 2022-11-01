@@ -24,8 +24,8 @@ public class Condition : Node, IGrowable {
 		}
 		return false; // should never happen
 	}
-	public static Condition NewCondition(Program ctx) =>
-		new Condition() {children = new List<Node>() {Expression.NewExpression(ctx), CompareOp.NewCompareOp(ctx), Expression.NewExpression(ctx)}};
+	public static Condition NewCondition(Program ctx) => new Condition(Expression.NewExpression(ctx), CompareOp.NewCompareOp(ctx), Expression.NewExpression(ctx));
+	public Condition(Expression expression, CompareOp compareOp, Expression expression2) => children = new List<Node>() {expression, compareOp, expression2};
 	public void Grow(Program ctx)
 	{
 		if (ctx.rand.Next(0, 2) == 0)

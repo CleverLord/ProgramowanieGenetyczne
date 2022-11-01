@@ -10,7 +10,7 @@ scope: '{' (action)* '}' ;
 // loop 10 { }
 loop: 'loop' constant scope ;
 
-read: 'read()'  ;
+read: 'read()';
 write: 'write' '(' expression ')' ';';
 
 // if (thing comp thing) { } ;

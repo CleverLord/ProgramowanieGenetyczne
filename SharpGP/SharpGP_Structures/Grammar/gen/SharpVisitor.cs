@@ -97,4 +97,28 @@ public interface ISharpVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitNestedExp([NotNull] SharpParser.NestedExpContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="SharpParser.variable"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitVariable([NotNull] SharpParser.VariableContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="SharpParser.constant"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitConstant([NotNull] SharpParser.ConstantContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="SharpParser.operand"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOperand([NotNull] SharpParser.OperandContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="SharpParser.compareOp"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitCompareOp([NotNull] SharpParser.CompareOpContext context);
 }
