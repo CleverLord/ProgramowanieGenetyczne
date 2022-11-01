@@ -9,9 +9,7 @@ public abstract class Node {
 	{
 		var x = new List<Node>();
 		x.Add(this);
-		if(children != null)
-			x.AddRange(children.SelectMany(n => n.GetNestedNodes()).ToList());
+		if (children != null) x.AddRange(children.SelectMany(n => n.GetNestedNodes()).ToList());
 		return x;
 	}
-	
 }

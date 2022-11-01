@@ -1,48 +1,21 @@
 ﻿namespace SharpGP_Structures.Tree;
 
-
-public enum OperatorEnum {
-	Plus,
-	Minus,
-	Multiply,
-	Divide
-}
-
 public class Operator : Node {
-	public OperatorEnum op;
-
-	public override string ToString()
-	{
-		switch (op)
-		{
-			case OperatorEnum.Plus:
-				return "+";
-			case OperatorEnum.Minus:
-				return "-";
-			case OperatorEnum.Multiply:
-				return "*";
-			case OperatorEnum.Divide:
-				return "/";
-			default:
-				return "";
-		}
-	}
-
+	public string op;
+	public static List<string> operators = new List<string>() {"+", "-", "*", "/"};
+	public override string ToString() => op;
 	public double Evaluate(double a, double b)
 	{
 		switch (op)
 		{
-			case OperatorEnum.Plus:
-				return a + b;
-			case OperatorEnum.Minus:
-				return a - b;
-			case OperatorEnum.Multiply:
-				return a * b;
-			case OperatorEnum.Divide:
-				if (b < 0.00001)
-					return a;
+			case "+": return a + b;
+			case "-": return a - b;
+			case "*": return a * b;
+			case "/":
+				if (b < 0.00001) return a;
 				return a / b;
 		}
 		return 0; //should never happen
 	}
+	public static Operator NewOperator(Program ctx) => new Operator() {op = operators[ctx.rand.Next(0, operators.Count)]};
 }

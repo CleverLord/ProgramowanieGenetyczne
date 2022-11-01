@@ -1,79 +1,60 @@
 ﻿namespace SharpGP_Structures.Tree;
 
-public class Condition : Node {
-	Expression expression => (Expression) children[0];
+public class Condition : Node, IGrowable {
+	private const double TOLERANCE = 0.00001;
+	protected Expression expression { get { return (Expression) children[0]; } set { children[0] = value; } }
 	CompareOp compareOp => (CompareOp) children[1];
-	Expression expression2 => (Expression) children[2];
+	protected Expression expression2 { get { return (Expression) children[2]; } set { children[2] = value; } }
 
 	public override string ToString()
 	{
 		UpdateIndent();
 		return expression + " " + compareOp + " " + expression2;
 	}
-
-	public bool Evaluate()
+	public bool Evaluate(ProgramRunContext prc)
 	{
 		switch (compareOp.op)
 		{
-			case ComparatorEnum.Equal:
-				return expression.Evaluate() == expression2.Evaluate();
-			case ComparatorEnum.NotEqual:
-				return expression.Evaluate() != expression2.Evaluate();
-			case ComparatorEnum.LessThan:
-				return expression.Evaluate() < expression2.Evaluate();
-			case ComparatorEnum.LessThanOrEqual:
-				return expression.Evaluate() <= expression2.Evaluate();
-			case ComparatorEnum.GreaterThan:
-				return expression.Evaluate() > expression2.Evaluate();
-			case ComparatorEnum.GreaterThanOrEqual:
-				return expression.Evaluate() >= expression2.Evaluate();
+			case "==": return Math.Abs(expression.Evaluate(prc) - expression2.Evaluate(prc)) < TOLERANCE;
+			case "!=": return Math.Abs(expression.Evaluate(prc) - expression2.Evaluate(prc)) > TOLERANCE;
+			case ">": return expression.Evaluate(prc) < expression2.Evaluate(prc);
+			case "<=": return expression.Evaluate(prc) <= expression2.Evaluate(prc);
+			case "<": return expression.Evaluate(prc) > expression2.Evaluate(prc);
+			case ">=": return expression.Evaluate(prc) >= expression2.Evaluate(prc);
 		}
 		return false; // should never happen
 	}
-
-	public static Condition NewCondition(Program ctx) => new Condition()
-		{children = new List<Node>() {Expression.NewExpression(ctx), CompareOp.NewCompareOp(ctx), Expression.NewExpression(ctx)}};
-}
-
-public enum ComparatorEnum {
-	Equal,
-	NotEqual,
-	LessThan,
-	LessThanOrEqual,
-	GreaterThan,
-	GreaterThanOrEqual
+	public static Condition NewCondition(Program ctx) =>
+		new Condition() {children = new List<Node>() {Expression.NewExpression(ctx), CompareOp.NewCompareOp(ctx), Expression.NewExpression(ctx)}};
+	public void Grow(Program ctx)
+	{
+		if (ctx.rand.Next(0, 2) == 0)
+			expression = expression.Grown(ctx);
+		else
+			expression2 = expression2.Grown(ctx);
+	}
 }
 
 public class CompareOp : Node {
-	public ComparatorEnum op;
-
-	public override string ToString()
+	public string op;
+	public static List<String> comparatorStrings = new List<String>()
 	{
-		switch (op)
-		{
-			case ComparatorEnum.Equal:
-				return "==";
-			case ComparatorEnum.NotEqual:
-				return "!=";
-			case ComparatorEnum.LessThan:
-				return "<";
-			case ComparatorEnum.LessThanOrEqual:
-				return "<=";
-			case ComparatorEnum.GreaterThan:
-				return ">";
-			case ComparatorEnum.GreaterThanOrEqual:
-				return ">=";
-		}
-		return "!!"; // should never happen
-	}
+		"==",
+		"!=",
+		"<",
+		"<=",
+		">",
+		">="
+	};
+	public override string ToString() => op;
 
-	public CompareOp()
+	//public CompareOp() => op = comparatorStrings[Program.rand.Next(0, comparatorStrings.Count)];
+	public CompareOp(string op)
 	{
-		op = (ComparatorEnum) Program.rand.Next(0, 6);
+		if (comparatorStrings.Contains(op))
+			this.op = op;
+		else
+			throw new Exception("Invalid comparator string");
 	}
-
-	public static CompareOp NewCompareOp(Program ctx)
-	{
-		return new CompareOp();
-	}
+	public static CompareOp NewCompareOp(Program ctx) => new CompareOp(comparatorStrings[ctx.rand.Next(0, comparatorStrings.Count)]);
 }

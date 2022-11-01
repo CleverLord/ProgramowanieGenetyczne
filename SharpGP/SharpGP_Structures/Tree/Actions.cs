@@ -1,11 +1,11 @@
 ﻿namespace SharpGP_Structures.Tree;
 
 public abstract class Action : Node {
-	public abstract void Invoke();
+	public abstract void Invoke(ProgramRunContext prc);
 	public static Action NewAction(Program ctx)
 	{
 		Action? result = null;
-		switch (Program.rand.Next(0, 4))
+		switch (ctx.rand.Next(0, 4))
 		{
 			case 0:
 				result = Assignment.NewAssignment(ctx);
@@ -24,21 +24,20 @@ public abstract class Action : Node {
 	}
 }
 
-public class Loop : Action, IGrowable {
+public class Loop : Action {
 	Constant repeatTimes => (Constant) children[0];
 	Scope scope => (Scope) children[1];
 	public override string ToString()
 	{
 		UpdateIndent();
-		return new String('\t', indend) + "loop " + repeatTimes + scope;
+		return new String('\t', indend) + "loop " + repeatTimes +" {\n"+ scope + new String('\t', indend) + "}";
 	}
-	public override void Invoke()
+	public override void Invoke(ProgramRunContext prc)
 	{
-		for (int i = 0; i < repeatTimes.value; i++) scope.Invoke();
+		for (int i = 0; i < repeatTimes.value; i++) scope.Invoke(prc);
 	}
 	public Loop(Constant repeatTimes, Scope scope) => children = new List<Node> {repeatTimes, scope};
 	public static Action NewLoop(Program ctx) => new Loop(Constant.NewConstant(ctx), new Scope());
-	public void Grow(Program ctx) => scope.Grow(ctx);
 }
 
 public class IfStatement : Action {
@@ -47,11 +46,11 @@ public class IfStatement : Action {
 	public override string ToString()
 	{
 		UpdateIndent();
-		return new String('\t', indend) + "if ( " + condition + ")" + scope;
+		return new String('\t', indend) + "if (" + condition + "){\n" + scope + "\n" + new String('\t', indend) + "}";
 	}
-	public override void Invoke()
+	public override void Invoke(ProgramRunContext prc)
 	{
-		if (condition.Evaluate()) scope.Invoke();
+		if (condition.Evaluate(prc)) scope.Invoke(prc);
 	}
 	public IfStatement(Condition condition, Scope scope) => children = new List<Node> {condition, scope};
 	public static IfStatement NewIfStatement(Program ctx) => new IfStatement(Condition.NewCondition(ctx), new Scope());
@@ -59,28 +58,28 @@ public class IfStatement : Action {
 
 public class Assignment : Action, IGrowable {
 	Variable variable => (Variable) children[0];
-	Expression expression => (Expression) children[1];
+	Expression expression { get => (Expression) children[1]; set => children[1] = value; }
 	public override string ToString()
 	{
 		UpdateIndent();
 		return new String('\t', indend) + variable + " = " + expression;
 	}
-	public override void Invoke() => variable.value = expression.Evaluate();
+	public override void Invoke(ProgramRunContext prc) => prc.variables[variable.name] = expression.Evaluate(prc);
 	public Assignment(Variable variable, Expression expression) => children = new List<Node> {variable, expression};
 	public static Assignment NewAssignment(Program ctx) => new Assignment(Variable.RandomOrNew(ctx), Expression.NewExpression(ctx));
-	public void Grow(Program ctx) => expression.Grow(ctx);
+	public void Grow(Program ctx) => expression = expression.Grown(ctx);
 }
 
-public class Write : Action {
-	Expression expression => (Expression) children[0];
+public class Write : Action, IGrowable {
+	Expression expression { get => (Expression) children[0]; set => children[0] = value; }
 	public Write(Expression expr) => children = new List<Node> {expr};
 	public override string ToString()
 	{
-		UpdateIndent();
-		return new String('\t', indend) + expression;
+		return new String('\t', indend) + "write(" +expression+ ")";
 	}
-	public override void Invoke() => expression.Evaluate();
+	public override void Invoke(ProgramRunContext prc) => expression.Evaluate(prc);
 	public static Write NewWrite(Program ctx) => new Write(Expression.NewExpression(ctx));
+	public void Grow(Program ctx) => expression.Grown(ctx);
 }
 
 public class Scope : Node, IGrowable {
@@ -88,17 +87,11 @@ public class Scope : Node, IGrowable {
 	public override string ToString()
 	{
 		UpdateIndent();
-		string s = new String('\t', indend) + "{";
-		foreach (var action in actions) s += action.ToString();
-		s += new String('\t', indend) + "}";
+		String s = "";
+		foreach (var action in actions) s += action+"\n";
 		return s;
 	}
-	public void Invoke() => actions.ForEach(a => a.Invoke());
-	public void Grow(Program ctx)
-	{
-		List<IGrowable> growables = children.Where(c => c is IGrowable).Select(c => c as IGrowable).ToList();
-		int target = Program.rand.Next(-1, growables.Count);
-		if (target == -1) { children.Add(Action.NewAction(ctx)); }
-		else { growables[target].Grow(ctx); }
-	}
+	public Scope() => children = new List<Node>();
+	public void Invoke(ProgramRunContext prc) => actions.ForEach(a => a.Invoke(prc));
+	public void Grow(Program ctx) => children.Add(Action.NewAction(ctx));
 }

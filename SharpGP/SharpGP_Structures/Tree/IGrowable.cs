@@ -1,4 +1,4 @@
-﻿namespace SharpGP_Structures.Tree; 
+﻿namespace SharpGP_Structures.Tree;
 
 public interface IGrowable {
 	public void Grow(Program ctx);

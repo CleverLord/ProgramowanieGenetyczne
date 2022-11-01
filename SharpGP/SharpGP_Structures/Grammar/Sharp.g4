@@ -8,7 +8,7 @@ action: (assignment | ifStatement | loop | write );
 scope: '{' (action)* '}' ;
 
 // loop 10 { }
-loop: 'loop' INT scope ;
+loop: 'loop' constant scope ;
 
 read: 'read()'  ;
 write: 'write' '(' expression ')' ';';
@@ -17,17 +17,20 @@ write: 'write' '(' expression ')' ';';
 ifStatement: 'if (' condition ')' scope ;
 
 // thing comp thing
-condition: expression COMPAREOP expression ; //this must be evalueable to boolean
+condition: expression compareOp expression ; //this must be evalueable to boolean
 
 // x_1 = (2+(3*4))
-assignment: VAR '=' expression ';' ;
+assignment: variable '=' expression ';' ;
 
-expression: INT | VAR | nestedExp | read ; // this must evaluate to value
+expression: constant | variable | nestedExp | read ; // this must evaluate to value
 
-nestedExp: '(' expression OPERAND expression ')' ; // this also must evaluate to value
+nestedExp: '(' expression operand expression ')' ; // this also must evaluate to value
 
-OPERAND: '*' | '/' | '+' | '-';
-COMPAREOP: '==' | '!=' | '>' | '<' | '>=' | '<=';
+variable : VAR;
+constant : INT;
+
+operand: '*' | '/' | '+' | '-';
+compareOp: '==' | '!=' | '>' | '<' | '>=' | '<=';
 
 INT: [0-9]+;
 WS: [ \t\r\n]+ -> skip;

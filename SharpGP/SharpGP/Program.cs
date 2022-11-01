@@ -3,3 +3,5 @@
 using SharpGP_Structures.Generator;
 
 SharpGP_Structures.Tree.Program p = Generator.GenerateProgram();
+Console.WriteLine(p);
+Console.WriteLine(" --- ");
