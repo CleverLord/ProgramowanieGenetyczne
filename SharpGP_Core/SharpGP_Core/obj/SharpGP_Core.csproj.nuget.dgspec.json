@@ -1,0 +1,68 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\cl3v3\\Documents\\GitHub\\ProgramowanieGenetyczne\\SharpGP_Core\\SharpGP_Core\\SharpGP_Core.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\cl3v3\\Documents\\GitHub\\ProgramowanieGenetyczne\\SharpGP_Core\\SharpGP_Core\\SharpGP_Core.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\cl3v3\\Documents\\GitHub\\ProgramowanieGenetyczne\\SharpGP_Core\\SharpGP_Core\\SharpGP_Core.csproj",
+        "projectName": "SharpGP_Core",
+        "projectPath": "C:\\Users\\cl3v3\\Documents\\GitHub\\ProgramowanieGenetyczne\\SharpGP_Core\\SharpGP_Core\\SharpGP_Core.csproj",
+        "packagesPath": "C:\\Users\\cl3v3\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\cl3v3\\Documents\\GitHub\\ProgramowanieGenetyczne\\SharpGP_Core\\SharpGP_Core\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\cl3v3\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Antlr4.Runtime.Standard": {
+              "target": "Package",
+              "version": "[4.10.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.302\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpGP_Core", "SharpGP_Core\SharpGP_Core.csproj", "{B9AE58B9-43E6-405A-9CC2-E3FA748FF8B9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B9AE58B9-43E6-405A-9CC2-E3FA748FF8B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9AE58B9-43E6-405A-9CC2-E3FA748FF8B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9AE58B9-43E6-405A-9CC2-E3FA748FF8B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9AE58B9-43E6-405A-9CC2-E3FA748FF8B9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

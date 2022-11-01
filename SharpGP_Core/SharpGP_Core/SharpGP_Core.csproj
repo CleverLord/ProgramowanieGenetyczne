@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Content Include="Grammar\Tiny.g4" />
+      <Content Include="Grammar\TrueEdWard.g4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Grammar\gen" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Antlr4.Runtime.Standard" Version="4.10.1" />
+    </ItemGroup>
+
+</Project>
