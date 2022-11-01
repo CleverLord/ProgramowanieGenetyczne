@@ -11,4 +11,6 @@ public abstract class Node {
 		x.AddRange(children.SelectMany(n => n.getNestedNodes()).ToList());
 		return x;
 	}
+
+	public virtual void Grow(Program ctx){} //not every node can grow
 }

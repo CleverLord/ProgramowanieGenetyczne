@@ -1,4 +1,28 @@
-﻿namespace SharpGP_Core.Tree; 
+﻿namespace SharpGP_Core.Tree;
+
+public abstract class Action : Node {
+	public abstract void Invoke();
+	
+	public static Action NewAction(Program ctx)
+	{
+		Action result=null;
+		switch (Generator.Generator.r.Next(0, 4)) {
+			case 0:
+				result = Assignment.NewAssignment(ctx);
+				break;
+			case 1:
+				result = IfStatement.NewIfStatement(ctx);
+				break;
+			case 2:
+				result = Loop.NewLoop(ctx);
+				break;
+			case 3:
+				result = Write.NewWrite(ctx);
+				break;
+		}
+		return result;
+	}
+}
 
 public class Loop : Action {
 	Constant repeatTimes
@@ -22,6 +46,17 @@ public class Loop : Action {
 	{
 		for (int i = 0; i < repeatTimes.value; i++) scope.Invoke();
 	}
+
+	public Loop(Constant repeatTimes, Scope scope)
+	{
+		this.repeatTimes = repeatTimes;
+		this.scope = scope;
+	}
+
+	public static Action NewLoop(Program ctx)
+	{
+		return new Loop(Constant.NewConstant(ctx), new Scope());
+	}
 }
 
 public class IfStatement : Action {
@@ -39,11 +74,24 @@ public class IfStatement : Action {
 	public override string ToString()
 	{
 		UpdateIndent();
-		return new String('\t', indend) + "if ( " + condition + scope;
+		return new String('\t', indend) + "if ( " + condition + ")" + scope;
 	}
+
 	public override void Invoke()
 	{
 		if (condition.Evaluate()) scope.Invoke();
+	}
+
+	public IfStatement(Condition condition, Scope scope)
+	{
+		this.condition = condition;
+		this.scope = scope;
+	}
+
+	public static IfStatement NewIfStatement(Program ctx)
+	{
+		Condition condition = Condition.NewCondition(ctx);
+		return new IfStatement(condition, new Scope());
 	}
 }
 
@@ -64,60 +112,58 @@ public class Assignment : Action {
 		UpdateIndent();
 		return new String('\t', indend) + variable + " = " + expression;
 	}
-
 	public override void Invoke()
 	{
 		variable.value = expression.Evaluate();
 	}
+	public Assignment(Variable variable, Expression expression)
+	{
+		this.variable = variable;
+		this.expression = expression;
+	}
+	public static Assignment NewAssignment(Program ctx)
+	{
+		Variable var = Variable.RandomOrNew(ctx);
+		Expression expr = Expression.NewExpression(ctx);
+
+		return new Assignment(var, expr);
+	}
+	public override void Grow(Program ctx)
+	{
+		expression.Grow(ctx);
+	}
 }
 
-
-public class Condition : Node {
+public class Write : Action {
 	Expression expression
 	{
 		get => (Expression) children[0];
-		set => children = value.GetType() == typeof(Expression) ?new List<Node>(){value} : children;
+		set => children[0] = value.GetType() == typeof(Expression) ? value : children[0];
 	}
-	Comparator comparator
+	public Write(Expression expr)
 	{
-		get => (Comparator) children[1];
-		set => children[1] = value.GetType() == typeof(Comparator) ? value : children[1];
-	}
-	Expression expression2
-	{
-		get => (Expression) children[2];
-		set => children[2] = value.GetType() == typeof(Expression) ? value : children[2];
+		expression = expr;
 	}
 
 	public override string ToString()
 	{
 		UpdateIndent();
-		return expression + " " + comparator + " " + expression2;
+		return new String('\t', indend) + expression + " = " + expression;
 	}
-
-	public bool Evaluate()
+	public override void Invoke()
 	{
-		switch (comparator.op)
-		{
-			case ComparatorEnum.Equal:
-				return expression.Evaluate() == expression2.Evaluate();
-			case ComparatorEnum.NotEqual:
-				return expression.Evaluate() != expression2.Evaluate();
-			case ComparatorEnum.LessThan:
-				return expression.Evaluate() < expression2.Evaluate();
-			case ComparatorEnum.LessThanOrEqual:
-				return expression.Evaluate() <= expression2.Evaluate();
-			case ComparatorEnum.GreaterThan:
-				return expression.Evaluate() > expression2.Evaluate();
-			case ComparatorEnum.GreaterThanOrEqual:
-				return expression.Evaluate() >= expression2.Evaluate();
-		}
-		return false; // should never happen
+		expression.Evaluate();
+	}
+	public static Write NewWrite(Program ctx)
+	{
+		Expression expr = Expression.NewExpression(ctx);
+		return new Write(expr);
 	}
 }
 
 public class Scope : Node {
 	public List<Action> actions => children.Select(c => c as Action).ToList();
+
 	public override string ToString()
 	{
 		UpdateIndent();
@@ -129,5 +175,14 @@ public class Scope : Node {
 	public void Invoke()
 	{
 		actions.ForEach(a => a.Invoke());
+	}
+	public override void Grow(Program ctx)
+	{
+		int target = Generator.Generator.r.Next(-1, children.Count);
+		if(target == -1) {
+			children.Add(Action.NewAction(ctx));
+		} else {
+			actions[target].Grow(ctx);
+		}
 	}
 }
