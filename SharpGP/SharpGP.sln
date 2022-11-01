@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpGP_Structures", "SharpGP_Structures\SharpGP_Structures.csproj", "{29D10F35-3E71-445C-BCEC-518A0358BC66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpGP", "SharpGP\SharpGP.csproj", "{EB8147C0-2EB7-438A-862A-7CE7D77FE25B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpGP", "SharpGP\SharpGP.csproj", "{2A83326E-7B9E-4EF3-A865-A4540B77BEA4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,9 +14,9 @@ Global
 		{29D10F35-3E71-445C-BCEC-518A0358BC66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29D10F35-3E71-445C-BCEC-518A0358BC66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29D10F35-3E71-445C-BCEC-518A0358BC66}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EB8147C0-2EB7-438A-862A-7CE7D77FE25B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EB8147C0-2EB7-438A-862A-7CE7D77FE25B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EB8147C0-2EB7-438A-862A-7CE7D77FE25B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EB8147C0-2EB7-438A-862A-7CE7D77FE25B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A83326E-7B9E-4EF3-A865-A4540B77BEA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A83326E-7B9E-4EF3-A865-A4540B77BEA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A83326E-7B9E-4EF3-A865-A4540B77BEA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A83326E-7B9E-4EF3-A865-A4540B77BEA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

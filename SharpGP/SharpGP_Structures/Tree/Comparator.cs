@@ -1,9 +1,10 @@
 ﻿namespace SharpGP_Structures.Tree;
+
 public class Condition : Node {
 	Expression expression
 	{
 		get => (Expression) children[0];
-		set => children = value.GetType() == typeof(Expression) ? new List<Node>() {value} : children;
+		set => children[0] = value.GetType() == typeof(Expression) ? value : children[0];
 	}
 	CompareOp compareOp
 	{
@@ -21,6 +22,7 @@ public class Condition : Node {
 		UpdateIndent();
 		return expression + " " + compareOp + " " + expression2;
 	}
+
 	public bool Evaluate()
 	{
 		switch (compareOp.op)
@@ -40,14 +42,16 @@ public class Condition : Node {
 		}
 		return false; // should never happen
 	}
+
 	public static Condition NewCondition(Program ctx)
 	{
 		Expression expression = Expression.NewExpression(ctx);
 		CompareOp compareOp = CompareOp.NewCompareOp(ctx);
 		Expression expression2 = Expression.NewExpression(ctx);
-		return new Condition() {expression = expression, compareOp = compareOp, expression2 = expression2};
+		return new Condition() {children = new List<Node>() {expression, compareOp, expression2}};
 	}
 }
+
 public enum ComparatorEnum {
 	Equal,
 	NotEqual,
@@ -79,13 +83,14 @@ public class CompareOp : Node {
 		}
 		return "!!"; // should never happen
 	}
+
 	public CompareOp()
 	{
 		op = (ComparatorEnum) Program.rand.Next(0, 6);
 	}
+
 	public static CompareOp NewCompareOp(Program ctx)
 	{
 		return new CompareOp();
 	}
 }
-

@@ -1,7 +1,7 @@
 ﻿namespace SharpGP_Structures.Tree;
 
 public abstract class Node {
-	protected List<Node> children = new List<Node>();
+	protected List<Node> children;
 	protected int indend = 0;
 	protected void UpdateIndent() => children.ForEach(n => n.indend = indend + 1);
 

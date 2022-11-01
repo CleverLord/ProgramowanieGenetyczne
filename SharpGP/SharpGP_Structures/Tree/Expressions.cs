@@ -64,7 +64,6 @@ public class Variable : Expression {
 	public Variable(int idx) => this.name = $"x_{idx}";
 	public override string ToString() => name;
 	public override double Evaluate() => value;
-
 	public static Variable RandomOrNew(Program ctx)
 	{
 		int varIdx = Program.rand.Next(-1,ctx.variables.Count);
