@@ -14,4 +14,11 @@ public static class Generator {
 			p.Grow();
 		return p;
 	}
+	public static Program LoadProgram(string filename)
+	{
+		Program p = new Program();
+		
+		return p;
+	}
+	
 }
