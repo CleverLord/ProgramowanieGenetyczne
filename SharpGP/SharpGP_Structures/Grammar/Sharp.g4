@@ -17,20 +17,18 @@ write: 'write' '(' expression ')' ';';
 ifStatement: 'if (' condition ')' scope ;
 
 // thing comp thing
-condition: expression compareOp expression ; //this must be evalueable to boolean
+condition: expression COMPAREOP expression ; //this must be evalueable to boolean
 
 // x_1 = (2+(3*4))
 assignment: VAR '=' expression ';' ;
 
 expression: INT | VAR | nestedExp | read ; // this must evaluate to value
 
-nestedExp: '(' expression operand expression ')' ; // this also must evaluate to value
+nestedExp: '(' expression OPERAND expression ')' ; // this also must evaluate to value
 
-operand: '*' | '/' | '+' | '-';
-compareOp: '==' | '!=' | '>' | '<' | '>=' | '<=';
-boolOp: 'and' | 'or';
+OPERAND: '*' | '/' | '+' | '-';
+COMPAREOP: '==' | '!=' | '>' | '<' | '>=' | '<=';
 
 INT: [0-9]+;
-
 WS: [ \t\r\n]+ -> skip;
 VAR: 'x_'[0-9][0-9]*;   
