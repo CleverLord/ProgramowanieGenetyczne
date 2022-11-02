@@ -27,10 +27,9 @@ public class NestedExpression : Expression, IGrowable {
 	protected Operator opeartor => (Operator) children[1];
 	protected Expression expression2 { get { return (Expression) children[2]; } set { children[2] = value; } }
 
-	public NestedExpression(Expression expression, Operator opeartor, Expression expression2)
-	{
-		children = new List<Node>() {expression, opeartor, expression2};
-	}
+	public NestedExpression(Expression expression, Operator opeartor, Expression expression2) => children = new List<Node>() {expression, opeartor, expression2};
+	//this is unsafe but it makes antlr look nicer
+	public NestedExpression(List<Node> children) => this.children = children;
 	public override double Evaluate(ProgramRunContext prc) => opeartor.Evaluate(expression.Evaluate(prc), expression2.Evaluate(prc));
 	public override string ToString() => $"({expression} {opeartor} {expression2})";
 

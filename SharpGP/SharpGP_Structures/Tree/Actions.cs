@@ -92,6 +92,7 @@ public class Scope : Node, IGrowable {
 		return s;
 	}
 	public Scope() => children = new List<Node>();
+	public Scope(List<Node> children) => this.children = children;
 	public void Add(Action action) => children.Add(action);
 	public void Invoke(ProgramRunContext prc) => actions.ForEach(a => a.Invoke(prc));
 	public void Grow(Program ctx) => children.Add(Action.NewAction(ctx));

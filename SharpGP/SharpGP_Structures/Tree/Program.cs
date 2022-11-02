@@ -11,18 +11,10 @@ public class Program : Node, IGrowable {
 	public int minConst = 0;
 	public int maxConst = 5;
 
-	public Program()
-	{
-		children = new List<Node>();
-	}
-	public void AddAction(Action action)
-	{
-		children.Add(action);
-	}
-	public void Invoke(ProgramRunContext prc)
-	{
-		Actions.ForEach(a => a.Invoke(prc));
-	}
+	public Program() => children = new List<Node>();
+	public Program(List<Node> children) => this.children = children;
+	public void AddAction(Action action) => children.Add(action);
+	public void Invoke(ProgramRunContext prc) => Actions.ForEach(a => a.Invoke(prc));
 	public override string ToString()
 	{
 		String s = "";
@@ -35,10 +27,7 @@ public class Program : Node, IGrowable {
 		var x = growables;
 		x[rand.Next(0, x.Count)].Grow(this);
 	}
-	public void Grow(Program ctx)
-	{
-		children.Add(Action.NewAction(this));
-	}
+	public void Grow(Program ctx) => children.Add(Action.NewAction(this));
 }
 
 public class ProgramRunContext {
