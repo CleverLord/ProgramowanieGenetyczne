@@ -59,11 +59,7 @@ public class IfStatement : Action {
 public class Assignment : Action, IGrowable {
 	Variable variable => (Variable) children[0];
 	Expression expression { get => (Expression) children[1]; set => children[1] = value; }
-	public override string ToString()
-	{
-		UpdateIndent();
-		return new String(PRogram.TAB, indend) + variable + " = " + expression + ';';
-	}
+	public override string ToString()=>new String(PRogram.TAB, indend) + variable + " = " + expression + ';';
 	public override void Invoke(ProgramRunContext prc) => prc.variables[variable.name] = expression.Evaluate(prc);
 	public Assignment(Variable variable, Expression expression) => children = new List<Node> {variable, expression};
 	public static Assignment NewAssignment(PRogram ctx) => new Assignment(Variable.RandomOrNew(ctx), Expression.NewExpression(ctx));
@@ -73,10 +69,7 @@ public class Assignment : Action, IGrowable {
 public class Write : Action, IGrowable {
 	Expression expression { get => (Expression) children[0]; set => children[0] = value; }
 	public Write(Expression expr) => children = new List<Node> {expr};
-	public override string ToString()
-	{
-		return new String(PRogram.TAB, indend) + "write(" + expression + ");";
-	}
+	public override string ToString()=> new String(PRogram.TAB, indend) + "write(" + expression + ");";
 	public override void Invoke(ProgramRunContext prc) => prc.Push(expression.Evaluate(prc));
 	public static Write NewWrite(PRogram ctx) => new Write(Expression.NewExpression(ctx));
 	public void Grow(PRogram ctx) => expression = expression.Grown(ctx);

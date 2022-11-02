@@ -5,7 +5,7 @@ namespace SharpGP_Structures.Generator;
 
 public static class SharpGP {
 	public static Random rand = new Random();
-	private static int minNodeCount = 22; // grow trees with at least 12 nodes
+	private static int minNodeCount = 12; // grow trees with at least 12 nodes
 
 	public static PRogram GenerateProgram(int seed=-1)
 	{
@@ -39,10 +39,12 @@ public static class SharpGP {
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		return new SharpParser(tokens);
 	}
-	public static PRogram? CrossPrograms(PRogram p1, PRogram p2)
+	public static (PRogram,PRogram)? CrossPrograms(PRogram p1, PRogram p2)
 	{
 		PRogram p1c = (PRogram) p1.Clone();
 		PRogram p2c = (PRogram) p2.Clone();
+		//p1c.UpdateParents();
+		//p2c.UpdateParents();
 		List<Node> p1n = p1c.Nodes; // get the nodes of the first program
 		List<Node> p2n = p2c.Nodes; // get the nodes of the second program
 		
@@ -60,6 +62,7 @@ public static class SharpGP {
 			Node p2Node = matchingNodes[p2Index];
 			
 			Node.CrossNodes(p1Node,p2Node);
+			return (p1c,p2c);
 		}
 		return null;
 	}

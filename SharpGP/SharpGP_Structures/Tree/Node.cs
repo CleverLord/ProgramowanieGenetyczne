@@ -10,15 +10,15 @@ public abstract class Node {
 	{
 		var x = new List<Node>();
 		x.Add(this);
-		if (children != null) x.AddRange(children.SelectMany(n => n.GetNestedNodes()).ToList());
+		x.AddRange(children?.SelectMany(n => n.GetNestedNodes()).ToList() ?? new List<Node>());
 		return x;
 	}
 	public Node Clone()
 	{
 		Node newnode = (Node)MemberwiseClone(); // shallow copy of indent and Inheritance stuff (like value of the Constant, name of the Variable, etc.)
 			// new node has only copied references to children (and the parent btw), so we need to clone them too
-		newnode.children = children.Select(n => n.Clone()).ToList();
-		UpdateParents(); // fix parent references
+		newnode.children = children?.Select(n=>n.Clone()).ToList();
+		newnode.UpdateParents(); // fix parent references
 		return newnode; 
 	}
 	public static void CrossNodes(Node n1, Node n2)

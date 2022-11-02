@@ -18,6 +18,7 @@ public class PRogram : Node, IGrowable {
 	public void Invoke(ProgramRunContext prc) => Actions.ForEach(a => a.Invoke(prc));
 	public override string ToString()
 	{
+		UpdateIndent();
 		String s = "";
 		foreach (var child in children) 
 			s += child + "\n";

@@ -6,11 +6,7 @@ public class Condition : Node, IGrowable {
 	CompareOp compareOp => (CompareOp) children[1];
 	protected Expression expression2 { get { return (Expression) children[2]; } set { children[2] = value; } }
 
-	public override string ToString()
-	{
-		UpdateIndent();
-		return expression + " " + compareOp + " " + expression2;
-	}
+	public override string ToString() => expression + " " + compareOp + " " + expression2;
 	public bool Evaluate(ProgramRunContext prc)
 	{
 		switch (compareOp.op)
