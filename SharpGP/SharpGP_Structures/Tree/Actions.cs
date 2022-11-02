@@ -2,7 +2,7 @@
 
 public abstract class Action : Node {
 	public abstract void Invoke(ProgramRunContext prc);
-	public static Action NewAction(Program ctx)
+	public static Action NewAction(PRogram ctx)
 	{
 		Action? result = null;
 		switch (ctx.rand.Next(0, 4))
@@ -30,14 +30,14 @@ public class Loop : Action {
 	public override string ToString()
 	{
 		UpdateIndent();
-		return new String(Program.TAB, indend) + "loop " + repeatTimes + " {\n" + scope + new String(Program.TAB, indend) + "}";
+		return new String(PRogram.TAB, indend) + "loop " + repeatTimes + " {\n" + scope + new String(PRogram.TAB, indend) + "}";
 	}
 	public override void Invoke(ProgramRunContext prc)
 	{
 		for (int i = 0; i < repeatTimes.value; i++) scope.Invoke(prc);
 	}
 	public Loop(Constant repeatTimes, Scope scope) => children = new List<Node> {repeatTimes, scope};
-	public static Action NewLoop(Program ctx) => new Loop(Constant.NewConstant(ctx), new Scope());
+	public static Action NewLoop(PRogram ctx) => new Loop(Constant.NewConstant(ctx), new Scope());
 }
 
 public class IfStatement : Action {
@@ -46,14 +46,14 @@ public class IfStatement : Action {
 	public override string ToString()
 	{
 		UpdateIndent();
-		return new String(Program.TAB, indend) + "if (" + condition + "){\n" + scope + new String(Program.TAB, indend) + "}";
+		return new String(PRogram.TAB, indend) + "if (" + condition + "){\n" + scope + new String(PRogram.TAB, indend) + "}";
 	}
 	public override void Invoke(ProgramRunContext prc)
 	{
 		if (condition.Evaluate(prc)) scope.Invoke(prc);
 	}
 	public IfStatement(Condition condition, Scope scope) => children = new List<Node> {condition, scope};
-	public static IfStatement NewIfStatement(Program ctx) => new IfStatement(Condition.NewCondition(ctx), new Scope());
+	public static IfStatement NewIfStatement(PRogram ctx) => new IfStatement(Condition.NewCondition(ctx), new Scope());
 }
 
 public class Assignment : Action, IGrowable {
@@ -62,12 +62,12 @@ public class Assignment : Action, IGrowable {
 	public override string ToString()
 	{
 		UpdateIndent();
-		return new String(Program.TAB, indend) + variable + " = " + expression + ';';
+		return new String(PRogram.TAB, indend) + variable + " = " + expression + ';';
 	}
 	public override void Invoke(ProgramRunContext prc) => prc.variables[variable.name] = expression.Evaluate(prc);
 	public Assignment(Variable variable, Expression expression) => children = new List<Node> {variable, expression};
-	public static Assignment NewAssignment(Program ctx) => new Assignment(Variable.RandomOrNew(ctx), Expression.NewExpression(ctx));
-	public void Grow(Program ctx) => expression = expression.Grown(ctx);
+	public static Assignment NewAssignment(PRogram ctx) => new Assignment(Variable.RandomOrNew(ctx), Expression.NewExpression(ctx));
+	public void Grow(PRogram ctx) => expression = expression.Grown(ctx);
 }
 
 public class Write : Action, IGrowable {
@@ -75,11 +75,11 @@ public class Write : Action, IGrowable {
 	public Write(Expression expr) => children = new List<Node> {expr};
 	public override string ToString()
 	{
-		return new String(Program.TAB, indend) + "write(" + expression + ");";
+		return new String(PRogram.TAB, indend) + "write(" + expression + ");";
 	}
-	public override void Invoke(ProgramRunContext prc) => expression.Evaluate(prc);
-	public static Write NewWrite(Program ctx) => new Write(Expression.NewExpression(ctx));
-	public void Grow(Program ctx) => expression = expression.Grown(ctx);
+	public override void Invoke(ProgramRunContext prc) => prc.Push(expression.Evaluate(prc));
+	public static Write NewWrite(PRogram ctx) => new Write(Expression.NewExpression(ctx));
+	public void Grow(PRogram ctx) => expression = expression.Grown(ctx);
 }
 
 public class Scope : Node, IGrowable {
@@ -95,5 +95,5 @@ public class Scope : Node, IGrowable {
 	public Scope(List<Node> children) => this.children = children;
 	public void Add(Action action) => children.Add(action);
 	public void Invoke(ProgramRunContext prc) => actions.ForEach(a => a.Invoke(prc));
-	public void Grow(Program ctx) => children.Add(Action.NewAction(ctx));
+	public void Grow(PRogram ctx) => children.Add(Action.NewAction(ctx));
 }

@@ -5,7 +5,7 @@ using static SharpParser;
 namespace SharpGP_Structures.Generator;
 
 public class AntlrToProgram : SharpBaseVisitor<Node> {
-	public override Node VisitProgram(ProgramContext ctx) => new Program(ctx.children.Select(Visit).ToList());
+	public override Node VisitProgram(ProgramContext ctx) => new PRogram(ctx.children.Select(Visit).ToList());
 	public override Node VisitAction(ActionContext ctx) => Visit(ctx.GetChild(0));
 	public override Node VisitScope(ScopeContext ctx) => new Scope(ctx.children.Select(Visit).ToList());
 	public override Node VisitLoop(LoopContext ctx) => new Loop((Constant) Visit(ctx.constant()), (Scope) Visit(ctx.scope()));

@@ -1,8 +1,9 @@
 ﻿using SharpGP_Structures.Generator;
+using SharpGP_Structures.Tree;
 
 int seed = new Random().Next();
 
-SharpGP_Structures.Tree.Program p = Generator.GenerateProgram(seed);
+PRogram p = SharpGP.GenerateProgram(seed);
 //p = Generator.LoadProgramFromFile("testProgram.txt")
 
 Console.WriteLine(p);

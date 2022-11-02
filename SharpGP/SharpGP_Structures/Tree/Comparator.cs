@@ -24,11 +24,11 @@ public class Condition : Node, IGrowable {
 		}
 		return false; // should never happen
 	}
-	public static Condition NewCondition(Program ctx) => new Condition(Expression.NewExpression(ctx), CompareOp.NewCompareOp(ctx), Expression.NewExpression(ctx));
+	public static Condition NewCondition(PRogram ctx) => new Condition(Expression.NewExpression(ctx), CompareOp.NewCompareOp(ctx), Expression.NewExpression(ctx));
 	public Condition(Expression expression, CompareOp compareOp, Expression expression2) => children = new List<Node>() {expression, compareOp, expression2};
 	//this is unsafe, but makes AntlrToProgram look nicer
 	public Condition(Node expression, Node compareOp, Node expression2) => children = new List<Node>() {expression, compareOp, expression2};
-	public void Grow(Program ctx)
+	public void Grow(PRogram ctx)
 	{
 		if (ctx.rand.Next(0, 2) == 0)
 			expression = expression.Grown(ctx);
@@ -58,5 +58,5 @@ public class CompareOp : Node {
 		else
 			throw new Exception("Invalid comparator string");
 	}
-	public static CompareOp NewCompareOp(Program ctx) => new CompareOp(comparatorStrings[ctx.rand.Next(0, comparatorStrings.Count)]);
+	public static CompareOp NewCompareOp(PRogram ctx) => new CompareOp(comparatorStrings[ctx.rand.Next(0, comparatorStrings.Count)]);
 }
