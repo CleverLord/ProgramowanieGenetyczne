@@ -29,7 +29,8 @@ public class AntlrToProgram : SharpBaseVisitor<Node> {
 	public override Node VisitExpression(SharpParser.ExpressionContext context) => Visit(context.GetChild(0)); 
 	public override Node VisitNestedExp(SharpParser.NestedExpContext context) =>
 		new NestedExpression((Expression) Visit(context.GetChild(1)), (Operator) Visit(context.operand()), (Expression) Visit(context.GetChild(3)));
-	public override Node VisitVariable(SharpParser.VariableContext context) => new Variable(int.Parse(context.GetChild(0).GetText()));
+	//following will only work for variables that have two characters and then a number
+	public override Node VisitVariable(SharpParser.VariableContext context) => new Variable(int.Parse(context.GetText().Substring(2)));
 	public override Node VisitConstant(SharpParser.ConstantContext context) => new Constant(int.Parse(context.GetChild(0).GetText()));
 	public override Node VisitOperand(SharpParser.OperandContext context) => new Operator(context.GetChild(0).GetText());
 	public override Node VisitCompareOp(SharpParser.CompareOpContext context) => new CompareOp(context.GetChild(0).GetText());

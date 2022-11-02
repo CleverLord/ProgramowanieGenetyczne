@@ -1,6 +1,7 @@
 ﻿namespace SharpGP_Structures.Tree;
 
 public class Program : Node, IGrowable {
+	public static char TAB = ' ';
 	public Random rand = new Random();
 	public List<Action> Actions => children.Cast<Action>().ToList();
 	public List<String> variables => nodes.Where(x => x is Variable).Cast<Variable>().Select(x => x.ToString()).Distinct().ToList();

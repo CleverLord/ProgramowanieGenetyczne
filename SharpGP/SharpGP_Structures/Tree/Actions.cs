@@ -30,7 +30,7 @@ public class Loop : Action {
 	public override string ToString()
 	{
 		UpdateIndent();
-		return new String('\t', indend) + "loop " + repeatTimes + " {\n" + scope + new String('\t', indend) + "}";
+		return new String(Program.TAB, indend) + "loop " + repeatTimes + " {\n" + scope + new String(Program.TAB, indend) + "}";
 	}
 	public override void Invoke(ProgramRunContext prc)
 	{
@@ -46,7 +46,7 @@ public class IfStatement : Action {
 	public override string ToString()
 	{
 		UpdateIndent();
-		return new String('\t', indend) + "if (" + condition + "){\n" + scope + new String('\t', indend) + "}";
+		return new String(Program.TAB, indend) + "if (" + condition + "){\n" + scope + new String(Program.TAB, indend) + "}";
 	}
 	public override void Invoke(ProgramRunContext prc)
 	{
@@ -62,7 +62,7 @@ public class Assignment : Action, IGrowable {
 	public override string ToString()
 	{
 		UpdateIndent();
-		return new String('\t', indend) + variable + " = " + expression;
+		return new String(Program.TAB, indend) + variable + " = " + expression + ';';
 	}
 	public override void Invoke(ProgramRunContext prc) => prc.variables[variable.name] = expression.Evaluate(prc);
 	public Assignment(Variable variable, Expression expression) => children = new List<Node> {variable, expression};
@@ -75,7 +75,7 @@ public class Write : Action, IGrowable {
 	public Write(Expression expr) => children = new List<Node> {expr};
 	public override string ToString()
 	{
-		return new String('\t', indend) + "write(" + expression + ");";
+		return new String(Program.TAB, indend) + "write(" + expression + ");";
 	}
 	public override void Invoke(ProgramRunContext prc) => expression.Evaluate(prc);
 	public static Write NewWrite(Program ctx) => new Write(Expression.NewExpression(ctx));

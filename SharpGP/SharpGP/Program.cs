@@ -1,15 +1,9 @@
-﻿// See https://aka.ms/new-console-template for more information
-using SharpGP_Structures.Generator;
+﻿using SharpGP_Structures.Generator;
 
-//good seeds:
-//2101181429 1921049680 94118497 1364541322 1913066927
+int seed = new Random().Next();
 
-//bad seeds:
-//1033321198 908716397 539831539
+SharpGP_Structures.Tree.Program p = Generator.GenerateProgram(seed);
+//p = Generator.LoadProgramFromFile("testProgram.txt")
 
-SharpGP_Structures.Tree.Program p = Generator.GenerateProgram();
-Console.WriteLine("");
-int seed =new Random().Next();
-p.rand=new Random(seed);
-Console.WriteLine("Seed: "+ seed);
 Console.WriteLine(p);
+Console.WriteLine("Seed: "+ seed);

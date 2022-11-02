@@ -11,4 +11,8 @@
       <ProjectReference Include="..\SharpGP_Structures\SharpGP_Structures.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="bin\Debug\net6.0\testProgram.txt" />
+    </ItemGroup>
+
 </Project>
