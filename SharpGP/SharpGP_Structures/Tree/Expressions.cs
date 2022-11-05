@@ -46,7 +46,11 @@ public class Variable : Expression, IMutable {
 	public string name;
 	public Variable(int idx) => this.name = $"x_{idx}";
 	public override string ToString() => name;
-	public override double Evaluate(ProgramRunContext prc) => prc.variables[name];
+	public override double Evaluate(ProgramRunContext prc)
+	{
+		prc.variables.TryGetValue(name,out double value);
+		return value;
+	}
 	public static Variable RandomOrNew(PRogram ctx)
 	{
 		int varCount = ctx.Variables.Count;

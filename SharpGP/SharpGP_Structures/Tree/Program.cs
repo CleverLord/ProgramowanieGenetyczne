@@ -59,4 +59,15 @@ public class ProgramRunContext {
 	{
 		output.Add((int) value);
 	}
+	public override string ToString()
+	{
+		String result = "";
+		result+="Input: ";
+		foreach (var i in input) result += i + ", ";
+		result += "\nOutput: ";
+		foreach (var i in output) result += i + ", ";
+		result += "\nVariables: ";
+		foreach (var i in variables) result += i.Key + " = " + i.Value + ", ";
+		return result;
+	}
 }

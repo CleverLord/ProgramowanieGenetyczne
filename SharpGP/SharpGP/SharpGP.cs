@@ -5,7 +5,7 @@ namespace SharpGP_Structures.Generator;
 
 public static class SharpGP {
 	public static Random rand = new Random();
-	private static int minNodeCount = 12; // grow trees with at least 12 nodes
+	private static int minNodeCount = 1200; // grow trees with at least 12 nodes
 
 	public static PRogram GenerateProgram(int seed=-1)
 	{
