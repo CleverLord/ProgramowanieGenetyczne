@@ -42,7 +42,7 @@ public class NestedExpression : Expression, IGrowable {
 	}
 }
 
-public class Variable : Expression {
+public class Variable : Expression, IMutable {
 	public string name;
 	public Variable(int idx) => this.name = $"x_{idx}";
 	public override string ToString() => name;
@@ -59,18 +59,28 @@ public class Variable : Expression {
 		int varIdx = ctx.rand.Next(0, ctx.Variables.Count);
 		return new Variable(varIdx);
 	}
-	//public void SetValue(ProgramRunContext prc, double d) => prc.variables[name] = d;
+	public void Mutate(PRogram ctx)
+	{
+		var x=ctx.Variables;
+		x.Add(name);
+		name=ctx.Variables[ctx.rand.Next(0, ctx.Variables.Count)];
+	}
 }
 
-public class Constant : Expression {
+public class Constant : Expression, IMutable {
 	public int value;
 	public Constant(int value) => this.value = value;
 	public override string ToString() => value.ToString();
+
 	public override double Evaluate(ProgramRunContext prc) => value;
 	public static Constant NewConstant(PRogram ctx)
 	{
 		int value = ctx.rand.Next(ctx.minConst, ctx.maxConst + 1);
 		return new Constant(value);
+	}
+	public void Mutate(PRogram ctx)
+	{
+		value = ctx.rand.Next(ctx.minConst, ctx.maxConst + 1);
 	}
 }
 

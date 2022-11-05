@@ -61,13 +61,9 @@ public static class SharpGP {
 			int p2Index = rand.Next(0, matchingNodes.Count);
 			Node p2Node = matchingNodes[p2Index];
 			
-			Node.CrossNodes(p1Node,p2Node);
+			Node.CrossNodes(p1Node,p2Node); //this is in node, since children are protected
 			return (p1c,p2c);
 		}
 		return null;
-	}
-	public static void MutateProgram()
-	{
-		
 	}
 }

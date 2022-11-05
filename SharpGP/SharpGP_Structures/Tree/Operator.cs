@@ -1,6 +1,6 @@
 ﻿namespace SharpGP_Structures.Tree;
 
-public class Operator : Node {
+public class Operator : Node, IMutable {
 	public string op;
 	public static List<string> operators = new List<string>() {"+", "-", "*", "/"};
 	public override string ToString() => op;
@@ -24,4 +24,5 @@ public class Operator : Node {
 		this.op = op;
 	}
 	public static Operator NewOperator(PRogram ctx) => new Operator(operators[ctx.rand.Next(0, operators.Count)]);
+	public void Mutate(PRogram ctx) => op = operators[ctx.rand.Next(0, operators.Count)];
 }

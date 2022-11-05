@@ -75,7 +75,7 @@ public class Write : Action, IGrowable {
 	public void Grow(PRogram ctx) => expression = expression.Grown(ctx);
 }
 
-public class Scope : Node, IGrowable {
+public class Scope : Node, IGrowable, IMutable {
 	public List<Action> actions => children.Select(c => c as Action).ToList();
 	public override string ToString()
 	{
@@ -89,4 +89,10 @@ public class Scope : Node, IGrowable {
 	public void Add(Action action) => children.Add(action);
 	public void Invoke(ProgramRunContext prc) => actions.ForEach(a => a.Invoke(prc));
 	public void Grow(PRogram ctx) => children.Add(Action.NewAction(ctx));
+	public void Mutate(PRogram ctx) //mutate program node itself
+	{
+		Node n = children[ctx.rand.Next(0, children.Count)];
+		children.Remove(n);
+		children.Insert(ctx.rand.Next(0, children.Count), n);
+	}
 }

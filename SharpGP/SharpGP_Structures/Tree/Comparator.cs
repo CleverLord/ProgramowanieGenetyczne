@@ -33,7 +33,7 @@ public class Condition : Node, IGrowable {
 	}
 }
 
-public class CompareOp : Node {
+public class CompareOp : Node, IMutable {
 	public string op;
 	public static List<String> comparatorStrings = new List<String>()
 	{
@@ -55,4 +55,5 @@ public class CompareOp : Node {
 			throw new Exception("Invalid comparator string");
 	}
 	public static CompareOp NewCompareOp(PRogram ctx) => new CompareOp(comparatorStrings[ctx.rand.Next(0, comparatorStrings.Count)]);
+	public void Mutate(PRogram ctx) => op = comparatorStrings[ctx.rand.Next(0, comparatorStrings.Count)];
 }
