@@ -1,11 +1,12 @@
-﻿using SharpGP_Structures.Tree;
-using Action = SharpGP_Structures.Tree.Action;
-using Antlr4.Runtime;
-namespace SharpGP_Structures.Generator;
+﻿using Antlr4.Runtime;
+using SharpGP_Structures.Generator;
+using SharpGP_Structures.Tree;
+
+namespace SharpGP;
 
 public static class SharpGP {
-	public static Random rand = new Random();
-	private static int minNodeCount = 1200; // grow trees with at least 12 nodes
+	private static Random rand = new Random();
+	private static int minNodeCount = 12; // grow trees with at least 12 nodes
 
 	public static PRogram GenerateProgram(int seed=-1)
 	{
@@ -15,6 +16,7 @@ public static class SharpGP {
 			p.Grow();
 		return p;
 	}
+
 	public static PRogram LoadProgramFromFile(string filename)
 	{
 		ICharStream input = CharStreams.fromPath(filename);

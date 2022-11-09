@@ -1,10 +1,10 @@
 ﻿using SharpGP_Structures.Generator;
 using SharpGP_Structures.Tree;
 
-PRogram p = SharpGP.GenerateProgram();
-PRogram p2 = SharpGP.GenerateProgram();
+PRogram p = SharpGP.SharpGP.GenerateProgram();
+PRogram p2 = SharpGP.SharpGP.GenerateProgram();
 //p = Generator.LoadProgramFromFile("testProgram.txt")
-var x = SharpGP.CrossPrograms(p, p2);
+var x = SharpGP.SharpGP.CrossPrograms(p, p2);
 
 Console.WriteLine("Parent1:\n " + p.ToString());
 Console.WriteLine("Parent2:\n " + p2.ToString());
