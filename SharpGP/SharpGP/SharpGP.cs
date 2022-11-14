@@ -7,16 +7,19 @@ namespace SharpGP;
 public static class SharpGP {
 	private static Random rand = new Random();
 	private static int minNodeCount = 12; // grow trees with at least 12 nodes
-
+	private static int maxDepth = 4; //max tree depth
 	public static PRogram GenerateProgram(int seed=-1)
 	{
 		PRogram p = new PRogram();
 		if (seed != -1) p = new PRogram(seed);
-		while(p.Nodes.Count<minNodeCount)
+		while (p.Nodes.Count < minNodeCount)
+		{
 			p.Grow();
+			if(p.GetDepth() > maxDepth) break;	
+			//Console.WriteLine(p.GetDepth());
+		}
 		return p;
 	}
-
 	public static PRogram LoadProgramFromFile(string filename)
 	{
 		ICharStream input = CharStreams.fromPath(filename);

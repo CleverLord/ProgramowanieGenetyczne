@@ -4,7 +4,9 @@ public class PRogram : Node, IGrowable, IMutable {
 	public static char TAB = ' ';
 	public Random rand = new Random();
 	public List<Action> Actions => children.Cast<Action>().ToList();
+
 	public List<String> Variables => Nodes.Where(x => x is Variable).Cast<Variable>().Select(x => x.ToString()).Distinct().ToList();
+
 	public List<Node> Nodes => GetNestedNodes();
 	public List<IGrowable> Growables => Nodes.Where(x => x is IGrowable).Cast<IGrowable>().ToList();
 	public List<IMutable> Mutables => Nodes.Where(x => x is IMutable).Cast<IMutable>().ToList();
@@ -16,6 +18,7 @@ public class PRogram : Node, IGrowable, IMutable {
 	public PRogram(List<Node> children) => this.children = children;
 	public void AddAction(Action action) => children.Add(action);
 	public void Invoke(ProgramRunContext prc) => Actions.ForEach(a => a.Invoke(prc));
+
 	public override string ToString()
 	{
 		UpdateIndent();
@@ -23,6 +26,7 @@ public class PRogram : Node, IGrowable, IMutable {
 		foreach (var child in children) s += child + "\n";
 		return s;
 	}
+
 	public void Grow() // grow whole program
 	{
 		var x = Growables;
@@ -30,6 +34,7 @@ public class PRogram : Node, IGrowable, IMutable {
 		UpdateParents();
 	}
 	public void Grow(PRogram ctx) => children.Add(Action.NewAction(this)); // grow program node itself
+	
 	public void Mutate() //mutate something in the program
 	{
 		var x = Mutables;
