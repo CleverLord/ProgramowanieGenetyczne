@@ -14,20 +14,11 @@ public abstract class Node {
 		return x;
 	}
 	
-	//check current depth of node
 	public int GetDepth()
 	{
-		if (children == null) return 0;
-		int max_v = 0;
-		int tmp = 1;
-		foreach (var v in children)
-		{
-			if(v == parent) continue;
-			tmp += v.GetDepth() + 1;
-			if(max_v < tmp) max_v = tmp;
-			tmp = 1;
-		}
-		return max_v;
+		if(children != null && children.Count > 0)
+			return children.Max(n => n.GetDepth()) + 1;
+		return 1;
 	}
 	
 	public Node Clone()

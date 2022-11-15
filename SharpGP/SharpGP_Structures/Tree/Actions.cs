@@ -91,8 +91,19 @@ public class Scope : Node, IGrowable, IMutable {
 	public void Grow(PRogram ctx) => children.Add(Action.NewAction(ctx));
 	public void Mutate(PRogram ctx) //mutate program node itself
 	{
-		Node n = children[ctx.rand.Next(0, children.Count)];
-		children.Remove(n);
-		children.Insert(ctx.rand.Next(0, children.Count), n);
+		Random random = new Random();
+		double expType = random.NextDouble();
+		if (expType < 0.5) {
+			if (actions.Count > 0) {
+				actions.RemoveAt(random.Next(0, actions.Count));
+			}
+		}
+		else  {
+			Node n = children[ctx.rand.Next(0, children.Count)];
+			children.Remove(n);
+			children.Insert(ctx.rand.Next(0, children.Count), n);
+		} 
+		
 	}
+	
 }
