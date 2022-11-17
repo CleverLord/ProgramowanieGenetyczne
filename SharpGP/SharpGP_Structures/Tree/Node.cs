@@ -13,6 +13,14 @@ public abstract class Node {
 		x.AddRange(children?.SelectMany(n => n.GetNestedNodes()).ToList() ?? new List<Node>());
 		return x;
 	}
+	
+	public int GetDepth()
+	{
+		if(children != null && children.Count > 0)
+			return children.Max(n => n.GetDepth()) + 1;
+		return 1;
+	}
+	
 	public Node Clone()
 	{
 		Node newnode = (Node)MemberwiseClone(); // shallow copy of indent and Inheritance stuff (like value of the Constant, name of the Variable, etc.)

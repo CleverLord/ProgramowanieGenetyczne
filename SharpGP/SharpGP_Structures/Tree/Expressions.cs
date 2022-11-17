@@ -2,15 +2,22 @@
 
 public abstract class Expression : Node {
 	public abstract double Evaluate(ProgramRunContext prc);
+	
+	static Random random = new Random();
+	static double probability = 0.10;
 	public static Expression NewExpression(PRogram ctx)
 	{
-		int expType = ctx.rand.Next(0, 3);
+		//changed probability of read
+		double expType = random.NextDouble();
 		Variable? rand = Variable.Random(ctx); //null protection
-		switch (expType)
-		{
-			case 0: return Constant.NewConstant(ctx);
-			case 1: return rand != null ? rand : Constant.NewConstant(ctx);
-			case 2: return new Read();
+		if (expType < (1-probability)/2) {
+			return Constant.NewConstant(ctx);
+		}
+		else if (expType < (1-probability)) {
+			return rand != null ? rand : Constant.NewConstant(ctx);
+		} 
+		else {
+			return new Read();
 		}
 		return new Read(); //should never happen
 	}
