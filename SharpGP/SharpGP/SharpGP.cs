@@ -6,9 +6,9 @@ namespace SharpGP;
 
 public static class SharpGP {
 	private static Random rand = new Random();
-	private static int minNodeCount = 12; // grow trees with at least 12 nodes
+	private static int minNodeCount = 15; // grow trees with at least 15 nodes
 	private static int maxDepth = 6; //max tree depth
-	public static PRogram GenerateProgram(int seed=-1)
+	public static PRogram GenerateProgram_NodeCount(int seed=-1)
 	{
 		PRogram p = new PRogram();
 		if (seed != -1) p = new PRogram(seed);
@@ -20,7 +20,7 @@ public static class SharpGP {
 	}
 
 	//generating trees with a maximum depth 
-	public static PRogram GenerateProgramv2(int seed = -1)
+	public static PRogram GenerateProgram_MaxDepth(int seed = -1)
 	{
 		PRogram p = new PRogram();
 		if (seed != -1) p = new PRogram(seed);
