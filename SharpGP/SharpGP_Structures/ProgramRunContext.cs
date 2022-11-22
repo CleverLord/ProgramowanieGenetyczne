@@ -7,23 +7,6 @@ public class ProgramRunContext
     private List<double> output = new List<double>();
     public Dictionary<string, double> variables = new Dictionary<string, double>();
     public Random rand = new Random();
-    public double Pop()
-    {
-        if (inputCopy.Count == 0)
-        {
-            switch (rand.Next(0, 3))
-            {
-                case 0: return 0;
-                case 1: return input[0];
-                case 2: return input[input.Capacity - 1];
-            }
-            inputCopy = new List<double>(input);
-        }
-        var result = inputCopy[0];
-        inputCopy.RemoveAt(0);
-        return result;
-    }
-
     enum Strategy
     {
         InputOrZero,
@@ -32,7 +15,7 @@ public class ProgramRunContext
     }
 
     Strategy strategy = Strategy.InputOrZero;
-    public double PopV2()
+    public double Pop()
     {
         double result = 0;
         switch (strategy)
@@ -54,7 +37,7 @@ public class ProgramRunContext
                 }
                 else
                     return input[0];
-            
+
             case Strategy.LoopInput:
                 if (inputCopy.Count == 0)
                     inputCopy = new List<double>(input);
@@ -62,9 +45,9 @@ public class ProgramRunContext
                 inputCopy.RemoveAt(0);
                 return result;
         }
-        return result;//should never happen
+        return result; //should never happen
     }
-    
+
     public void Push(double value)
     {
         output.Add((int)value);

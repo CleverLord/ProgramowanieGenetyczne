@@ -9,17 +9,14 @@ public static class TreeGenerator
     public static PRogram GenerateProgram_NodeCount(int minNodeCount = 12, int seed = -1)
     {
         PRogram p = new PRogram();
-        if (seed != -1)
-            p = new PRogram(seed);
+        if (seed != -1) { p = new PRogram(seed); }
         while (p.Nodes.Count < minNodeCount) { p.Grow(); }
         return p;
     }
-    
     public static PRogram GenerateProgram_MaxDepth(int maxDepth = 12, int seed = -1)
     {
         PRogram p = new PRogram();
-        if (seed != -1)
-            p = new PRogram(seed);
+        if (seed != -1) { p = new PRogram(seed); }
         while (p.GetDepth() < maxDepth) { p.Grow(); }
         return p;
     }
@@ -47,5 +44,4 @@ public static class TreeGenerator
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         return new SharpParser(tokens);
     }
-
 }

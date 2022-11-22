@@ -8,7 +8,6 @@ public class Grader
 
     public Grader(string gradingFunction)
     {
-
         var method = GetType().GetMethod(gradingFunction, BindingFlags.Instance | BindingFlags.Public);
         if (method == null) { throw new Exception("Grading function called " + gradingFunction + " does not exist"); }
         gradingFunctionDelegate = method.CreateDelegate<Func<TestCase, ProgramRunContext, double>>();
