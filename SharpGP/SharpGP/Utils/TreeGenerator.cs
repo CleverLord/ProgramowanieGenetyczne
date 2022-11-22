@@ -1,6 +1,6 @@
 ﻿namespace SharpGP.Utils;
 
-public class TreeGenerator
+public static class TreeGenerator
 {
     
 }
