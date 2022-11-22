@@ -24,9 +24,10 @@ public class ProgramRunContext
                 if (input.Count > 0)
                 {
                     result = input[0];
-                    inputCopy.RemoveAt(0);
+                    input.RemoveAt(0);
+                    return result;
                 }
-                return result;
+                return 0;
 
             case Strategy.LockLastInput:
                 if (input.Count > 1)
@@ -35,10 +36,13 @@ public class ProgramRunContext
                     input.RemoveAt(0);
                     return result;
                 }
-                else
+                else if(input.Count>0)
                     return input[0];
+                return 0;
 
             case Strategy.LoopInput:
+                if (input.Count == 0)
+                    return 0;
                 if (inputCopy.Count == 0)
                     inputCopy = new List<double>(input);
                 result = inputCopy[0];
