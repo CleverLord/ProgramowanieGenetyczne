@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpGP_Structures", "Sharp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpGP", "SharpGP\SharpGP.csproj", "{2A83326E-7B9E-4EF3-A865-A4540B77BEA4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSuiteGenerator", "TestSuiteGenerator\TestSuiteGenerator.csproj", "{DAA6173F-5C3C-4ADF-8887-A0499846ACD4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{2A83326E-7B9E-4EF3-A865-A4540B77BEA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A83326E-7B9E-4EF3-A865-A4540B77BEA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A83326E-7B9E-4EF3-A865-A4540B77BEA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAA6173F-5C3C-4ADF-8887-A0499846ACD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAA6173F-5C3C-4ADF-8887-A0499846ACD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAA6173F-5C3C-4ADF-8887-A0499846ACD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAA6173F-5C3C-4ADF-8887-A0499846ACD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

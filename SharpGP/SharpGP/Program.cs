@@ -1,4 +1,5 @@
-﻿using SharpGP_Structures.Generator;
+﻿using SharpGP_Structures;
+using SharpGP_Structures.Generator;
 using SharpGP_Structures.Tree;
 
 PRogram p = SharpGP.SharpGP.GenerateProgram();

@@ -1,4 +1,4 @@
-﻿namespace SharpGP_Structures.Tree;
+﻿namespace SharpGP_Structures;
 
 public class ProgramRunContext
 {
@@ -82,5 +82,9 @@ public class ProgramRunContext
         foreach (var i in variables)
             result += i.Key + " = " + i.Value + ", ";
         return result;
+    }
+    public List<double> GetOutput()
+    {
+        return new List<double>(output);
     }
 }
