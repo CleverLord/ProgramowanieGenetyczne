@@ -11,7 +11,14 @@ public class TestCase
 
 public class TestSuite
 {
+    public TestConfig config;
     public List<TestCase> testCases;
     public string gradingFunction;
     [NonSerialized] public Grader grader;
+}
+
+public class TestConfig
+{
+    public int minNodeCount = 15; // grow trees with at least 15 nodes
+    public int maxDepth = 6; //max tree depth
 }

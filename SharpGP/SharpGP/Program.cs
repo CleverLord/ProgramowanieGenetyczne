@@ -1,9 +1,9 @@
 ﻿using SharpGP_Structures;
-using SharpGP_Structures.Generator;
 using SharpGP_Structures.Tree;
+using SharpGP.Utils;
 
-PRogram p = SharpGP.SharpGP.GenerateProgram_MaxDepth();
-PRogram p2 = SharpGP.SharpGP.GenerateProgram_NodeCount();
+PRogram p = TreeGenerator.GenerateProgram_MaxDepth();
+PRogram p2 = TreeGenerator.GenerateProgram_NodeCount();
 
 //PRogram p = SharpGP.SharpGP.LoadProgramFromFile("test1.txt");
 //PRogram p2 = SharpGP.SharpGP.LoadProgramFromFile("test2.txt");
