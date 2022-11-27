@@ -11,7 +11,7 @@ public class PRogram : Node, IGrowable, IMutable {
 	public List<IGrowable> Growables => Nodes.Where(x => x is IGrowable).Cast<IGrowable>().ToList();
 	public List<IMutable> Mutables => Nodes.Where(x => x is IMutable).Cast<IMutable>().ToList();
 	public int minConst = 0;
-	public int maxConst = 5;
+	public int maxConst = 25;
 
 	public PRogram() => children = new List<Node>();
 	public PRogram(int seed) : this() => rand = new Random(seed);

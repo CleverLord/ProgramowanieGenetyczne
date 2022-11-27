@@ -4,7 +4,7 @@ using SharpGP.Utils;
 
 PRogram p = TreeGenerator.GenerateProgram_MaxDepth();
 PRogram p2 = TreeGenerator.GenerateProgram_NodeCount();
-
+var e= TreeGenerator.LoadProgramFromFile("testProgram.txt");
 //PRogram p = SharpGP.SharpGP.LoadProgramFromFile("test1.txt");
 //PRogram p2 = SharpGP.SharpGP.LoadProgramFromFile("test2.txt");
 

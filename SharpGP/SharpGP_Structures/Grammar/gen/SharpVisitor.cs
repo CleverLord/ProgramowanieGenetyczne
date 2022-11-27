@@ -110,15 +110,15 @@ public interface ISharpVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitConstant([NotNull] SharpParser.ConstantContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="SharpParser.operand"/>.
+	/// Visit a parse tree produced by <see cref="SharpParser.operator"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitOperand([NotNull] SharpParser.OperandContext context);
+	Result VisitOperator([NotNull] SharpParser.OperatorContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="SharpParser.compareOp"/>.
+	/// Visit a parse tree produced by <see cref="SharpParser.comparator"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitCompareOp([NotNull] SharpParser.CompareOpContext context);
+	Result VisitComparator([NotNull] SharpParser.ComparatorContext context);
 }

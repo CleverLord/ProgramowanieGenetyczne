@@ -6,7 +6,7 @@ namespace SharpGP;
 public static class SharpGP
 {
     private static Random _rand = new Random();
-    public static TestSuite TestSuite;
+    public static TestSet TestSet;
 
     public static (PRogram, PRogram)? CrossPrograms(PRogram p1, PRogram p2)
     {
