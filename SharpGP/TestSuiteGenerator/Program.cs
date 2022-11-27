@@ -2,4 +2,4 @@
 
 Console.WriteLine("Hello, World!");
 
-TestSuiteGenerator.GenerateConstantValueTS(2);
+TestCaseGenerator.GenerateConstantValueTS(2);
