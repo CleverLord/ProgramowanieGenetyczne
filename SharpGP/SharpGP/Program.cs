@@ -2,6 +2,21 @@
 using SharpGP_Structures.Tree;
 using SharpGP.Utils;
 
+//TODO: rework following code to test single functions, instead of what was done last
+//Here test generating with max depth
+
+//Here test generating with max node count
+
+//Here test loading from file
+
+//Here test loading from string
+
+//Here test program crossing
+
+//Here test program mutation
+
+// OLD stuff below //
+
 PRogram p = TreeGenerator.GenerateProgram_MaxDepth();
 PRogram p2 = TreeGenerator.GenerateProgram_NodeCount();
 var e= TreeGenerator.LoadProgramFromFile("testProgram.txt");

@@ -6,8 +6,26 @@ namespace SharpGP;
 public static class SharpGP
 {
     private static Random _rand = new Random();
-    public static TestSet TestSet;
-
+    
+    //TODO: Make actual evolution process
+    public static void PerformEvolution(TestSet ts)
+    {
+        //since this is static, make sure no variables are shared between runs (so they are declared in the method)
+        
+        //create initial population
+        //evaluate initial population
+        //while (termination condition not met)
+        //create whole new population by crossover and mutation
+          //decide whether to use crossover or mutation
+          //select parent or parents
+          //perform crossover or mutation
+          //add new individual(s) to new population
+          //remove old individual(s) from old population
+        //evaluate new population
+    }
+    
+    
+    //Helper functions:
     public static (PRogram, PRogram)? CrossPrograms(PRogram p1, PRogram p2)
     {
         PRogram p1c = (PRogram)p1.Clone();

@@ -25,10 +25,9 @@ public class TreeConfig
     //Tree Evolution Data
     public double MutationChance = 0.1;
     public double CrossoverChance = 0.5;
-    
+
     public TreeConfig()
     {
-        //Preprocess variables
         PrecalculateActions();
     }
     
