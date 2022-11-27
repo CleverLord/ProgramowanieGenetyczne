@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using SharpGP_Structures.TestSuite;
 
-public static class TestCaseGenerator
+public static class TestSetGenerator
 {
     public static void SaveTestSuite(TestSet ts, string filename, string fileExtension = ".SharpGpTestSuite", string folder = "")
     {

@@ -8,7 +8,7 @@ public class Grader
 
     public Grader(string gradingFunction)
     {
-        var method = GetType().GetMethod(gradingFunction, BindingFlags.Instance | BindingFlags.Public);
+        var method = GetType().GetMethod(gradingFunction);
         if (method == null) { throw new Exception("Grading function called " + gradingFunction + " does not exist"); }
         gradingFunctionDelegate = method.CreateDelegate<Func<TestCase, ProgramRunContext, double>>();
     }
@@ -18,7 +18,7 @@ public class Grader
         return gradingFunctionDelegate(tc, prc);
     }
     
-    private double accuracyScore(TestCase tc, ProgramRunContext prc)
+    public static double accuracyScore(TestCase tc, ProgramRunContext prc)
     {
         List<double> output = prc.GetOutput();
         if (tc.targetOutput.Count != output.Count) { return 0; }
@@ -26,7 +26,7 @@ public class Grader
         return output.All(d => d < 0.0001) ? 1 : 0; //if all diffs are less than 0.0001, then we have a perfect score
     }
     
-    private double hasTargetValue(TestCase tc, ProgramRunContext prc)
+    public static double hasTargetValue(TestCase tc, ProgramRunContext prc)
     {
         List<double> output = prc.GetOutput();
         double target = tc.targetOutput[0];
@@ -34,7 +34,7 @@ public class Grader
     }
 
     #region helper functions
-    private bool hasTargetValue(double target, List<double> output)
+    public static bool hasTargetValue(double target, List<double> output)
     {
         return output.Any(d => Math.Abs(d - target) < 0.0001);
     }
