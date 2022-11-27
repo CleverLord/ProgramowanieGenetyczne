@@ -15,6 +15,7 @@ public class Grader
     
     public double Grade(TestCase tc, ProgramRunContext prc)
     {
+        //keep in mind, here prc is already populated with the output of the program
         return gradingFunctionDelegate(tc, prc);
     }
     
