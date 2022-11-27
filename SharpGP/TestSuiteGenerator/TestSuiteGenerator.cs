@@ -5,8 +5,14 @@ public static class TestSuiteGenerator
 {
     public static void SaveTestSuite(TestSet ts, string filename, string fileExtension = ".SharpGpTestSuite", string folder = "")
     {
-        if (folder == "") { folder = Directory.GetCurrentDirectory(); }
-        File.WriteAllTextAsync(folder + filename + fileExtension, JsonConvert.SerializeObject(ts));
+        if (folder == "")
+        {
+            var binFolder = Directory.GetCurrentDirectory();
+            folder = Directory.GetParent(binFolder).Parent.Parent.CreateSubdirectory("TestSuites").FullName;
+        }
+
+        string path = Path.Combine(folder, filename + fileExtension);
+        File.WriteAllText(path, JsonConvert.SerializeObject(ts, Formatting.Indented));
     }
     public static void GenerateConstantValueTS(double constant) // you can add parameters to this funciton if you wish
     {
