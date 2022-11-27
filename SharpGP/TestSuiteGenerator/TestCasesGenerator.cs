@@ -10,7 +10,6 @@ public static class TestCaseGenerator
             var binFolder = Directory.GetCurrentDirectory();
             folder = Directory.GetParent(binFolder).Parent.Parent.CreateSubdirectory("TestSuites").FullName;
         }
-
         string path = Path.Combine(folder, filename + fileExtension);
         File.WriteAllText(path, JsonConvert.SerializeObject(ts, Formatting.Indented));
     }
