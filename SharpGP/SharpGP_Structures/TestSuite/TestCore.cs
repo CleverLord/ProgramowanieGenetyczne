@@ -3,19 +3,21 @@ using Newtonsoft.Json;
 
 namespace SharpGP_Structures.TestSuite;
 
-public class TestCase
-{
-    public List<double> input;
-    public List<double> targetOutput;
-}
-
-public class TestSuite
+public class TestSet
 {
     public TestConfig config;
     public List<TestCase> testCases;
     public string gradingFunction;
     [NonSerialized] public Grader grader;
 }
+
+
+public class TestCase
+{
+    public List<double> input;
+    public List<double> targetOutput;
+}
+
 
 public class TestConfig
 {
