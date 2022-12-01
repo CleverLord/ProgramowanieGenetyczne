@@ -64,7 +64,6 @@ public class Grader
         return target - output[0];
     }
 
-
     #region helper functions
     public static bool hasTargetValue(double target, List<double> output)
     {
@@ -75,6 +74,4 @@ public class Grader
         return Math.Abs(a - b) < Threshold;
     }
     #endregion
-
-
 }
