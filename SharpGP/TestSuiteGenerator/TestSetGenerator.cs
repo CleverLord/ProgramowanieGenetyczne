@@ -16,7 +16,7 @@ public static class TestSetGenerator
     public static void GenerateConstantValueTS(double constant) // you can add parameters to this funciton if you wish
     {
         TestSet ts = new TestSet();
-        ts.gradingFunction = "accuracyScore";
+        //ts.gradingFunction = "accuracyScore";
 
         // TODO: add some test cases here
 

@@ -2,12 +2,21 @@
 
 namespace SharpGP_Structures.TestSuite;
 
+[Serializable]
 public class Grader
 {
+    public string gradingFunctionName;
     public Func<TestCase, ProgramRunContext, double> gradingFunctionDelegate;
 
+    public void Initialize()
+    {
+        var method = GetType().GetMethod(gradingFunctionName);
+        if (method == null) { throw new Exception("Grading function called " + gradingFunctionName + " does not exist"); }
+        gradingFunctionDelegate = method.CreateDelegate<Func<TestCase, ProgramRunContext, double>>();
+    }
     public Grader(string gradingFunction)
     {
+        gradingFunctionName = gradingFunction;
         var method = GetType().GetMethod(gradingFunction);
         if (method == null) { throw new Exception("Grading function called " + gradingFunction + " does not exist"); }
         gradingFunctionDelegate = method.CreateDelegate<Func<TestCase, ProgramRunContext, double>>();

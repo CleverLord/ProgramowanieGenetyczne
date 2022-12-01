@@ -12,8 +12,8 @@ public class TreeConfig
     
     //Tree Generated Structure Data
     //Actions
-    public double NewAssignmentChanceFactor = 5;
-    public double NewIfStatementChanceFactor = 5;
+    public double NewAssignmentChanceFactor = 6;
+    public double NewIfStatementChanceFactor = 6;
     public double NewLoopChanceFactor = 7;
     public double NewWriteChanceFactor = 1;
     //Precalculated Values
@@ -24,7 +24,7 @@ public class TreeConfig
     
     //Tree Evolution Data
     public double MutationChance = 0.1;
-    public double CrossoverChance = 0.9;
+    public double CrossoverChance => 1 - MutationChance;
 
     public TreeConfig()
     {

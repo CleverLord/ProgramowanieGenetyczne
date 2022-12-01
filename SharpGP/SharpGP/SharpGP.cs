@@ -11,6 +11,8 @@ public static class SharpGP
     public static void PerformEvolution(TestSet ts)
     {
         //since this is static, make sure no variables are shared between runs (so they are declared in the method)
+        int currentGeneration = 0;
+        int currentStage = 0;
         
         //create initial population
         //evaluate initial population

@@ -7,12 +7,18 @@ public class TestSet
 {
     public TreeConfig config;
     public List<TestCase> testCases;
-    public string gradingFunction;
-    [NonSerialized] public Grader grader;
+    public List<TestStage> stages;
 }
 
 public class TestCase
 {
     public List<double> input;
     public List<double> targetOutput;
+}
+
+public class TestStage
+{
+    public Grader grader;
+    public Agregrader ag;
+    public double threshold = 0.95;
 }
