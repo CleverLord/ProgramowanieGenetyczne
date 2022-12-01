@@ -2,7 +2,7 @@
 using SharpGP_Structures.Tree;
 using SharpGP.Utils;
 
-//TODO: rework following code to test single functions, instead of what was done last
+//TODO: rework following code to test single functions, instead of what the work was focused on last time
 //Here test generating with max depth
 
 //Here test generating with max node count
@@ -27,11 +27,13 @@ var e= TreeGenerator.LoadProgramFromFile("testProgram.txt");
 //PRogram p2 = SharpGP.SharpGP.LoadProgramFromString("x_2 = (3 + 2);");
 var x = SharpGP.SharpGP.CrossPrograms(p, p2);
 
-Console.WriteLine("Parent1:\n" + p.ToString());
-Console.WriteLine("Parent2:\n" + p2.ToString());
-Console.WriteLine("Child1:\n" + x.Value.Item1.ToString());
-Console.WriteLine("Child2:\n" + x.Value.Item2.ToString());
+Console.WriteLine("Parent1:\n" + p);
+Console.WriteLine("Parent2:\n" + p2);
+Console.WriteLine("Child1:\n" + x.Value.Item1);
+Console.WriteLine("Child2:\n" + x.Value.Item2);
 
 ProgramRunContext prc=new ProgramRunContext();
-p.Invoke(prc);
+PRogram p3 = TreeGenerator.GenerateProgram_MaxDepth();
+Console.WriteLine("P3:\n" + p3);
+p3.Invoke(prc);
 Console.WriteLine("Result:\n" + prc);
