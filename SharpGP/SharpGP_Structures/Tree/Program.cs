@@ -1,24 +1,33 @@
 ﻿namespace SharpGP_Structures.Tree;
-
+using System.Diagnostics;
 public class PRogram : Node, IGrowable, IMutable {
 	public static char TAB = ' ';
 	public Random rand = new Random();
+	public TreeConfig config;
+	
 	public List<Action> Actions => children.Cast<Action>().ToList();
-
 	public List<String> Variables => Nodes.Where(x => x is Variable).Cast<Variable>().Select(x => x.ToString()).Distinct().ToList();
-
 	public List<Node> Nodes => GetNestedNodes();
 	public List<IGrowable> Growables => Nodes.Where(x => x is IGrowable).Cast<IGrowable>().ToList();
 	public List<IMutable> Mutables => Nodes.Where(x => x is IMutable).Cast<IMutable>().ToList();
-	public int minConst = 0;
-	public int maxConst = 25;
 
 	public PRogram() => children = new List<Node>();
 	public PRogram(int seed) : this() => rand = new Random(seed);
 	public PRogram(List<Node> children) => this.children = children;
+	public PRogram(TreeConfig config) : this() => this.config = config;
+	
 	public void AddAction(Action action) => children.Add(action);
-	public void Invoke(ProgramRunContext prc) => Actions.ForEach(a => a.Invoke(prc));
-
+	public void Invoke(ProgramRunContext prc)
+	{
+		Stopwatch sw = new Stopwatch();
+		sw.Start();
+		
+		foreach (var action in Actions)
+			action.Invoke(prc);
+		
+		sw.Stop();
+		prc.ElapsedMilliseconds = sw.ElapsedMilliseconds;
+	}
 	public override string ToString()
 	{
 		UpdateIndent();
@@ -26,7 +35,6 @@ public class PRogram : Node, IGrowable, IMutable {
 		foreach (var child in children) s += child + "\n";
 		return s;
 	}
-
 	public void Grow() // grow whole program
 	{
 		var x = Growables;
@@ -34,6 +42,13 @@ public class PRogram : Node, IGrowable, IMutable {
 		UpdateParents();
 	}
 	public void Grow(PRogram ctx) => children.Add(Action.NewAction(this)); // grow program node itself
+
+	public void FullGrow()
+	{
+		while(GetDepth()<config.maxDepth)
+			Grow();
+		Actions.ForEach(x => x.FullGrow(this, config.maxDepth-1));
+	}
 	
 	public void Mutate() //mutate something in the program
 	{

@@ -14,7 +14,14 @@ Niespójność między systemami w kwestji variabli - to raczej zostaje
 
 Stages:
 {
-grader: "contains value"
+gradertarget: "contains close value" 
+graderMetric: "msv"
+agregrader: "sum"
+upTo: 0.95
+}
+{
+gradertarget: "contains value"
+graderMetric: bool
 agregrader: "sum"
 upTo: 0.95
 }
@@ -25,6 +32,11 @@ upTo: 0.95
 }
 {
 grader: "just target value"
+agregrader: "sum" //<-proporcjonalny do accuracy
+upTo: 0.95
+}
+{
+grader: "fast target value"
 agregrader: "sum" //<-proporcjonalny do accuracy
 upTo: 0.95
 }

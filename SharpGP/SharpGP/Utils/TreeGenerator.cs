@@ -1,4 +1,5 @@
 ﻿using Antlr4.Runtime;
+using SharpGP_Structures;
 using SharpGP_Structures.Generator;
 using SharpGP_Structures.Tree;
 
@@ -18,6 +19,17 @@ public static class TreeGenerator
         PRogram p = new PRogram();
         if (seed != -1) { p = new PRogram(seed); }
         while (p.GetDepth() < maxDepth) { p.Grow(); }
+        return p;
+    }
+    public static PRogram GenerateProgram_FromConfig(TreeConfig tsConfig, double depthPercentage = 100.0)
+    {
+        if (depthPercentage - 100.0 > 0.00001)
+        {
+            //create full depth tree
+        }
+        PRogram p = new PRogram(tsConfig);
+        
+        while (p.GetDepth() < tsConfig.maxDepth * depthPercentage / 100) { p.Grow(); }
         return p;
     }
     public static PRogram LoadProgramFromFile(string filename)
@@ -44,4 +56,5 @@ public static class TreeGenerator
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         return new SharpParser(tokens);
     }
+
 }

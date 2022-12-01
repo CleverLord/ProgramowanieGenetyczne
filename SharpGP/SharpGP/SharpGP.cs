@@ -1,32 +1,36 @@
 ﻿using SharpGP_Structures.TestSuite;
 using SharpGP_Structures.Tree;
+using SharpGP.Utils;
 
 namespace SharpGP;
 
 public static class SharpGP
 {
     private static Random _rand = new Random();
-    
+
     //TODO: Make actual evolution process
     public static void PerformEvolution(TestSet ts)
     {
         //since this is static, make sure no variables are shared between runs (so they are declared in the method)
         int currentGeneration = 0;
         int currentStage = 0;
-        
+
         //create initial population
+        List<PRogram> population = new List<PRogram>();
+        for (int i = 0; i < 100; i++) { population.Add(TreeGenerator.GenerateProgram_FromConfig(ts.config)); }
+        
         //evaluate initial population
         //while (termination condition not met)
         //create whole new population by crossover and mutation
-          //decide whether to use crossover or mutation
-          //select parent or parents
-          //perform crossover or mutation
-          //add new individual(s) to new population
-          //remove old individual(s) from old population
+        //decide whether to use crossover or mutation
+        //select parent or parents
+        //perform crossover or mutation
+        //add new individual(s) to new population
+        //remove old individual(s) from old population
         //evaluate new population
     }
-    
-    
+
+
     //Helper functions:
     public static (PRogram, PRogram)? CrossPrograms(PRogram p1, PRogram p2)
     {

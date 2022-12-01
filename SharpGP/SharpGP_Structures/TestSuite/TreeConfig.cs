@@ -41,5 +41,4 @@ public class TreeConfig
         NewLoopChance = NewLoopChanceFactor / sum + NewIfStatementChance;
         NewWriteChance = NewWriteChanceFactor / sum + NewLoopChance;
     }
-    
 }

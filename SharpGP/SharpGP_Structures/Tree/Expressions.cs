@@ -86,12 +86,12 @@ public class Constant : Expression, IMutable {
 	public override double Evaluate(ProgramRunContext prc) => value;
 	public static Constant NewConstant(PRogram ctx)
 	{
-		int value = ctx.rand.Next(ctx.minConst, ctx.maxConst + 1);
+		int value = ctx.rand.Next(ctx.config.minVariableValue, ctx.config.maxVariableValue + 1);
 		return new Constant(value);
 	}
 	public void Mutate(PRogram ctx)
 	{
-		value = ctx.rand.Next(ctx.minConst, ctx.maxConst + 1);
+		value = ctx.rand.Next(ctx.config.minVariableValue, ctx.config.maxVariableValue + 1);
 	}
 }
 

@@ -6,6 +6,8 @@ public class ProgramRunContext
     private List<double> inputCopy = new List<double>(input);
     private List<double> output = new List<double>();
     public Dictionary<string, double> variables = new Dictionary<string, double>();
+    public long ElapsedMilliseconds = -1; //obsolete
+    public long ElapsedTicks = -1;
     public Random rand = new Random();
     enum Strategy
     {
