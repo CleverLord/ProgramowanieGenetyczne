@@ -16,12 +16,25 @@ public static class TestSetGenerator
     public static void GenerateConstantValueTS(double constant) // you can add parameters to this funciton if you wish
     {
         TestSet ts = new TestSet();
-
-        ts.stages.Add(new TestStage() {grader = new Grader("accuracyScore")});
-
-        // TODO: add some test cases here
-
-
+        Random rnd = new Random();
+        for(int i = 0; i < 100; i++)
+        {
+            double x = rnd.NextDouble() * 100;
+            double y = rnd.NextDouble() * 100;
+            double sum = x + y;
+            ts.testCases.Add(new TestCase() { input = new List<double>() { x,y}, 
+                targetOutput = new List<double>() { sum } });
+        }
+        
+        ts.stages.Add( new (){grader =  new Grader("bestAbsoluteError"), 
+            ag =  new Agregrader("sum"){}} );
+        ts.stages.Add( new (){grader =  new Grader("hasTargetValue"), 
+            ag =  new Agregrader("sum"){}} );
+        ts.stages.Add( new (){grader =  new Grader("atFirstPlace"), 
+            ag =  new Agregrader("sum"){}} );
+        ts.stages.Add( new (){grader =  new Grader("justOneTargetValue"), 
+            ag =  new Agregrader("sum"){}} );
+        
         SaveTestSuite(ts, "ConstantValueTS_" + constant);
     }
 

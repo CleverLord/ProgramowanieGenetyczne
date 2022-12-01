@@ -5,7 +5,7 @@ namespace SharpGP_Structures.TestSuite;
 
 public class TestSet
 {
-    public TreeConfig config;
+    public TreeConfig config = new TreeConfig();
     public List<TestCase> testCases;
     public List<TestStage> stages;
 }
