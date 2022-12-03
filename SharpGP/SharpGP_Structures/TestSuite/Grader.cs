@@ -17,36 +17,64 @@ public class Grader
     public Grader(string gradingFunction)
     {
         gradingFunctionName = gradingFunction;
-        var method = GetType().GetMethod(gradingFunction);
-        if (method == null) { throw new Exception("Grading function called " + gradingFunction + " does not exist"); }
-        gradingFunctionDelegate = method.CreateDelegate<Func<TestCase, ProgramRunContext, double>>();
+        Initialize();
     }
-    
+
+    public static double JustTargetValue(TestCase tc, ProgramRunContext prc)
+    {
+        if (prc.GetOutput().Count != 1) { return 1; }
+        return prc.GetOutput()[0] - tc.targetOutput[0] < 0.0001 ? 0 : 1;
+    }
     public double Grade(TestCase tc, ProgramRunContext prc)
     {
         //keep in mind, here prc is already populated with the output of the program
         return gradingFunctionDelegate(tc, prc);
     }
     
-    public static double accuracyScore(TestCase tc, ProgramRunContext prc)
+    
+    public static double target_1_1_A(TestCase tc, ProgramRunContext prc)
     {
-        List<double> output = prc.GetOutput();
-        if (tc.targetOutput.Count != output.Count) { return 0; }
-        output.Select((x, i) => Math.Abs(x - tc.targetOutput[i])); //create diff list
-        return output.All(d => d < 0.0001) ? 1 : 0; //if all diffs are less than 0.0001, then we have a perfect score
+        //Program powinien wygenerować na wyjściu (na dowolnej pozycji w danych wyjściowych) liczbę 1. Poza liczbą 1 może też zwrócić inne liczby.
+        //róznicę którejkolwiek z liczb trzeba minimalizować
+        
+        if (prc.GetOutput().Count == 0) { return Double.MaxValue; }
+        var absDiff = prc.GetOutput().Select(x => Math.Abs(x - 1)).ToList();
+        return absDiff.Min();
     }
     
-    public static double hasTargetValue(TestCase tc, ProgramRunContext prc)
+    public static double target_1_3_A(TestCase tc, ProgramRunContext prc)
+    {
+        if (prc.GetOutput().Count == 0) { return double.MaxValue; }
+        var absDiff = prc.GetOutput().Select(x => Math.Abs(x - 1)).ToList();
+        return absDiff.Min();
+    }
+    
+    public static double target_1_4_A__1(TestCase tc, ProgramRunContext prc)
+    {
+        return prc.GetOutput().Count - 1;
+    }
+    public static double target_1_4_A__0(TestCase tc, ProgramRunContext prc)
     {
         List<double> output = prc.GetOutput();
         double target = tc.targetOutput[0];
-        return hasTargetValue(target, output) ? 1 : 0;
+
+        if (output.Count != 1)
+            return double.MaxValue;
+
+        return target - output[0];
     }
+
 
     #region helper functions
     public static bool hasTargetValue(double target, List<double> output)
     {
-        return output.Any(d => Math.Abs(d - target) < 0.0001);
+        return output.Any(d => isClose(d, target));
+    }
+    public static bool isClose(double a, double b, double Threshold = 0.0001)
+    {
+        return Math.Abs(a - b) < Threshold;
     }
     #endregion
+
+
 }
