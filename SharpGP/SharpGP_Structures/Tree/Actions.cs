@@ -163,7 +163,5 @@ public class Scope : Node, IGrowable, IMutable
             children.Remove(n);
             children.Insert(ctx.rand.Next(0, children.Count), n);
         }
-
     }
-
 }

@@ -38,11 +38,11 @@ public class PRogram : Node, IGrowable, IMutable {
 	public void Grow() // grow whole program
 	{
 		var x = Growables;
+		//apply config percentages
 		x[rand.Next(0, x.Count)].Grow(this);
 		UpdateParents();
 	}
 	public void Grow(PRogram ctx) => children.Add(Action.NewAction(this)); // grow program node itself
-
 	public void FullGrow()
 	{
 		while(GetDepth()<config.maxDepth)

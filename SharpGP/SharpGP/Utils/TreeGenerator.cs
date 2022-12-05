@@ -21,14 +21,14 @@ public static class TreeGenerator
         while (p.GetDepth() < maxDepth) { p.Grow(); }
         return p;
     }
-    public static PRogram GenerateProgram_FromConfig(TreeConfig tsConfig, double depthPercentage = 100.0)
+    public static PRogram GenerateProgram_FromConfig(TreeConfig tsConfig, double depthPercentage = 100)
     {
-        if (depthPercentage - 100.0 > 0.00001)
-        {
-            //create full depth tree
-        }
         PRogram p = new PRogram(tsConfig);
-        
+        if ((int)depthPercentage == 100)
+        {
+            p.FullGrow();
+            return p;
+        }
         while (p.GetDepth() < tsConfig.maxDepth * depthPercentage / 100) { p.Grow(); }
         return p;
     }
