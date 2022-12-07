@@ -12,7 +12,7 @@ public class TreeConfig
     public int minVariableValue = 0; // min value of variables
     public int maxVariableValue = 25; // max value of variables
     
-    #region Tree Generated Structure Data
+    #region Tree Structure Generation Data
     // Actions
     private double NewAssignmentChanceFactor = 6;
     private double NewIfStatementChanceFactor = 6;
@@ -31,12 +31,28 @@ public class TreeConfig
     [NonSerialized] public double NewVariableChance;
     [NonSerialized] public double NewConstantChance;
     [NonSerialized] public double NewReadChance;
+    // Grow
+    private double GrowProgramChanceFactor = 5;
+    private double GrowIfStatementChanceFactor = 2;
+    private double GrowWriteChanceFactor = 2;
+    private double GrowAssignmentChanceFactor = 2;
+    private double GrowNestedExpressionChanceFactor = 2;
+    private double GrowConditionChanceFactor = 2;
+    private double GrowScopeChanceFactor = 5;
     
+    // Precalculated Values
+    [NonSerialized] public double GrowProgramChance;
+    [NonSerialized] public double GrowIfStatementChance;
+    [NonSerialized] public double GrowWriteChance;
+    [NonSerialized] public double GrowAssignmentChance;
+    [NonSerialized] public double GrowNestedExpressionChance;
+    [NonSerialized] public double GrowConditionChance;
+    [NonSerialized] public double GrowScopeChance;
     #endregion
     
     #region Tree Evolution Data
     public double MutationChance = 0.1;
-    public double CrossoverChance => 1 - MutationChance;
+    //public double CrossoverChance => 1 - MutationChance;
     
     #region Mutation
     private double MutateProgramFactor = 0.5;
@@ -44,7 +60,7 @@ public class TreeConfig
     private double MutateConstantFactor = 0.5;
     private double MutateComparatorFactor = 0.5;
     private double MutateOperatorFactor = 0.5;
-    private double MutateScopeFactor = 0.5;
+    private double MutateScopeFactor = 0.1;
     //Precalculated Values
     [NonSerialized] public double MutateProgramChance;
     [NonSerialized] public double MutateVariableChance;
@@ -53,6 +69,11 @@ public class TreeConfig
     [NonSerialized] public double MutateOperatorChance;
     [NonSerialized] public double MutateScopeChance;
     #endregion
+    private double MutationRemoveChanceFactor = 0.5;
+    private double MutationSwapChanceFactor = 0.5;
+    //Precalculated Values
+    [NonSerialized] public double MutationRemoveChance;
+    //public double MutationAddChance => 1 - MutationRemoveChance;
     #region Crossover
     private double CrossoverLoopFactor = 25;
     private double CrossoverIfFactor = 25;
@@ -119,6 +140,20 @@ public class TreeConfig
         NewConstantChance = NewConstantChanceFactor / sum + NewVariableChance;
         NewReadChance = NewReadChanceFactor / sum + NewConstantChance;
     }
+
+    public void PrecalculateGrowProgram()
+    {
+        //Sum all chances
+        double sum = GrowProgramChanceFactor + GrowIfStatementChanceFactor + GrowWriteChanceFactor + GrowAssignmentChanceFactor + GrowNestedExpressionChanceFactor + GrowConditionChanceFactor + GrowScopeChanceFactor;
+        // Calculate chances and offset them
+        GrowProgramChance = GrowProgramChanceFactor / sum;
+        GrowIfStatementChance = GrowIfStatementChanceFactor / sum + GrowProgramChance;
+        GrowWriteChance = GrowWriteChanceFactor / sum + GrowIfStatementChance;
+        GrowAssignmentChance = GrowAssignmentChanceFactor / sum + GrowWriteChance;
+        GrowNestedExpressionChance = GrowNestedExpressionChanceFactor / sum + GrowAssignmentChance;
+        GrowConditionChance = GrowConditionChanceFactor / sum + GrowNestedExpressionChance;
+        GrowScopeChance = GrowScopeChanceFactor / sum + GrowConditionChance;
+    }
     public void PrecalculateMutation()
     {
         //sum all chances
@@ -130,6 +165,8 @@ public class TreeConfig
         MutateComparatorChance = MutateComparatorFactor / sum + MutateConstantChance;
         MutateOperatorChance = MutateOperatorFactor / sum + MutateComparatorChance;
         MutateScopeChance = MutateScopeFactor / sum + MutateOperatorChance;
+        
+        MutationRemoveChance = MutationRemoveChanceFactor / (MutationRemoveChanceFactor + MutationSwapChanceFactor);
     }
     public void PrecalculateCrossOver()
     {
@@ -219,6 +256,26 @@ public class TreeConfig
         else if (chance < CrossOverOperatorChance)
             return typeof(Operator);
         else if (chance < CrossOverScopeChance)
+            return typeof(Scope);
+        else
+            throw new Exception("Invalid chance");
+    }
+    public Type TypeToGrow()
+    {
+        double chance = r.NextDouble();
+        if(chance<GrowProgramChance)
+            return typeof(PRogram);
+        else if (chance < GrowIfStatementChance)
+            return typeof(IfStatement);
+        else if (chance < GrowWriteChance)
+            return typeof(Write);
+        else if (chance < GrowAssignmentChance)
+            return typeof(Assignment);
+        else if (chance < GrowNestedExpressionChance)
+            return typeof(NestedExpression);
+        else if (chance < GrowConditionChance)
+            return typeof(Condition);
+        else if (chance < GrowScopeChance)
             return typeof(Scope);
         else
             throw new Exception("Invalid chance");
