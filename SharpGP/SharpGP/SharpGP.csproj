@@ -8,13 +8,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SharpGP_Structures\SharpGP_Structures.csproj"/>
+      <ProjectReference Include="..\SharpGP_Structures\SharpGP_Structures.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="bin\Debug\net6.0\test1.txt"/>
-        <None Include="bin\Debug\net6.0\test2.txt"/>
-        <None Include="bin\Debug\net6.0\testProgram.txt"/>
+      <None Include="bin\Debug\net6.0\test1.txt" />
+      <None Include="bin\Debug\net6.0\test2.txt" />
+      <None Include="bin\Debug\net6.0\testProgram.txt" />
     </ItemGroup>
 
 </Project>

@@ -8,11 +8,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta3"/>
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta3" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SharpGP_Structures\SharpGP_Structures.csproj"/>
+      <ProjectReference Include="..\SharpGP_Structures\SharpGP_Structures.csproj" />
     </ItemGroup>
 
 </Project>

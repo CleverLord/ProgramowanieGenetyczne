@@ -1,10 +1,13 @@
-﻿namespace SharpGP_Structures.TestSuite;
+﻿using System.Linq.Expressions;
+using Newtonsoft.Json;
+
+namespace SharpGP_Structures.TestSuite;
 
 public class TestSet
 {
     public TreeConfig config;
-    public List<TestStage> stages;
     public List<TestCase> testCases;
+    public List<TestStage> stages;
 }
 
 public class TestCase
@@ -15,7 +18,7 @@ public class TestCase
 
 public class TestStage
 {
-    public Agregrader ag;
     public Grader grader;
+    public Agregrader ag;
     public double threshold = 0.95;
 }

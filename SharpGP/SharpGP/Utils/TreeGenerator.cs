@@ -9,57 +9,52 @@ public static class TreeGenerator
 {
     public static PRogram GenerateProgram_NodeCount(int minNodeCount = 12, int seed = -1)
     {
-        var p = new PRogram();
-        if (seed != -1) p = new PRogram(seed);
-        while (p.Nodes.Count < minNodeCount) p.Grow();
+        PRogram p = new PRogram();
+        if (seed != -1) { p = new PRogram(seed); }
+        while (p.Nodes.Count < minNodeCount) { p.Grow(); }
         return p;
     }
-
     public static PRogram GenerateProgram_MaxDepth(int maxDepth = 12, int seed = -1)
     {
-        var p = new PRogram();
-        if (seed != -1) p = new PRogram(seed);
-        while (p.GetDepth() < maxDepth) p.Grow();
+        PRogram p = new PRogram();
+        if (seed != -1) { p = new PRogram(seed); }
+        while (p.GetDepth() < maxDepth) { p.Grow(); }
         return p;
     }
-
     public static PRogram GenerateProgram_FromConfig(TreeConfig tsConfig, double depthPercentage = 100)
     {
-        var p = new PRogram(tsConfig);
+        PRogram p = new PRogram(tsConfig);
         if ((int)depthPercentage == 100)
         {
             p.FullGrow();
             return p;
         }
-
-        while (p.GetDepth() < tsConfig.maxDepth * depthPercentage / 100) p.Grow();
+        while (p.GetDepth() < tsConfig.maxDepth * depthPercentage / 100) { p.Grow(); }
         return p;
     }
-
     public static PRogram LoadProgramFromFile(string filename)
     {
-        var input = CharStreams.fromPath(filename);
+        ICharStream input = CharStreams.fromPath(filename);
         var parser = getParser(input);
         var tree = parser.program();
-        var programVisitor = new AntlrToProgram();
-        var p = (PRogram)programVisitor.Visit(tree);
+        AntlrToProgram programVisitor = new AntlrToProgram();
+        PRogram p = (PRogram)programVisitor.Visit(tree);
         return p;
     }
-
     public static PRogram LoadProgramFromString(string textToParse)
     {
-        var input = CharStreams.fromString(textToParse);
+        ICharStream input = CharStreams.fromString(textToParse);
         var parser = getParser(input);
         var tree = parser.program();
-        var programVisitor = new AntlrToProgram();
-        var p = (PRogram)programVisitor.Visit(tree);
+        AntlrToProgram programVisitor = new AntlrToProgram();
+        PRogram p = (PRogram)programVisitor.Visit(tree);
         return p;
     }
-
     private static SharpParser getParser(ICharStream input)
     {
         var lexer = new SharpLexer(input);
-        var tokens = new CommonTokenStream(lexer);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
         return new SharpParser(tokens);
     }
+
 }
