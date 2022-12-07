@@ -12,9 +12,8 @@ Dodanie drzew o w miarę równych gałęziach
 Niespójność między systemami w kwestji variabli - to raczej zostaje
 
 
-Stages:
-{
-gradertarget: "contains close value" 
+Stages: {
+gradertarget: "contains close value"
 graderMetric: "msv"
 agregrader: "sum"
 upTo: 0.95

@@ -2,21 +2,16 @@
 
 public class ProgramRunContext
 {
-    private static List<double> input = new List<double>();
-    private List<double> inputCopy = new List<double>(input);
-    private List<double> output = new List<double>();
-    public Dictionary<string, double> variables = new Dictionary<string, double>();
+    private static readonly List<double> input = new();
     public long ElapsedMilliseconds = -1; //obsolete
     public long ElapsedTicks = -1;
-    public Random rand = new Random();
-    enum Strategy
-    {
-        InputOrZero,
-        LockLastInput,
-        LoopInput
-    }
+    private List<double> inputCopy = new(input);
+    private readonly List<double> output = new();
+    public Random rand = new();
 
-    Strategy strategy = Strategy.InputOrZero;
+    private readonly Strategy strategy = Strategy.InputOrZero;
+    public Dictionary<string, double> variables = new();
+
     public double Pop()
     {
         double result = 0;
@@ -29,6 +24,7 @@ public class ProgramRunContext
                     input.RemoveAt(0);
                     return result;
                 }
+
                 return 0;
 
             case Strategy.LockLastInput:
@@ -38,8 +34,12 @@ public class ProgramRunContext
                     input.RemoveAt(0);
                     return result;
                 }
-                else if(input.Count>0)
+
+                if (input.Count > 0)
+                {
                     return input[0];
+                }
+
                 return 0;
 
             case Strategy.LoopInput:
@@ -51,6 +51,7 @@ public class ProgramRunContext
                 inputCopy.RemoveAt(0);
                 return result;
         }
+
         return result; //should never happen
     }
 
@@ -58,9 +59,10 @@ public class ProgramRunContext
     {
         output.Add((int)value);
     }
+
     public override string ToString()
     {
-        String result = "";
+        var result = "";
         result += "Input: ";
         foreach (var i in input)
             result += i + ", ";
@@ -72,8 +74,16 @@ public class ProgramRunContext
             result += i.Key + " = " + i.Value + ", ";
         return result;
     }
+
     public List<double> GetOutput()
     {
         return new List<double>(output);
+    }
+
+    private enum Strategy
+    {
+        InputOrZero,
+        LockLastInput,
+        LoopInput
     }
 }
