@@ -3,13 +3,19 @@ using System.Diagnostics;
 public class PRogram : Node, IGrowable, IMutable {
 	public static char TAB = ' ';
 	public Random rand = new Random();
-	public TreeConfig config;
+	public TreeConfig config= new TreeConfig();
 	
-	public List<Action> Actions => children.Cast<Action>().ToList();
-	public List<String> Variables => Nodes.Where(x => x is Variable).Cast<Variable>().Select(x => x.ToString()).Distinct().ToList();
-	public List<Node> Nodes => GetNestedNodes();
+	private List<Action> Actions => children.Cast<Action>().ToList();
+
+	private List<String> Variables =>
+		Nodes.Where(x => x is Variable).Cast<Variable>().Select(x => x.ToString()).Distinct().ToList();
+	public int VariableCount => Variables.Count;
+	private List<Node> Nodes => GetNestedNodes();
+	
+	//waning, following function gives access to all nodes, and makes it possible to destroy the tree structure
+	public List<Node> GetNodes() => Nodes;
 	public List<IGrowable> Growables => Nodes.Where(x => x is IGrowable).Cast<IGrowable>().ToList();
-	public List<IMutable> Mutables => Nodes.Where(x => x is IMutable).Cast<IMutable>().ToList();
+	private List<IMutable> Mutables => Nodes.Where(x => x is IMutable).Cast<IMutable>().ToList();
 
 	public PRogram() => children = new List<Node>();
 	public PRogram(int seed) : this() => rand = new Random(seed);
@@ -39,6 +45,17 @@ public class PRogram : Node, IGrowable, IMutable {
 	{
 		var x = Growables;
 		//apply config percentages
+		for (int i = 0; i < 10; i++)
+		{
+			Type t = config.TypeToGrow();
+			var growable = Growables.Where(x => x.GetType() == t).ToList();
+			if (growable.Count != 0)
+			{
+				growable[rand.Next(growable.Count)].Grow(this);
+				UpdateParents();
+				return;
+			}
+		}
 		x[rand.Next(0, x.Count)].Grow(this);
 		UpdateParents();
 	}
@@ -53,6 +70,17 @@ public class PRogram : Node, IGrowable, IMutable {
 	public void Mutate() //mutate something in the program
 	{
 		var x = Mutables;
+		//apply config percentages
+		for (int i = 0; i < 10; i++)
+		{
+			Type t = config.TypeToMutate();
+			var mutable = Mutables.Where(x => x.GetType() == t).ToList();
+			if (mutable.Count != 0)
+			{
+				mutable[rand.Next(mutable.Count)].Mutate(this);
+				return;
+			}
+		}
 		x[rand.Next(0, x.Count)].Mutate(this);
 	}
 	public void Mutate(PRogram ctx) //mutate program node itself

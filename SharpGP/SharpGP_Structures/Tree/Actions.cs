@@ -16,7 +16,7 @@ public abstract class Action : Node
             result = Loop.NewLoop(ctx);
         if (toCreate == typeof(Write))
             result = Write.NewWrite(ctx);
-
+        
         return result ?? Write.NewWrite(ctx); //write is just in case
     }
 
@@ -163,6 +163,17 @@ public class Scope : Node, IGrowable, IMutable
         while (GetDepth() < targetDepth)
         {
             var x = Growables;
+            for (int i = 0; i < 10; i++)
+            {
+                Type t = ctx.config.TypeToGrow();
+                var growable = Growables.Where(x => x.GetType() == t).ToList();
+                if (growable.Count != 0)
+                {
+                    growable[ctx.rand.Next(growable.Count)].Grow(ctx);
+                    UpdateParents();
+                    return;
+                }
+            }
             x.Add(this);
             x[ctx.rand.Next(0, x.Count)].Grow(ctx);
         }

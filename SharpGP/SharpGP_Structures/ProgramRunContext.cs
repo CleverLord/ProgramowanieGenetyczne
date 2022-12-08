@@ -9,6 +9,8 @@ public class ProgramRunContext
     public long ElapsedMilliseconds = -1; //obsolete
     public long ElapsedTicks = -1;
     public Random rand = new Random();
+    public int actions = 0;
+    
     enum Strategy
     {
         InputOrZero,

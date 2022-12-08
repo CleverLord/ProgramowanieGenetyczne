@@ -15,6 +15,15 @@
       <None Include="bin\Debug\net6.0\test1.txt" />
       <None Include="bin\Debug\net6.0\test2.txt" />
       <None Include="bin\Debug\net6.0\testProgram.txt" />
+      <None Remove="bin\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="bin\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="bin\**" />
     </ItemGroup>
 
 </Project>

@@ -120,6 +120,7 @@ public class TreeConfig
     {
         PrecalculateGrowActions();
         PrecalculateGrowExpressions();
+        PrecalculateGrowProgram();
     }
     public void PrecalculateGrowActions()
     {

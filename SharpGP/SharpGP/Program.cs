@@ -17,9 +17,9 @@ using SharpGP.Utils;
 
 // OLD stuff below //
 
-PRogram p = TreeGenerator.GenerateProgram_MaxDepth(15);
+PRogram p = TreeGenerator.GenerateProgram_MaxDepth(7);
 PRogram p2 = TreeGenerator.GenerateProgram_NodeCount();
-var e= TreeGenerator.LoadProgramFromFile("testProgram.txt");
+//var e= TreeGenerator.LoadProgramFromFile("testProgram.txt");
 //PRogram p = SharpGP.SharpGP.LoadProgramFromFile("test1.txt");
 //PRogram p2 = SharpGP.SharpGP.LoadProgramFromFile("test2.txt");
 
@@ -39,11 +39,11 @@ p3.Invoke(prc);
 Console.WriteLine("Result:\n" + prc);
 
 Console.WriteLine("--------------------------------------------");
-for (int i = 1; i < 10; i++)
+/*for (int i = 1; i < 10; i++)
 {
     PRogram p4 = TreeGenerator.GenerateProgram_MaxDepth(15);
     Console.WriteLine("P4:\n" + p4);
     //print depth
     Console.WriteLine("Depth: " + p4.GetDepth());
     Console.WriteLine("--------------");
-}
+}*/

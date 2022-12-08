@@ -17,8 +17,9 @@ public static class SharpGP
 
         //create initial population
         List<PRogram> population = new List<PRogram>();
-        for (int i = 0; i < 100; i++) { population.Add(TreeGenerator.GenerateProgram_FromConfig(ts.config)); }
-        
+        for (int i = 0; i < 100; i++)
+            population.Add(TreeGenerator.GenerateProgram_FromConfig(ts.config));
+
         //evaluate initial population
         //while (termination condition not met)
         //create whole new population by crossover and mutation
@@ -37,8 +38,8 @@ public static class SharpGP
         PRogram p1c = (PRogram)p1.Clone();
         PRogram p2c = (PRogram)p2.Clone();
 
-        List<Node> p1n = p1c.Nodes; // get the nodes of the first program
-        List<Node> p2n = p2c.Nodes; // get the nodes of the second program
+        List<Node> p1n = p1c.GetNodes(); // get the nodes of the first program
+        List<Node> p2n = p2c.GetNodes(); // get the nodes of the second program
 
         p1n.RemoveAt(0); //drop the root node
         p2n.RemoveAt(0); //drop the root node
@@ -50,13 +51,18 @@ public static class SharpGP
             p1n.RemoveAt(p1Index);
             var matchingNodes = p2n.Where(n => n.GetType() == p1Node.GetType()).ToList();
             if (matchingNodes.Count == 0)
+            {
+                p1n = p1n.Where(n => n.GetType() != p1Node.GetType()).ToList();
                 continue;
+            }
+
             int p2Index = _rand.Next(0, matchingNodes.Count);
             Node p2Node = matchingNodes[p2Index];
 
             Node.CrossNodes(p1Node, p2Node); //this is in node, since children are protected
             return (p1c, p2c);
         }
+
         return null;
     }
 }
