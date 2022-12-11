@@ -88,32 +88,23 @@ public static class SharpGP
 
         //Ruletka
         var nodesToFactor = new Dictionary<Node, double>();
+
+        //"Wszystkie poddrzewa o mniejszym rozmiarze mają takie samo prawdopodobieństwo wyboru podobnie jak o większym"
+        //To po co je liczyć dla kazdego node'a?
+        double factor_eq = 1.0 / p1Depth;
+        double factor_lt = (1 - p1Depth) / (subtreesCount_Lower * (1 + avgSize_Lower / avgSize_Greater));
+        double factor_gt = (1 - p1Depth) / (subtreesCount_Greater * (1 + avgSize_Greater / avgSize_Lower));
+
         foreach (var v in nodesToDepth)
         {
             Node node = v.Key;
             int depth = v.Value;
-            double factor = 0;
             if (depth == p1Depth)
-            {
-                // factor = p0
-                factor = 1.0 / p1Depth;
-            }
+                nodesToFactor.Add(node, factor_eq);
+            else if (depth < p1Depth)
+                nodesToFactor.Add(node, factor_lt);
             else
-            {
-                // p+ = (1-p0) / n+ (1+mean+/mean-)
-                // a = (1-p0)
-                double a = 1.0 - (1.0 / p1Depth);
-                if (depth < p1Depth)
-                {
-                    factor = a / (subtreesCount_Lower * (1 + avgSize_Lower / avgSize_Greater));
-                }
-                else
-                {
-                    factor = a / (subtreesCount_Greater * (1 + avgSize_Greater / avgSize_Lower));
-                }
-            }
-
-            nodesToFactor.Add(node, factor);
+                nodesToFactor.Add(node, factor_gt);
         }
 
         Dictionary<int, double> depthFactors = new Dictionary<int, double>();
