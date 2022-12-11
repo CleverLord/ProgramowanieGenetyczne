@@ -101,11 +101,14 @@ public static class SharpGP
                 double factor = 0;
                 if( depth == p1Depth)
                 {
+                    // factor = p0
                     factor = 1.0/ p1Depth;
                 }
                 else
                 {
-                    double a = 1.0 / (1.0 / p1Depth);
+                    // p+ = (1-p0) / n+ (1+mean+/mean-)
+                    // a = (1-p0)
+                    double a = 1.0 - (1.0 / p1Depth);
                     if (depth < p1Depth)
                     {
                         factor = a / (subtreesCount_Lower * (1 + avgSize_Lower / avgSize_Greater));
