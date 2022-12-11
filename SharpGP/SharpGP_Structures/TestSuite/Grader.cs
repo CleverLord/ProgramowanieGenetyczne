@@ -38,7 +38,11 @@ public class Grader
         var absDiffs = output.Select((x, i) => Math.Abs(x - tc.targetOutput[i])).ToList();
         return absDiffs.Min();
     }
+
     public static double hasTargetValue(TestCase tc, ProgramRunContext prc)
+    {
+        return 0;
+    }
     
     public static double target_1_1_A(TestCase tc, ProgramRunContext prc)
     {

@@ -4,6 +4,7 @@ public abstract class Node
 {
     protected Node parent;
     protected List<Node>? children;
+    public List<Node> GetChildren => children;
     protected int indend = 0;
     protected void UpdateIndent() => children?.ForEach(n => n.indend = indend + 1);
     public void UpdateParents() =>
