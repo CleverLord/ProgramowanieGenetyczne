@@ -66,9 +66,9 @@ public static class SharpGP
         return null;
     }
 
-    public static Node? Getp2Node( List<Node> p2n, int p1Depth )
+    public static Node? Getp2Node(List<Node> p2n, int p1Depth)
     {
-        Dictionary<Node, int> nodesToDepth  =  p2n.ToDictionary( n => n, n => n.GetDepth() );
+        Dictionary<Node, int> nodesToDepth = p2n.ToDictionary(n => n, n => n.GetDepth());
         nodesToDepth = nodesToDepth.Where(t => t.Value <= 1 + (2 * p1Depth)).ToDictionary(t => t.Key, t => t.Value);
         //obliczanie factorów zgodnie ze slajdem nr.4 z wykladu
         var subtreesCount_Lower = nodesToDepth.Count(p => p.Value < p1Depth);
@@ -76,95 +76,82 @@ public static class SharpGP
         var subtreesCount_Greater = nodesToDepth.Count(p => p.Value > p1Depth);
         var avgSize_Lower = nodesToDepth.Where(p => p.Value < p1Depth).Average(p => p.Value);
         var avgSize_Greater = nodesToDepth.Where(p => p.Value > p1Depth).Average(p => p.Value);
-        
+
         if (subtreesCount_Lower == 0 || subtreesCount_Greater == 0)
         {
             //zastosowanie wyjątku zgodnie ze slajdem nr.5 z wykladu
             if (subtreesCount_Equal == 0)
-            {
                 return null;
+            var equalNodes = nodesToDepth.Where(p => p.Value == p1Depth).ToList();
+            return equalNodes[_rand.Next(0, equalNodes.Count)].Key;
+        }
+
+        //Ruletka
+        var nodesToFactor = new Dictionary<Node, double>();
+        foreach (var v in nodesToDepth)
+        {
+            Node node = v.Key;
+            int depth = v.Value;
+            double factor = 0;
+            if (depth == p1Depth)
+            {
+                // factor = p0
+                factor = 1.0 / p1Depth;
             }
             else
             {
-                var equalNodes = nodesToDepth.Where(p => p.Value == p1Depth).ToList();
-                return equalNodes[_rand.Next(0, equalNodes.Count)].Key;
-            }
-        }
-        else
-        {
-            //Ruletka
-            var nodesToFactor = new Dictionary< Node, double>();
-            foreach (var v in nodesToDepth)
-            {
-                Node node = v.Key;
-                int depth = v.Value;
-                double factor = 0;
-                if( depth == p1Depth)
+                // p+ = (1-p0) / n+ (1+mean+/mean-)
+                // a = (1-p0)
+                double a = 1.0 - (1.0 / p1Depth);
+                if (depth < p1Depth)
                 {
-                    // factor = p0
-                    factor = 1.0/ p1Depth;
+                    factor = a / (subtreesCount_Lower * (1 + avgSize_Lower / avgSize_Greater));
                 }
                 else
                 {
-                    // p+ = (1-p0) / n+ (1+mean+/mean-)
-                    // a = (1-p0)
-                    double a = 1.0 - (1.0 / p1Depth);
-                    if (depth < p1Depth)
-                    {
-                        factor = a / (subtreesCount_Lower * (1 + avgSize_Lower / avgSize_Greater));
-                    }
-                    else
-                    { 
-                        factor  = a / (subtreesCount_Greater * (1 + avgSize_Greater / avgSize_Lower));
-                    }
+                    factor = a / (subtreesCount_Greater * (1 + avgSize_Greater / avgSize_Lower));
                 }
-                
-                nodesToFactor.Add(node, factor);
-            }
-            
-            Dictionary<int, double> depthFactors = new Dictionary<int, double>();
-            foreach (var kvp in nodesToDepth)
-            {
-                Node node = kvp.Key;
-                int depth = kvp.Value;
-                if (!depthFactors.ContainsKey(depth))
-                {
-                    depthFactors.Add(depth, 0);
-                }
-                depthFactors[depth] += nodesToFactor[node];
-            }
-            
-            double sum = depthFactors.Sum(kvp => kvp.Value);
-            int maxDepth = depthFactors.Max(kvp => kvp.Key);
-            double[] depthFactorsArray = new double[maxDepth + 1];
-            for (int i = 0; i < depthFactorsArray.Length; i++)
-            {
-                depthFactorsArray[i] = depthFactors.ContainsKey(i) ? depthFactors[i] / sum : 0;
             }
 
-            var depthFactorsCumulated = new double[depthFactorsArray.Length];
-            for (int i = 0; i < depthFactorsCumulated.Length; i++)
-            {
-                depthFactorsCumulated[i] = depthFactorsArray[i] + (i > 0 ? depthFactorsCumulated[i - 1] : 0);
-            }
-            
-            double random = _rand.NextDouble();
-            int depthIndex = 0;
-            for (int i = 0; i < depthFactorsCumulated.Length; i++)
-            {
-                if (random < depthFactorsCumulated[i])
-                {
-                    depthIndex = i;
-                    break;
-                }
-            }
-            
-            var nodesAtDepth = nodesToDepth.Where(kvp => kvp.Value == depthIndex).ToList();
-            return nodesAtDepth[_rand.Next(0, nodesAtDepth.Count)].Key;
+            nodesToFactor.Add(node, factor);
         }
-        return null;
+
+        Dictionary<int, double> depthFactors = new Dictionary<int, double>();
+        foreach (var kvp in nodesToDepth)
+        {
+            Node node = kvp.Key;
+            int depth = kvp.Value;
+            if (!depthFactors.ContainsKey(depth))
+                depthFactors.Add(depth, 0);
+            depthFactors[depth] += nodesToFactor[node];
+        }
+
+        double sum = depthFactors.Sum(kvp => kvp.Value);
+        int maxDepth = depthFactors.Max(kvp => kvp.Key);
+        double[] depthFactorsArray = new double[maxDepth + 1];
+        for (int i = 0; i < depthFactorsArray.Length; i++)
+            depthFactorsArray[i] = depthFactors.ContainsKey(i) ? depthFactors[i] / sum : 0;
+
+
+        var depthFactorsCumulated = new double[depthFactorsArray.Length];
+        for (int i = 0; i < depthFactorsCumulated.Length; i++)
+            depthFactorsCumulated[i] = depthFactorsArray[i] + (i > 0 ? depthFactorsCumulated[i - 1] : 0);
+
+        double random = _rand.NextDouble();
+        int depthIndex = 0;
+        for (int i = 0; i < depthFactorsCumulated.Length; i++)
+        {
+            if (random < depthFactorsCumulated[i])
+            {
+                depthIndex = i;
+                break;
+            }
+        }
+
+        var nodesAtDepth = nodesToDepth.Where(kvp => kvp.Value == depthIndex).ToList();
+        return nodesAtDepth[_rand.Next(0, nodesAtDepth.Count)].Key;
     }
-    
+
     public static (PRogram, PRogram)? CrossProgramsV2(PRogram p1, PRogram p2)
     {
         PRogram p1c = (PRogram)p1.Clone();
@@ -186,6 +173,7 @@ public static class SharpGP
                 p1n = p1n.Where(n => n.GetType() != p1Node.GetType()).ToList();
                 continue;
             }
+
             var p1Depth = p1n.Max(n => n.GetDepth());
             Node? p2Node = Getp2Node(matchingNodes, p1Depth);
             if (p2Node == null)
@@ -193,11 +181,12 @@ public static class SharpGP
                 p1n = p1n.Where(n => n.GetType() != p1Node.GetType()).ToList();
                 continue;
             }
-            Node.CrossNodes(p1Node, p2Node); 
+
+            Node.CrossNodes(p1Node, p2Node);
             return (p1c, p2c);
         }
-        
-        
+
+
         return null;
     }
 }
