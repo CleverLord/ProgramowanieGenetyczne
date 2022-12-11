@@ -87,60 +87,25 @@ public static class SharpGP
         }
 
         //Ruletka
-        var nodesToFactor = new Dictionary<Node, double>();
-
+        
         //"Wszystkie poddrzewa o mniejszym rozmiarze mają takie samo prawdopodobieństwo wyboru podobnie jak o większym"
         //To po co je liczyć dla kazdego node'a?
         double factor_eq = 1.0 / p1Depth;
         double factor_lt = (1 - p1Depth) / (subtreesCount_Lower * (1 + avgSize_Lower / avgSize_Greater));
         double factor_gt = (1 - p1Depth) / (subtreesCount_Greater * (1 + avgSize_Greater / avgSize_Lower));
 
-        foreach (var v in nodesToDepth)
-        {
-            Node node = v.Key;
-            int depth = v.Value;
-            if (depth == p1Depth)
-                nodesToFactor.Add(node, factor_eq);
-            else if (depth < p1Depth)
-                nodesToFactor.Add(node, factor_lt);
-            else
-                nodesToFactor.Add(node, factor_gt);
-        }
-
-        Dictionary<int, double> depthFactors = new Dictionary<int, double>();
-        foreach (var kvp in nodesToDepth)
-        {
-            Node node = kvp.Key;
-            int depth = kvp.Value;
-            if (!depthFactors.ContainsKey(depth))
-                depthFactors.Add(depth, 0);
-            depthFactors[depth] += nodesToFactor[node];
-        }
-
-        double sum = depthFactors.Sum(kvp => kvp.Value);
-        int maxDepth = depthFactors.Max(kvp => kvp.Key);
-        double[] depthFactorsArray = new double[maxDepth + 1];
-        for (int i = 0; i < depthFactorsArray.Length; i++)
-            depthFactorsArray[i] = depthFactors.ContainsKey(i) ? depthFactors[i] / sum : 0;
-
-
-        var depthFactorsCumulated = new double[depthFactorsArray.Length];
-        for (int i = 0; i < depthFactorsCumulated.Length; i++)
-            depthFactorsCumulated[i] = depthFactorsArray[i] + (i > 0 ? depthFactorsCumulated[i - 1] : 0);
-
         double random = _rand.NextDouble();
-        int depthIndex = 0;
-        for (int i = 0; i < depthFactorsCumulated.Length; i++)
-        {
-            if (random < depthFactorsCumulated[i])
-            {
-                depthIndex = i;
-                break;
-            }
-        }
+        if (random < factor_eq)
+            //wybierz losowe poddrzewo o takim samym rozmiarze
+            return nodesToDepth.Where(p => p.Value == p1Depth).ToArray()[_rand.Next(0, subtreesCount_Equal)].Key;
+        if (random < factor_eq + factor_lt)
+            //wybierz losowe poddrzewo o mniejszym rozmiarze
+            return nodesToDepth.Where(p => p.Value < p1Depth).ToArray()[_rand.Next(0, subtreesCount_Equal)].Key;
+        else
+            //wybierz losowe poddrzewo o większym rozmiarze
+            return nodesToDepth.Where(p => p.Value > p1Depth).ToArray()[_rand.Next(0, subtreesCount_Equal)].Key;
 
-        var nodesAtDepth = nodesToDepth.Where(kvp => kvp.Value == depthIndex).ToList();
-        return nodesAtDepth[_rand.Next(0, nodesAtDepth.Count)].Key;
+        return null;
     }
 
     public static (PRogram, PRogram)? CrossProgramsV2(PRogram p1, PRogram p2)
