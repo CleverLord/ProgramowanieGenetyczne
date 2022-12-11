@@ -32,6 +32,14 @@ public class Grader
     }
     
     
+    public static double bestAbsoluteError(TestCase tc, ProgramRunContext prc)
+    {
+        List<double> output = prc.GetOutput();
+        var absDiffs = output.Select((x, i) => Math.Abs(x - tc.targetOutput[i])).ToList();
+        return absDiffs.Min();
+    }
+    public static double hasTargetValue(TestCase tc, ProgramRunContext prc)
+    
     public static double target_1_1_A(TestCase tc, ProgramRunContext prc)
     {
         //Program powinien wygenerować na wyjściu (na dowolnej pozycji w danych wyjściowych) liczbę 1. Poza liczbą 1 może też zwrócić inne liczby.
@@ -57,9 +65,13 @@ public class Grader
     {
         List<double> output = prc.GetOutput();
         double target = tc.targetOutput[0];
-        return hasTargetValue(target, output) ? 0 : 1;
+
+        if (output.Count != 1)
+            return double.MaxValue;
+
+        return target - output[0];
     }
-    public static double atFirstPlace(TestCase tc, ProgramRunContext prc)
+    public static double AtFirstPlace(TestCase tc, ProgramRunContext prc)
     {
         List<double> output = prc.GetOutput();
         double target = tc.targetOutput[0];
@@ -74,8 +86,12 @@ public class Grader
     {
         if(prc.GetOutput().Count != 1) { return 1; }
         return  Close(prc.GetOutput()[0], tc.targetOutput[0]) ? 0 : 1;
+
+       /* if (output.Count != 1)
+            return double.MaxValue;
+        return target - output[0];*/        
     }
-    public static double hasAllTargetValues(TestCase tc, ProgramRunContext prc){
+    public static double HasAllTargetValues(TestCase tc, ProgramRunContext prc){
         foreach (var i in tc.input)
         {
             if (!hasTargetValue(i, prc.GetOutput())) { return 1; }
@@ -85,7 +101,7 @@ public class Grader
     public static double Sum(TestCase tc, ProgramRunContext prc)
     {
         List<double> output = prc.GetOutput();
-        if(hasAllTargetValues(tc, prc) == 0){
+        if(HasAllTargetValues(tc, prc) == 0){
             return 0;
         }
         double sum = 0;
@@ -100,6 +116,7 @@ public class Grader
     //     
     // }
     
+
 
     #region helper functions
     public static bool hasTargetValue(double target, List<double> output)
