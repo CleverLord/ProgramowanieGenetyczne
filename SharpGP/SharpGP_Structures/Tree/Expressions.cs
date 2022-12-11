@@ -23,13 +23,16 @@ public abstract class Expression : Node
         }
         return new Read(); //should never happen
         */
-        Type target = ctx.config.ExpressionToCreate();
+        /*Type target = ctx.config.ExpressionToCreate();
         if (target == typeof(Variable))
             return Variable.Random(ctx);
         if (target == typeof(Constant))
             return Constant.NewConstant(ctx);
         if (target == typeof(Read))
-            return new Read();
+            return new Read();*/
+        
+        Func<PRogram, Expression> creator = ctx.config.ExpressionToCreate();
+        return creator.Invoke(ctx);
 
         //make it later raport to runtimeContext instead of crashing whole evolution process
         throw new Exception("Invalid Expression Type");
@@ -135,4 +138,5 @@ public class Read : Expression
 {
     public override string ToString() => "read()";
     public override double Evaluate(ProgramRunContext prc) => prc.Pop();
+    public static Read NewRead(PRogram ctx) => new Read();
 }

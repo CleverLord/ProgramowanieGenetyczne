@@ -1,4 +1,5 @@
 ﻿using SharpGP_Structures.Tree;
+using Action = SharpGP_Structures.Tree.Action;
 
 namespace SharpGP_Structures;
 
@@ -191,29 +192,29 @@ public class TreeConfig
     #endregion
 
     [NonSerialized] public Random r = new Random();
-    public Type ActionToCreate()
+    public Func<PRogram, Action> ActionToCreate()
     {
         double chance = r.NextDouble();
         if (chance < NewAssignmentChance)
-            return typeof(Assignment);
+            return Assignment.NewAssignment;
         else if (chance < NewIfStatementChance)
-            return typeof(IfStatement);
+            return IfStatement.NewIfStatement;
         else if (chance < NewLoopChance)
-            return typeof(Loop);
+            return Loop.NewLoop;
         else if (chance < NewWriteChance)
-            return typeof(Write);
+            return Write.NewWrite;
         else
             throw new Exception("Invalid chance");
     }
-    public Type ExpressionToCreate()
+    public Func<PRogram,Expression> ExpressionToCreate()
     {
         double chance = r.NextDouble();
         if (chance < NewVariableChance)
-            return typeof(Variable);
+            return Variable.RandomOrNew;
         else if (chance < NewConstantChance)
-            return typeof(Constant);
+            return Constant.NewConstant;
         else if (chance < NewReadChance)
-            return typeof(Read);
+            return Read.NewRead;
         else
             throw new Exception("Invalid chance");
     }

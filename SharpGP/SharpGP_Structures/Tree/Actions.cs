@@ -6,18 +6,8 @@ public abstract class Action : Node
 
     public static Action NewAction(PRogram ctx)
     {
-        Action? result = null;
-        Type toCreate = ctx.config.ActionToCreate();
-        if (toCreate == typeof(Assignment))
-            result = Assignment.NewAssignment(ctx);
-        if (toCreate == typeof(IfStatement))
-            result = IfStatement.NewIfStatement(ctx);
-        if (toCreate == typeof(Loop))
-            result = Loop.NewLoop(ctx);
-        if (toCreate == typeof(Write))
-            result = Write.NewWrite(ctx);
-        
-        return result ?? Write.NewWrite(ctx); //write is just in case
+        Func<PRogram, Action> creator = ctx.config.ActionToCreate();
+        return creator.Invoke(ctx);
     }
 
     public abstract void FullGrow(PRogram ctx, int targetDepth);
