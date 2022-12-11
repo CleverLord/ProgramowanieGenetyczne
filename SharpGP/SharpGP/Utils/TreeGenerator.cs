@@ -11,7 +11,7 @@ public static class TreeGenerator
     {
         PRogram p = new PRogram();
         if (seed != -1) { p = new PRogram(seed); }
-        while (p.Nodes.Count < minNodeCount) { p.Grow(); }
+        while (p.GetNodes().Count < minNodeCount) { p.Grow(); }
         return p;
     }
     public static PRogram GenerateProgram_MaxDepth(int maxDepth = 12, int seed = -1)
