@@ -74,35 +74,104 @@ public static class TestSetGenerator
         SaveTestSuite(ts, "TestSet_1_1_C");
     }
 
-    public static void GenerateFor_1_2_D()
+    public static void GenerateFor_1_1_D()
     {
         TestSet ts = new TestSet();
 
         ts.stages.Add(new TestStage() {grader = new Grader("hasTargetValue"), threshold = 0.001});
         ts.stages.Add(new TestStage() {grader = new Grader("AtFirstPlace"), threshold = 0.001});
         ts.testCases.Add(new TestCase() { targetOutput = new List<double>() { 1 } });
-        SaveTestSuite(ts, "TestSet_1_1_C");
+        SaveTestSuite(ts, "TestSet_1_1_D");
+    }
+    public static void GenerateFor_1_1_E()
+    {
+        TestSet ts = new TestSet();
+        ts.stages.Add(new TestStage() {grader = new Grader("hasTargetValue"), threshold = 0.001});
+        ts.stages.Add(new TestStage() {grader = new Grader("AtFirstPlace"), threshold = 0.001});
+        ts.testCases.Add(new TestCase() { targetOutput = new List<double>() { 789 } });
+        SaveTestSuite(ts, "TestSet_1_1_E");
+    }
+    public static void GenerateFor_1_1_F()
+    {
+        TestSet ts = new TestSet();
+        ts.stages.Add(new TestStage() {grader = new Grader("hasTargetValue"), threshold = 0.001});
+        ts.stages.Add(new TestStage() {grader = new Grader("AtFirstPlace"), threshold = 0.001});
+        ts.stages.Add(new TestStage() {grader = new Grader("justOneTargetValue"), threshold = 0.001});
+        ts.testCases.Add(new TestCase() { targetOutput = new List<double>() { 789 } });
+        SaveTestSuite(ts, "TestSet_1_1_F");
+    }
+    public static void GenerateFor_1_2_A()
+    {
+        TestSet ts = new TestSet();
+        ts.stages.Add(new TestStage() {grader = new Grader("target_1_2_A"), threshold = 0.001});
+
+        for (int i = 0; i < 100; i++)
+        {
+            double a = getRandomDouble(0, 9);
+            double b = getRandomDouble(0, 9);
+            double c = a + b;
+            ts.testCases.Add(new TestCase() {input = new List<double>() {a, b}, targetOutput = new List<double>() {c}});
+        }
+        SaveTestSuite(ts, "TestSet_1_2_A");
+    }
+    public static void GenerateFor_1_2_B()
+    {
+        TestSet ts = new TestSet();
+
+        ts.stages.Add(new TestStage() {grader = new Grader("target_1_2_B"), threshold = 0.001});
+
+        for (int i = 0; i < 100; i++)
+        {
+            double a = getRandomDouble(-9, 9);
+            double b = getRandomDouble(-9, 9);
+            double c = a + b;
+            ts.testCases.Add(new TestCase() {input = new List<double>() {a, b}, targetOutput = new List<double>() {c}});
+        }
+        SaveTestSuite(ts, "TestSet_1_2_B");
+    }
+    public static void GenerateFor_1_2_C()
+    {
+        TestSet ts = new TestSet();
+
+        ts.stages.Add(new TestStage() {grader = new Grader("target_1_2_C"), threshold = 0.001});
+
+        for (int i = 0; i < 100; i++)
+        {
+            double a = getRandomDouble(-9999,9999);
+            double b = getRandomDouble(-9999,9999);
+            double c = a + b;
+            ts.testCases.Add(new TestCase() {input = new List<double>() {a, b}, targetOutput = new List<double>() {c}});
+        }
+        SaveTestSuite(ts, "TestSet_1_2_C");
+    }
+    public static void GenerateFor_1_2_D()
+    {
+        TestSet ts = new TestSet();
+
+        ts.stages.Add(new TestStage() {grader = new Grader("target_1_2_D"), threshold = 0.001});
+
+        for (int i = 0; i < 100; i++)
+        {
+            double a = getRandomDouble(-9999,9999);
+            double b = getRandomDouble(-9999,9999);
+            double c = a - b;
+            ts.testCases.Add(new TestCase() {input = new List<double>() {a, b}, targetOutput = new List<double>() {c}});
+        }
+        SaveTestSuite(ts, "TestSet_1_2_D");
     }
     public static void GenerateFor_1_2_E()
     {
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() {grader = new Grader("hasTargetValue"), threshold = 0.001});
-        ts.stages.Add(new TestStage() {grader = new Grader("AtFirstPlace"), threshold = 0.001});
-        ts.testCases.Add(new TestCase() { targetOutput = new List<double>() { 789 } });
-        SaveTestSuite(ts, "TestSet_1_1_C");
-    }
-    public static void GenerateFor_1_2_F()
-    {
-        TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() {grader = new Grader("hasTargetValue"), threshold = 0.001});
-        ts.stages.Add(new TestStage() {grader = new Grader("AtFirstPlace"), threshold = 0.001});
-        ts.stages.Add(new TestStage() {grader = new Grader("AtFirstPlace"), threshold = 0.001});
-        ts.testCases.Add(new TestCase() { targetOutput = new List<double>() { 789 } });
-        SaveTestSuite(ts, "TestSet_1_1_C");
-    }
-    public static void GenerateFor_1_2_C()
-    {
-        
+        ts.stages.Add(new TestStage() {grader = new Grader("target_1_2_E"), threshold = 0.001});
+
+        for (int i = 0; i < 100; i++)
+        {
+            double a = getRandomDouble(-9999,9999);
+            double b = getRandomDouble(-9999,9999);
+            double c = a * b;
+            ts.testCases.Add(new TestCase() {input = new List<double>() {a, b}, targetOutput = new List<double>() {c}});
+        }
+        SaveTestSuite(ts, "TestSet_1_2_E");
     }
     public static void GenerateFor_1_3_A()
     {
@@ -118,6 +187,21 @@ public static class TestSetGenerator
             ts.testCases.Add(new TestCase() {input = new List<double>() {a, b}, targetOutput = new List<double>() {c}});
         }
         SaveTestSuite(ts, "TestSet_1_3_A");
+    }
+    public static void GenerateFor_1_3_B()
+    {
+        TestSet ts = new TestSet();
+
+        ts.stages.Add(new TestStage() {grader = new Grader("target_1_3_B"), threshold = 0.001});
+
+        for (int i = 0; i < 100; i++)
+        {
+            double a = getRandomDouble(-9999,9999);
+            double b = getRandomDouble(-9999,9999);
+            double c = a < b ? a : b;
+            ts.testCases.Add(new TestCase() {input = new List<double>() {a, b}, targetOutput = new List<double>() {c}});
+        }
+        SaveTestSuite(ts, "TestSet_1_3_B");
     }
     
     public static void GenerateFor_1_4_A()
@@ -139,6 +223,29 @@ public static class TestSetGenerator
         }
 
         SaveTestSuite(ts, "TestSet_1_4_A");
+    }
+
+    public static void GenerateFor_1_4_B()
+    {
+        TestSet ts = new TestSet();
+
+        ts.stages.Add(new TestStage() { grader = new Grader("target_1_4_B__1"), threshold = 0.001 });
+        ts.stages.Add(new TestStage() { grader = new Grader("target_1_4_B__0"), threshold = 0.001 });
+        
+        for (int j = 0; j < 100; j++)
+        {
+            int numberOfTests = rnd.Next(0, 99);
+            double sum = 0;
+            for (var i = 0; i < numberOfTests; i++)
+            {
+                sum += getRandomDouble(-99, 99);
+            }
+            double avg = Math.Round(sum / numberOfTests);
+            ts.testCases.Add(new TestCase() 
+                {input = {numberOfTests}, targetOutput = new List<double>() {avg}});
+        }
+
+        SaveTestSuite(ts, "TestSet_1_4_B");
     }
 
     #region RandomRegion
