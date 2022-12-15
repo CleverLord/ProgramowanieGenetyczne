@@ -2,8 +2,8 @@
 
 public class ProgramRunContext
 {
-    private static List<double> input = new List<double>();
-    private List<double> inputCopy = new List<double>(input);
+    public List<double> input = new List<double>();
+    private List<double> inputCopy = new List<double>();
     private List<double> output = new List<double>();
     public Dictionary<string, double> variables = new Dictionary<string, double>();
     public long ElapsedMilliseconds = -1; //obsolete
