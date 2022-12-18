@@ -91,8 +91,8 @@ public static class SharpGP
         //"Wszystkie poddrzewa o mniejszym rozmiarze mają takie samo prawdopodobieństwo wyboru podobnie jak o większym"
         //To po co je liczyć dla kazdego node'a?
         double factor_eq = 1.0 / p1Depth;
-        double factor_lt = (1 - p1Depth) / (subtreesCount_Lower * (1 + avgSize_Lower / avgSize_Greater));
-        double factor_gt = (1 - p1Depth) / (subtreesCount_Greater * (1 + avgSize_Greater / avgSize_Lower));
+        double factor_lt = (1 - p1Depth) /  (1 + avgSize_Lower / avgSize_Greater);
+        //double factor_gt = (1 - p1Depth) / (1 + avgSize_Greater / avgSize_Lower); //wartość nieużywana
 
         double random = _rand.NextDouble();
         if (random < factor_eq)
