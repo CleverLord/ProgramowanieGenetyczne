@@ -81,7 +81,11 @@ public class Grader
         double target = tc.targetOutput[0];
         return Close(output[0], target) ? 0 : 1;
     }
-
+    //powinna istnieć możliwość określenia ile czasu może się maksymalnie wykonywać dany program (dla danego wektora wejściowego).
+    //Limit „czasu wykonywania” powinien być określony jako ilość instrukcji w języku, które mogą być wykonane 
+    
+    
+    
     public static bool Close(double a, double b)
     {
         return Math.Abs(a - b) < 0.0001;
