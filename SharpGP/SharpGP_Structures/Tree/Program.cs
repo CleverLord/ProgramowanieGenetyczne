@@ -4,7 +4,7 @@ public class PRogram : Node, IGrowable, IMutable {
 	public static char TAB = ' ';
 	public Random rand = new Random();
 	public TreeConfig config= new TreeConfig();
-	
+
 	private List<Action> Actions => children.Cast<Action>().ToList();
 
 	private List<String> Variables =>
@@ -67,20 +67,17 @@ public class PRogram : Node, IGrowable, IMutable {
 		Actions.ForEach(x => x.FullGrow(this, config.maxDepth-1));
 	}
 	
-	public void Mutate() //mutate something in the program
+	public void Mutate(Type t) //mutate something in the program
 	{
 		var x = Mutables;
 		//apply config percentages
-		for (int i = 0; i < 10; i++)
+		var mutable = Mutables.Where(x => x.GetType() == t).ToList();
+		if (mutable.Count != 0)
 		{
-			Type t = config.TypeToMutate();
-			var mutable = Mutables.Where(x => x.GetType() == t).ToList();
-			if (mutable.Count != 0)
-			{
-				mutable[rand.Next(mutable.Count)].Mutate(this);
-				return;
-			}
+			mutable[rand.Next(mutable.Count)].Mutate(this);
+			return;
 		}
+		Console.WriteLine("This should never be printed" + t + Environment.NewLine + ToString());
 		x[rand.Next(0, x.Count)].Mutate(this);
 	}
 	public void Mutate(PRogram ctx) //mutate program node itself
@@ -89,4 +86,7 @@ public class PRogram : Node, IGrowable, IMutable {
 		children.Remove(n);
 		children.Insert(rand.Next(0, children.Count), n);
 	}
+	public bool hasNodeOfType(Type t) => Nodes.Any(x => x.GetType() == t);
+	public bool canBeMutated() => Mutables.Count != 0;
+	
 }

@@ -218,24 +218,6 @@ public class TreeConfig
         else
             throw new Exception("Invalid chance");
     }
-    public Type TypeToMutate()
-    {
-        double chance = r.NextDouble();
-        if (chance < MutateProgramChance)
-            return typeof(PRogram);
-        else if (chance < MutateVariableChance)
-            return typeof(Variable);
-        else if (chance < MutateConstantChance)
-            return typeof(Constant);
-        else if (chance < MutateComparatorChance)
-            return typeof(Comparator);
-        else if (chance < MutateOperatorChance)
-            return typeof(Operator);
-        else if (chance < MutateScopeChance)
-            return typeof(Scope);
-        else
-            throw new Exception("Invalid chance");
-    }
     public Type TypeToCrossOver()
     {
         double chance = r.NextDouble();

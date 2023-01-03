@@ -48,8 +48,13 @@ public static class SharpGP
                     {
                         //mutate
                         PRogram p = population[_rand.Next(population.Count)];
+                        while (!p.canBeMutated()) // pray that any of the programs can be mutated
+                            p = population[_rand.Next(population.Count)];
                         PRogram newP = (PRogram) p.Clone();
-                        newP.Mutate();
+                        Type typeToMutate = getTypeToMutate(newP.config);
+                        while(!newP.hasNodeOfType(typeToMutate))
+                            typeToMutate = getTypeToMutate(newP.config);
+                        newP.Mutate(typeToMutate);
                         newPopulation.Add(newP);
                     }
                     else
@@ -225,5 +230,22 @@ public static class SharpGP
 
 
         return null;
+    }
+    public static Type getTypeToMutate(TreeConfig tc)
+    {
+        double chance = _rand.NextDouble();
+        if (chance < tc.MutateProgramChance)
+            return typeof(PRogram);
+        else if (chance < tc.MutateVariableChance)
+            return typeof(Variable);
+        else if (chance < tc.MutateConstantChance)
+            return typeof(Constant);
+        else if (chance < tc.MutateComparatorChance)
+            return typeof(Comparator);
+        else if (chance < tc.MutateOperatorChance)
+            return typeof(Operator);
+        //else if (chance < tc.MutateScopeChance) //MutationScopeChance is 1 
+        return typeof(Scope);
+        
     }
 }
