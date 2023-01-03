@@ -12,6 +12,14 @@ public class Grader
     {
         var method = GetType().GetMethod(gradingFunctionName);
         if (method == null) { throw new Exception("Grading function called " + gradingFunctionName + " does not exist"); }
+        //check for return type
+        if(method.ReturnType != typeof(double)) { throw new Exception("Grading function called " + gradingFunctionName + " does not return a double"); }
+        //check for params
+        var parameters = method.GetParameters();
+        if(parameters.Length != 2) { throw new Exception("Grading function called " + gradingFunctionName + " does not have 2 parameters"); }
+        if(parameters[0].ParameterType != typeof(TestCase)) { throw new Exception("Grading function called " + gradingFunctionName + " does not have a TestCase as its first parameter"); }
+        if(parameters[1].ParameterType != typeof(ProgramRunContext)) { throw new Exception("Grading function called " + gradingFunctionName + " does not have a ProgramRunContext as its second parameter"); }
+        //create delegate
         gradingFunctionDelegate = method.CreateDelegate<Func<TestCase, ProgramRunContext, double>>();
     }
     public Grader(string gradingFunction)

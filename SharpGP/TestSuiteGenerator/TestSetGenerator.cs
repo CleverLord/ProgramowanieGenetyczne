@@ -27,13 +27,13 @@ public static class TestSetGenerator
         }
         
         ts.stages.Add( new (){grader =  new Grader("bestAbsoluteError"), 
-            ag =  new Agregrader("sum"){}} );
+            ag =  new Agregrader("sum")} );
         ts.stages.Add( new (){grader =  new Grader("hasTargetValue"), 
-            ag =  new Agregrader("sum"){}} );
+            ag =  new Agregrader("sum")} );
         ts.stages.Add( new (){grader =  new Grader("atFirstPlace"), 
-            ag =  new Agregrader("sum"){}} );
+            ag =  new Agregrader("sum")} );
         ts.stages.Add( new (){grader =  new Grader("justOneTargetValue"), 
-            ag =  new Agregrader("sum"){}} );
+            ag =  new Agregrader("sum")} );
         
         SaveTestSuite(ts, "ConstantValueTS_" + constant);
     }

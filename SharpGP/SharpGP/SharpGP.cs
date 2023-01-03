@@ -133,40 +133,6 @@ public static class SharpGP
         return result;
     }
 
-    //Helper functions:
-    public static (PRogram, PRogram)? CrossPrograms(PRogram p1, PRogram p2)
-    {
-        PRogram p1c = (PRogram)p1.Clone();
-        PRogram p2c = (PRogram)p2.Clone();
-
-        List<Node> p1n = p1c.GetNodes(); // get the nodes of the first program
-        List<Node> p2n = p2c.GetNodes(); // get the nodes of the second program
-
-        p1n.RemoveAt(0); //drop the root node
-        p2n.RemoveAt(0); //drop the root node
-
-        while (p1n.Count > 0)
-        {
-            int p1Index = _rand.Next(0, p1n.Count);
-            Node p1Node = p1n[p1Index];
-            p1n.RemoveAt(p1Index);
-            var matchingNodes = p2n.Where(n => n.GetType() == p1Node.GetType()).ToList();
-            if (matchingNodes.Count == 0)
-            {
-                p1n = p1n.Where(n => n.GetType() != p1Node.GetType()).ToList();
-                continue;
-            }
-
-            int p2Index = _rand.Next(0, matchingNodes.Count);
-            Node p2Node = matchingNodes[p2Index];
-
-            Node.CrossNodes(p1Node, p2Node); //this is in node, since children are protected
-            return (p1c, p2c);
-        }
-
-        return null;
-    }
-
     public static Node? Getp2Node(List<Node> p2n, int p1Depth)
     {
         Dictionary<Node, int> nodesToDepth = p2n.ToDictionary(n => n, n => n.GetDepth());
