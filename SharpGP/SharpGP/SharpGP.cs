@@ -16,9 +16,9 @@ public static class SharpGP
         int currentGeneration = 0;
         int popSize = 100; //move this to TestSet
         TestStage currentStage = ts.stages[0];
+        bool isLastStage = ts.stages.Count == 1;
         Grader g= currentStage.grader;
         Agregrader ag = currentStage.ag;
-        
         //create initial population
         List<PRogram> population = new List<PRogram>();
         for (int i = 0; i < popSize; i++)
@@ -32,7 +32,7 @@ public static class SharpGP
         marks.Sort();
         while (currentStage != null) //has job to do
         {
-            while (marks[(int)(marks.Count * 0.9)] > currentStage.threshold)
+            while ((marks[(int)(marks.Count * 0.9)] > currentStage.threshold && !isLastStage) || (marks[0] > currentStage.threshold && isLastStage) )
             {
                 //train
                 List<PRogram> newPopulation= new List<PRogram>();
@@ -44,9 +44,9 @@ public static class SharpGP
                 while (newPopulation.Count < popSize)
                 {
                     //select whether to crossover or mutate
+                    //mutate
                     if (_rand.NextDouble() < ts.config.MutationChance)
                     {
-                        //mutate
                         PRogram p = population[_rand.Next(population.Count)];
                         while (!p.canBeMutated()) // pray that any of the programs can be mutated
                             p = population[_rand.Next(population.Count)];
@@ -57,17 +57,27 @@ public static class SharpGP
                         newP.Mutate(typeToMutate);
                         newPopulation.Add(newP);
                     }
+                    //crossover
                     else
                     {
-                        //crossover
-                        PRogram p1 = Tournament(programsToMarks, 4);
-                        PRogram p2 = Tournament(programsToMarks, 4);
-                        var x= CrossPrograms(p1, p2);
-                        if (x != null)
+                        bool crossoverSuccess = false;
+                        while (!crossoverSuccess)
                         {
-                            newPopulation.Add(x.Value.Item1);
-                            newPopulation.Add(x.Value.Item2);
+                            PRogram p1 = Tournament(programsToMarks, 4);
+                            PRogram p2 = Tournament(programsToMarks, 4);
+                            if(p1 != p2)
+                            {
+                                var x= CrossProgramsV2(p1, p2);
+                                if (x != null)
+                                {
+                                    newPopulation.Add(x.Value.Item1);
+                                    newPopulation.Add(x.Value.Item2);
+                                    crossoverSuccess = true;
+                                }
+                            }
+                            
                         }
+                        
                     }
                 }
                 programsToMarks = evaluatedPopulation(population, ts.testCases, g,ag);
@@ -79,13 +89,18 @@ public static class SharpGP
                 currentStage = null;
             else
             {
-                currentStage = ts.stages[indexOfCurrentStage + 1];
+                currentStage = ts.stages[++indexOfCurrentStage];
                 g = currentStage.grader;
                 ag = currentStage.ag;
+                isLastStage =  indexOfCurrentStage == ts.stages.Count -1;
             }
         }
-        //create whole new population by crossover and mutation
-        //decide whether to use crossover or mutation
+        //print summary
+        Console.WriteLine("Finished evolution");
+        Console.WriteLine("Best program:");
+        Console.WriteLine(programsToMarks.OrderBy(x => x.Value).First().Key);
+        Console.WriteLine("Best mark: " + programsToMarks.OrderBy(x => x.Value).First().Value);
+        Console.WriteLine("Generation: " + currentGeneration);
     }
     private static PRogram Tournament(Dictionary<PRogram,double> programsToMarks,int tournamentSize)
     {
