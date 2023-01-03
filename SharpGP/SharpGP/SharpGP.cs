@@ -14,7 +14,7 @@ public static class SharpGP
     {
         //since this is static, make sure no variables are shared between runs (so they are declared in the method)
         int currentGeneration = 0;
-        int popSize = 100;
+        int popSize = 100; //move this to TestSet
         TestStage currentStage = ts.stages[0];
         Grader g= currentStage.grader;
         Agregrader ag = currentStage.ag;
@@ -102,7 +102,7 @@ public static class SharpGP
             List<double> grades = new List<double>();
             foreach (TestCase tc in testCases)
             {
-                ProgramRunContext prc = new ProgramRunContext();
+                ProgramRunContext prc = new ProgramRunContext(); // make a constructor that takes a test case
                 prc.input=tc.input;
                 p.Invoke(prc);
                 grades.Add(g.Grade(tc,prc));
