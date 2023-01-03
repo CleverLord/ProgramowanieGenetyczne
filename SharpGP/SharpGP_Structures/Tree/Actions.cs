@@ -6,8 +6,7 @@ public abstract class Action : Node
 
     public static Action NewAction(PRogram ctx)
     {
-        Func<PRogram, Action> creator = ctx.config.ActionToCreate();
-        return creator.Invoke(ctx);
+        return NodeFactory.getNewAction(ctx.config, ctx);
     }
 
     public abstract void FullGrow(PRogram ctx, int targetDepth);

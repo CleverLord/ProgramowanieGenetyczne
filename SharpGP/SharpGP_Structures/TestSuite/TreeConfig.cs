@@ -192,32 +192,8 @@ public class TreeConfig
     #endregion
 
     [NonSerialized] public Random r = new Random();
-    public Func<PRogram, Action> ActionToCreate()
-    {
-        double chance = r.NextDouble();
-        if (chance < NewAssignmentChance)
-            return Assignment.NewAssignment;
-        else if (chance < NewIfStatementChance)
-            return IfStatement.NewIfStatement;
-        else if (chance < NewLoopChance)
-            return Loop.NewLoop;
-        else if (chance < NewWriteChance)
-            return Write.NewWrite;
-        else
-            throw new Exception("Invalid chance");
-    }
-    public Func<PRogram,Expression> ExpressionToCreate()
-    {
-        double chance = r.NextDouble();
-        if (chance < NewVariableChance)
-            return Variable.RandomOrNew;
-        else if (chance < NewConstantChance)
-            return Constant.NewConstant;
-        else if (chance < NewReadChance)
-            return Read.NewRead;
-        else
-            throw new Exception("Invalid chance");
-    }
+    
+    
     public Type TypeToMutate()
     {
         double chance = r.NextDouble();
