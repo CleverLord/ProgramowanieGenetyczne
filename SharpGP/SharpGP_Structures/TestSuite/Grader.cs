@@ -28,7 +28,7 @@ public class Grader
     public static double bestAbsoluteError(TestCase tc, ProgramRunContext prc)
     {
         List<double> output = prc.GetOutput();
-        var absDiffs = output.Select((x, i) => Math.Abs(x - tc.targetOutput[i])).ToList();
+        var absDiffs = output.Select((x, i) => Math.Abs(x - tc.targetOutput[i])).ToList(); //array index out of range
         return absDiffs.Min();
     }
 
