@@ -30,12 +30,8 @@ public abstract class Expression : Node
             return Constant.NewConstant(ctx);
         if (target == typeof(Read))
             return new Read();*/
-        
-        Func<PRogram, Expression> creator = ctx.config.ExpressionToCreate();
-        return creator.Invoke(ctx);
 
-        //make it later raport to runtimeContext instead of crashing whole evolution process
-        throw new Exception("Invalid Expression Type");
+        return NodeFactory.getNewExpression(ctx.config, ctx);
     }
 
     public Expression Grown(PRogram ctx)
