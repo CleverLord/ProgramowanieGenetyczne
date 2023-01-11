@@ -9,7 +9,6 @@ public static class SharpGP
 {
     private static Random _rand = new Random();
 
-    //TODO: Make actual evolution process
     public static void PerformEvolution(TestSet ts)
     {
         //since this is static, make sure no variables are shared between runs (so they are declared in the method)
