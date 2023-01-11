@@ -20,5 +20,5 @@ public class TestStage
 {
     public Grader grader;
     public Agregrader ag;
-    public double threshold = 0.95;
+    public double threshold;
 }
