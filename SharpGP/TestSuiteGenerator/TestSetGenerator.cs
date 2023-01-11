@@ -42,7 +42,11 @@ public static class TestSetGenerator
     {
         double threshold = 0;
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_1_A"), threshold = threshold});
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_1_A"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
         ts.testCases.Add(new TestCase() {targetOutput = new List<double>() {1}});
         ts.testCases.Add(new TestCase() {input = new List<double>(), targetOutput = new List<double>() {1}});
         ts.testCases.Add(new TestCase() {input = new List<double>(){1}, targetOutput = new List<double>() {1}});
@@ -54,7 +58,11 @@ public static class TestSetGenerator
     { 
         double threshold = 0;
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() { grader = new Grader("target_1_1_B"), threshold = threshold });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_1_B"), threshold = threshold ,
+            ag =  new Agregrader("sum")
+        });
         ts.testCases.Add(new TestCase() { targetOutput = new List<double>() { 789 } });
         ts.testCases.Add(new TestCase() { input = new List<double>(), targetOutput = new List<double>() { 789 } });
         ts.testCases.Add(new TestCase()
@@ -67,7 +75,11 @@ public static class TestSetGenerator
     {
         double threshold = 0;
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() { grader = new Grader("target_1_1_C"), threshold = threshold });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_1_C"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
         ts.testCases.Add(new TestCase() { targetOutput = new List<double>() { 31415 } });
         ts.testCases.Add(new TestCase() { input = new List<double>(), targetOutput = new List<double>() { 31415 } });
         ts.testCases.Add(new TestCase()
@@ -81,8 +93,16 @@ public static class TestSetGenerator
     {
         double threshold = 0;
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_1_D__0"), threshold = threshold});
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_2_D__1"), threshold = threshold});
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_1_D__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_D__1"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
         ts.testCases.Add(new TestCase() { targetOutput = new List<double>() { 1 } });
         SaveTestSuite(ts, "TestSet_1_1_D");
     }
@@ -90,8 +110,16 @@ public static class TestSetGenerator
     {
         double threshold = 0;
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_1_E__0"), threshold = threshold});
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_2_E__1"), threshold = threshold});
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_1_E__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_E__1"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
         ts.testCases.Add(new TestCase() { targetOutput = new List<double>() { 789 } });
         SaveTestSuite(ts, "TestSet_1_1_E");
     }
@@ -99,9 +127,21 @@ public static class TestSetGenerator
     {
         double threshold = 0;
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_1_F__0"), threshold = threshold});
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_1_F__1"), threshold = threshold});
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_1_F__2"), threshold = 0.05 });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_1_F__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_1_F__1"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_1_F__2"), threshold = 0.05,
+            ag =  new Agregrader("sum")
+        });
         ts.testCases.Add(new TestCase() { targetOutput = new List<double>() { 1 } });
         SaveTestSuite(ts, "TestSet_1_1_F");
     }
@@ -110,8 +150,16 @@ public static class TestSetGenerator
         double range = 9;
         double threshold = range * 100 * 0.05;
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_2_A__0"), threshold = threshold});
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_2_A__1"), threshold = threshold});
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_A__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_A__1"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
         for (int i = 0; i < 100; i++)
         {
             double a = getRandomDouble(0, 9);
@@ -126,8 +174,16 @@ public static class TestSetGenerator
         double range = 9;
         double threshold = 2 * range * 100 * 0.05;
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_2_B__0"), threshold = threshold});
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_2_B__1"), threshold = threshold});
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_B__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_B__1"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
         for (int i = 0; i < 100; i++)
         {
             double a = getRandomDouble(-range, range);
@@ -142,8 +198,16 @@ public static class TestSetGenerator
         double range = 9999;
         double threshold = 2 * range * 100 * 0.05;
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_2_C__0"), threshold = threshold});
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_2_C__1"), threshold = threshold});
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_C__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_C__1"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
         for (int i = 0; i < 100; i++)
         {
             double a = getRandomDouble(-range,range);
@@ -158,8 +222,16 @@ public static class TestSetGenerator
         double range = 9999;
         double threshold = 2 * range * 100 * 0.05;
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_2_D__0"), threshold = threshold});
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_2_D__1"), threshold = threshold});
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_D__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_D__1"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
         for (int i = 0; i < 100; i++)
         {
             double a = getRandomDouble(-range,range);
@@ -174,8 +246,16 @@ public static class TestSetGenerator
         double range = 9999;
         double threshold = 2 * range * 100 * 0.05;
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_2_E__0"), threshold = threshold});
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_2_E__1"), threshold = threshold});
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_E__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_E__1"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
         for (int i = 0; i < 100; i++)
         {
             double a = getRandomDouble(-range,range);
@@ -190,8 +270,16 @@ public static class TestSetGenerator
         double range = 9;
         double threshold = range * 100 * 0.05;
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_3_A__0"), threshold = threshold});
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_3_A__1"), threshold = threshold});
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_3_A__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_3_A__1"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
         for (int i = 0; i < 100; i++)
         {
             double a = getRandomDouble(0, range);
@@ -206,8 +294,16 @@ public static class TestSetGenerator
         double range = 9999;
         double threshold = 2*range * 100 * 0.05;
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_3_B__0"), threshold = threshold});
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_3_B__1"), threshold = threshold});
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_3_B__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_3_B__1"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
         for (int i = 0; i < 100; i++)
         {
             double a = getRandomDouble(-9999,9999);
@@ -223,8 +319,16 @@ public static class TestSetGenerator
         double range = 99;
         double threshold = 2 *range * 100 * 0.05 * 10;
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_4_A__0"), threshold = threshold});
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_4_A__1"), threshold = threshold});
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_4_A__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_4_A__1"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
 
         for (int i = 0; i < 100; i++)
         {
@@ -245,8 +349,16 @@ public static class TestSetGenerator
         double range = 99;
         double threshold = range * 100 * 0.05;
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() { grader = new Grader("target_1_4_B__0"), threshold = threshold });
-        ts.stages.Add(new TestStage() { grader = new Grader("target_1_4_B__1"), threshold = threshold });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_4_B__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_4_B__1"), threshold = threshold ,
+            ag =  new Agregrader("sum")
+        });
         
         for (int j = 0; j < 100; j++)
         {
