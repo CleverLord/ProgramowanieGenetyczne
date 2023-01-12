@@ -4,8 +4,8 @@
 public class Agregrader
 {
     public string agregradingFunctionName;
-    public Func<List<double>, double> agregradingFunctionDelegate;
-    
+    [NonSerialized] public Func<List<double>, double> agregradingFunctionDelegate;
+
     public void Initialize()
     {
         var method = GetType().GetMethod(agregradingFunctionName);
@@ -15,17 +15,22 @@ public class Agregrader
         //check for parameters
         var parameters = method.GetParameters();
         if (parameters.Length != 1) { throw new Exception("Grading function called " + agregradingFunctionName + " does not have exactly one parameter"); }
-        if (parameters[0].ParameterType != typeof(List<double>)) { throw new Exception("Grading function called " + agregradingFunctionName + " does not have a parameter of type List<double>"); }
+        if (parameters[0].ParameterType != typeof(List<double>))
+        {
+            throw new Exception("Grading function called " + agregradingFunctionName + " does not have a parameter of type List<double>");
+        }
         //create delegate
-        agregradingFunctionDelegate = method.CreateDelegate<Func<List<double>, double> >();
+        agregradingFunctionDelegate = method.CreateDelegate<Func<List<double>, double>>();
     }
-    
+
     public Agregrader(string agregradingFunction)
     {
         agregradingFunctionName = agregradingFunction;
         Initialize();
     }
-    
+    public Agregrader() // this is needed for deserialization
+    {
+    }
     public double Agregrade(List<double> grades)
     {
         return agregradingFunctionDelegate(grades);

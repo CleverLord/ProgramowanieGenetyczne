@@ -11,6 +11,7 @@ public static class SharpGP
 
     public static void PerformEvolution(TestSet ts)
     {
+        Console.WriteLine("Starting evolution");
         //since this is static, make sure no variables are shared between runs (so they are declared in the method)
         int currentGeneration = 0;
         int popSize = 100; //move this to TestSet
@@ -81,6 +82,7 @@ public static class SharpGP
                 }
                 programsToMarks = evaluatedPopulation(population, ts.testCases, g,ag);
                 currentGeneration++;
+                Console.WriteLine(currentGeneration + " " + programsToMarks.Values.Min());
             }
             //go to next stage
             int indexOfCurrentStage = ts.stages.IndexOf(currentStage);

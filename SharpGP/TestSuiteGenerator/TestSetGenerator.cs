@@ -13,6 +13,7 @@ public static class TestSetGenerator
         string path = Path.Combine(folder, filename + fileExtension);
         File.WriteAllText(path, JsonConvert.SerializeObject(ts, Formatting.Indented));
     }
+    [Obsolete]
     public static void GenerateConstantValueTS(double constant) // you can add parameters to this funciton if you wish
     {
         TestSet ts = new TestSet();
@@ -41,7 +42,7 @@ public static class TestSetGenerator
     public static void GenerateFor_1_1_A()
     {
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() {grader = new Grader("hasTargetValue"), threshold = 0.001});
+        ts.stages.Add(new TestStage() {grader = new Grader("target_1_1_A"), threshold = 0.001});
         ts.testCases.Add(new TestCase() {targetOutput = new List<double>() {1}});
         ts.testCases.Add(new TestCase() {input = new List<double>(), targetOutput = new List<double>() {1}});
         ts.testCases.Add(new TestCase() {input = new List<double>(){1}, targetOutput = new List<double>() {1}});
