@@ -41,8 +41,13 @@ public static class TestSetGenerator
 
     public static void GenerateFor_1_1_A()
     {
+        double threshold = 0;
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_1_A"), threshold = 0.001});
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_1_A"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
         ts.testCases.Add(new TestCase() {targetOutput = new List<double>() {1}});
         ts.testCases.Add(new TestCase() {input = new List<double>(), targetOutput = new List<double>() {1}});
         ts.testCases.Add(new TestCase() {input = new List<double>(){1}, targetOutput = new List<double>() {1}});
@@ -52,8 +57,13 @@ public static class TestSetGenerator
 
     public static void GenerateFor_1_1_B()
     { 
+        double threshold = 0;
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() { grader = new Grader("hasTargetValue"), threshold = 0.001 });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_1_B"), threshold = threshold ,
+            ag =  new Agregrader("sum")
+        });
         ts.testCases.Add(new TestCase() { targetOutput = new List<double>() { 789 } });
         ts.testCases.Add(new TestCase() { input = new List<double>(), targetOutput = new List<double>() { 789 } });
         ts.testCases.Add(new TestCase()
@@ -63,9 +73,14 @@ public static class TestSetGenerator
         SaveTestSuite(ts, "TestSet_1_1_B");
     }
     public static void GenerateFor_1_1_C()
-    { 
+    {
+        double threshold = 0;
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() { grader = new Grader("hasTargetValue"), threshold = 0.001 });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_1_C"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
         ts.testCases.Add(new TestCase() { targetOutput = new List<double>() { 31415 } });
         ts.testCases.Add(new TestCase() { input = new List<double>(), targetOutput = new List<double>() { 31415 } });
         ts.testCases.Add(new TestCase()
@@ -77,35 +92,75 @@ public static class TestSetGenerator
 
     public static void GenerateFor_1_1_D()
     {
+        double threshold = 0;
         TestSet ts = new TestSet();
-
-        ts.stages.Add(new TestStage() {grader = new Grader("hasTargetValue"), threshold = 0.001});
-        ts.stages.Add(new TestStage() {grader = new Grader("AtFirstPlace"), threshold = 0.001});
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_1_D__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_D__1"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
         ts.testCases.Add(new TestCase() { targetOutput = new List<double>() { 1 } });
         SaveTestSuite(ts, "TestSet_1_1_D");
     }
     public static void GenerateFor_1_1_E()
     {
+        double threshold = 0;
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() {grader = new Grader("hasTargetValue"), threshold = 0.001});
-        ts.stages.Add(new TestStage() {grader = new Grader("AtFirstPlace"), threshold = 0.001});
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_1_E__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_E__1"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
         ts.testCases.Add(new TestCase() { targetOutput = new List<double>() { 789 } });
         SaveTestSuite(ts, "TestSet_1_1_E");
     }
     public static void GenerateFor_1_1_F()
     {
+        double threshold = 0;
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() {grader = new Grader("hasTargetValue"), threshold = 0.001});
-        ts.stages.Add(new TestStage() {grader = new Grader("AtFirstPlace"), threshold = 0.001});
-        ts.stages.Add(new TestStage() {grader = new Grader("justOneTargetValue"), threshold = 0.001});
-        ts.testCases.Add(new TestCase() { targetOutput = new List<double>() { 789 } });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_1_F__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_1_F__1"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_1_F__2"), threshold = 0.05,
+            ag =  new Agregrader("sum")
+        });
+        ts.testCases.Add(new TestCase() { targetOutput = new List<double>() { 1 } });
         SaveTestSuite(ts, "TestSet_1_1_F");
     }
     public static void GenerateFor_1_2_A()
     {
+        double range = 9;
+        double threshold = range * 100 * 0.05;
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_2_A"), threshold = 0.001});
-
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_A__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_A__1"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
         for (int i = 0; i < 100; i++)
         {
             double a = getRandomDouble(0, 9);
@@ -117,14 +172,23 @@ public static class TestSetGenerator
     }
     public static void GenerateFor_1_2_B()
     {
+        double range = 9;
+        double threshold = 2 * range * 100 * 0.05;
         TestSet ts = new TestSet();
-
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_2_B"), threshold = 0.001});
-
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_B__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_B__1"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
         for (int i = 0; i < 100; i++)
         {
-            double a = getRandomDouble(-9, 9);
-            double b = getRandomDouble(-9, 9);
+            double a = getRandomDouble(-range, range);
+            double b = getRandomDouble(-range, range);
             double c = a + b;
             ts.testCases.Add(new TestCase() {input = new List<double>() {a, b}, targetOutput = new List<double>() {c}});
         }
@@ -132,14 +196,23 @@ public static class TestSetGenerator
     }
     public static void GenerateFor_1_2_C()
     {
+        double range = 9999;
+        double threshold = 2 * range * 100 * 0.05;
         TestSet ts = new TestSet();
-
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_2_C"), threshold = 0.001});
-
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_C__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_C__1"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
         for (int i = 0; i < 100; i++)
         {
-            double a = getRandomDouble(-9999,9999);
-            double b = getRandomDouble(-9999,9999);
+            double a = getRandomDouble(-range,range);
+            double b = getRandomDouble(-range,range);
             double c = a + b;
             ts.testCases.Add(new TestCase() {input = new List<double>() {a, b}, targetOutput = new List<double>() {c}});
         }
@@ -147,14 +220,23 @@ public static class TestSetGenerator
     }
     public static void GenerateFor_1_2_D()
     {
+        double range = 9999;
+        double threshold = 2 * range * 100 * 0.05;
         TestSet ts = new TestSet();
-
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_2_D"), threshold = 0.001});
-
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_D__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_D__1"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
         for (int i = 0; i < 100; i++)
         {
-            double a = getRandomDouble(-9999,9999);
-            double b = getRandomDouble(-9999,9999);
+            double a = getRandomDouble(-range,range);
+            double b = getRandomDouble(-range,range);
             double c = a - b;
             ts.testCases.Add(new TestCase() {input = new List<double>() {a, b}, targetOutput = new List<double>() {c}});
         }
@@ -162,13 +244,23 @@ public static class TestSetGenerator
     }
     public static void GenerateFor_1_2_E()
     {
+        double range = 9999;
+        double threshold = 2 * range * 100 * 0.05;
         TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_2_E"), threshold = 0.001});
-
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_E__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_2_E__1"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
         for (int i = 0; i < 100; i++)
         {
-            double a = getRandomDouble(-9999,9999);
-            double b = getRandomDouble(-9999,9999);
+            double a = getRandomDouble(-range,range);
+            double b = getRandomDouble(-range,range);
             double c = a * b;
             ts.testCases.Add(new TestCase() {input = new List<double>() {a, b}, targetOutput = new List<double>() {c}});
         }
@@ -176,14 +268,23 @@ public static class TestSetGenerator
     }
     public static void GenerateFor_1_3_A()
     {
+        double range = 9;
+        double threshold = range * 100 * 0.05;
         TestSet ts = new TestSet();
-
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_3_A"), threshold = 0.001});
-
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_3_A__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_3_A__1"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
         for (int i = 0; i < 100; i++)
         {
-            double a = getRandomDouble(0, 9);
-            double b = getRandomDouble(0, 9);
+            double a = getRandomDouble(0, range);
+            double b = getRandomDouble(0, range);
             double c = a < b ? a : b;
             ts.testCases.Add(new TestCase() {input = new List<double>() {a, b}, targetOutput = new List<double>() {c}});
         }
@@ -191,10 +292,19 @@ public static class TestSetGenerator
     }
     public static void GenerateFor_1_3_B()
     {
+        double range = 9999;
+        double threshold = 2*range * 100 * 0.05;
         TestSet ts = new TestSet();
-
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_3_B"), threshold = 0.001});
-
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_3_B__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_3_B__1"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
         for (int i = 0; i < 100; i++)
         {
             double a = getRandomDouble(-9999,9999);
@@ -207,16 +317,25 @@ public static class TestSetGenerator
     
     public static void GenerateFor_1_4_A()
     {
+        double range = 99;
+        double threshold = 2 *range * 100 * 0.05 * 10;
         TestSet ts = new TestSet();
-
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_4_A__1"), threshold = 0.001});
-        ts.stages.Add(new TestStage() {grader = new Grader("target_1_4_A__0"), threshold = 0.001});
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_4_A__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_4_A__1"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
 
         for (int i = 0; i < 100; i++)
         {
             double[] tab = new double[10];
             //generate random numbers
-            for (int j = 0; j < 10; j++) { tab[j] = getRandomDouble(-99, 99); }
+            for (int j = 0; j < 10; j++) { tab[j] = getRandomDouble(-range, range); }
             //calculate avg
             double avg = tab.ToList().Average();
             
@@ -228,10 +347,19 @@ public static class TestSetGenerator
 
     public static void GenerateFor_1_4_B()
     {
+        double range = 99;
+        double threshold = range * 100 * 0.05;
         TestSet ts = new TestSet();
-
-        ts.stages.Add(new TestStage() { grader = new Grader("target_1_4_B__1"), threshold = 0.001 });
-        ts.stages.Add(new TestStage() { grader = new Grader("target_1_4_B__0"), threshold = 0.001 });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_4_B__0"), threshold = threshold,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_1_4_B__1"), threshold = threshold ,
+            ag =  new Agregrader("sum")
+        });
         
         for (int j = 0; j < 100; j++)
         {
@@ -239,7 +367,7 @@ public static class TestSetGenerator
             double sum = 0;
             for (var i = 0; i < numberOfTests; i++)
             {
-                sum += getRandomDouble(-99, 99);
+                sum += getRandomDouble(-range, range);
             }
             double avg = Math.Round(sum / numberOfTests);
             ts.testCases.Add(new TestCase() 
