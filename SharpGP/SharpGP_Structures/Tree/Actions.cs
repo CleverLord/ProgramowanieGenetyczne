@@ -22,22 +22,19 @@ public class Loop : Action
 
     public override void Invoke(ProgramRunContext prc)
     {
-        for (int i = 0; i < repeatTimes.value; i++)
-            scope.Invoke(prc);
+        for (int i = 0; i < repeatTimes.value; i++) scope.Invoke(prc);
     }
 
     public override void FullGrow(PRogram ctx, int targetDepth)
     {
-        while (scope.GetDepth() < targetDepth)
-            scope.Grow(ctx);
-        scope.FullGrow(ctx, targetDepth);
+        //while (scope.GetDepth() < targetDepth) scope.Grow(ctx); // Grow scope only adds children
+        scope.FullGrow(ctx, targetDepth); // FullGrow may expand them
     }
 
     public override string ToString()
     {
         UpdateIndent();
-        return new String(PRogram.TAB, indend) + "loop " + repeatTimes + " {\n" + scope +
-               new String(PRogram.TAB, indend) + "}";
+        return new String(PRogram.TAB, indend) + "loop " + repeatTimes + " {\n" + scope + new String(PRogram.TAB, indend) + "}";
     }
 }
 
@@ -51,59 +48,42 @@ public class IfStatement : Action
 
     public override void Invoke(ProgramRunContext prc)
     {
-        if (condition.Evaluate(prc))
-            scope.Invoke(prc);
+        if (condition.Evaluate(prc)) scope.Invoke(prc);
     }
 
     public override string ToString()
     {
         UpdateIndent();
-        return new String(PRogram.TAB, indend) + "if (" + condition + "){\n" + scope + new String(PRogram.TAB, indend) +
-               "}";
+        return new String(PRogram.TAB, indend) + "if (" + condition + "){\n" + scope + new String(PRogram.TAB, indend) + "}";
     }
 
     public override void FullGrow(PRogram ctx, int targetDepth)
     {
-        while (scope.GetDepth() < targetDepth)
-            scope.Grow(ctx);
-        scope.FullGrow(ctx, targetDepth);
+        //while (scope.GetDepth() < targetDepth) scope.Grow(ctx); // Grow scope only adds children
+        scope.FullGrow(ctx, targetDepth); // FullGrow may expand them
     }
 }
 
 public class Assignment : Action, IGrowable
 {
     Variable variable => (Variable)children[0];
-
-    Expression expression
-    {
-        get => (Expression)children[1];
-        set => children[1] = value;
-    }
+    Expression expression { get => (Expression)children[1]; set => children[1] = value; }
 
     public Assignment(Variable variable, Expression expression) => children = new List<Node> { variable, expression };
-
-    public static Assignment NewAssignment(PRogram ctx) =>
-        new Assignment(Variable.RandomOrNew(ctx), Expression.NewExpression(ctx));
+    public static Assignment NewAssignment(PRogram ctx) => new Assignment(Variable.RandomOrNew(ctx), Expression.NewExpression(ctx));
 
     public override void Invoke(ProgramRunContext prc) => prc.variables[variable.name] = expression.Evaluate(prc);
     public override string ToString() => new String(PRogram.TAB, indend) + variable + " = " + expression + ';';
-
     public void Grow(PRogram ctx) => expression = expression.Grown(ctx);
-
     public override void FullGrow(PRogram ctx, int targetDepth)
     {
-        while (expression.GetDepth() < targetDepth)
-            this.Grow(ctx);
+        while (expression.GetDepth() < targetDepth) Grow(ctx);
     }
 }
 
 public class Write : Action, IGrowable
 {
-    Expression expression
-    {
-        get => (Expression)children[0];
-        set => children[0] = value;
-    }
+    Expression expression { get => (Expression)children[0]; set => children[0] = value; }
 
     public Write(Expression expr) => children = new List<Node> { expr };
     public static Write NewWrite(PRogram ctx) => new Write(Expression.NewExpression(ctx));
@@ -115,60 +95,55 @@ public class Write : Action, IGrowable
 
     public override void FullGrow(PRogram ctx, int targetDepth)
     {
-        while (expression.GetDepth() < targetDepth)
-            this.Grow(ctx);
+        while (expression.GetDepth() < targetDepth) Grow(ctx);
     }
 }
 
-public class Scope : Node, IGrowable, IMutable
+public class Scope : Action, IGrowable, IMutable
 {
     public List<Action> actions => children.Select(c => c as Action).ToList();
-    public List<IGrowable> Growables => actions.Where(x => x is IGrowable).Cast<IGrowable>().ToList();
+    public List<IGrowable> Growables => GetNestedNodes().Select(c => c as Action).Where(x => x is IGrowable).Cast<IGrowable>().ToList();
 
     public Scope() => children = new List<Node>();
     public Scope(List<Node> children) => this.children = children;
 
     public void Add(Action action) => children.Add(action);
-
-    public void Invoke(ProgramRunContext prc)
+    public override void Invoke(ProgramRunContext prc)
     {
-        foreach (var a in actions)
-            a.Invoke(prc);
+        foreach (var a in actions) a.Invoke(prc);
     }
-
     public override string ToString()
     {
         UpdateIndent();
         String s = "";
-        foreach (var action in actions)
-            s += action + "\n";
+        foreach (var action in actions) s += action + "\n";
         return s;
     }
 
     public void Grow(PRogram ctx) => children.Add(Action.NewAction(ctx));
-
-    public void FullGrow(PRogram ctx, int targetDepth)
+    public void GrowSelfOrChildren(PRogram ctx)
     {
-        while (GetDepth() < targetDepth)
+        var x = Growables;
+        for (int i = 0; i < 10; i++)
         {
-            var x = Growables;
-            for (int i = 0; i < 10; i++)
+            Type t = ctx.config.TypeToGrow();
+            var growable = Growables.Where(x => x.GetType() == t).ToList();
+            if (growable.Count != 0)
             {
-                Type t = ctx.config.TypeToGrow();
-                var growable = Growables.Where(x => x.GetType() == t).ToList();
-                if (growable.Count != 0)
-                {
-                    growable[ctx.rand.Next(growable.Count)].Grow(ctx);
-                    UpdateParents();
-                    return;
-                }
+                growable[ctx.rand.Next(growable.Count)].Grow(ctx);
+                UpdateParents();
+                return;
             }
-            x.Add(this);
-            x[ctx.rand.Next(0, x.Count)].Grow(ctx);
         }
+        if (x.Count != 0) x[ctx.rand.Next(x.Count)].Grow(ctx);
 
-        foreach (var action in actions)
-            action.FullGrow(ctx, targetDepth - 1);
+        UpdateParents();
+    }
+
+    public override void FullGrow(PRogram ctx, int targetDepth)
+    {
+        while (GetDepth() < targetDepth) GrowSelfOrChildren(ctx);
+        foreach (var action in actions) action.FullGrow(ctx, targetDepth - 1);
     }
 
     public void Mutate(PRogram ctx) //mutate program node itself
@@ -177,10 +152,8 @@ public class Scope : Node, IGrowable, IMutable
         double expType = random.NextDouble();
         if (expType < ctx.config.MutationRemoveChance)
         {
-            if (actions.Count > 0)
-                actions.RemoveAt(random.Next(0, actions.Count));
-        }
-        else
+            if (actions.Count > 0) { actions.RemoveAt(random.Next(0, actions.Count)); }
+        } else
         {
             Node n = children[ctx.rand.Next(0, children.Count)];
             children.Remove(n);
