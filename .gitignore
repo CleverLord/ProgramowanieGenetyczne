@@ -4,3 +4,5 @@ TinyGP/out
 bin/
 obj/
 SharpGP/~$Sharp_HowToGP.xlsx
+*.SharpGpTestSuite
+*.SharpGpTestSuite

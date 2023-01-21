@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using SharpGP_Structures;
+using SharpGP_Structures.Evolution;
 using SharpGP_Structures.TestSuite;
 using SharpGP_Structures.Tree;
 using SharpGP.Utils;
@@ -18,6 +19,7 @@ public static partial class SharpGP
         ts.stages.ForEach(stage => stage.grader.Initialize());
 
         //since this is static, make sure no variables are shared between runs (so they are declared in the method)
+        EvolutionHistory eh = new EvolutionHistory();
         int currentGeneration = 0;
         int popSize = 100; //move this to TestSet
         TestStage currentStage = ts.stages[0];
@@ -34,19 +36,29 @@ public static partial class SharpGP
         //while (termination condition not met)
         //termination condition set to satisfy threshold in 90 percentiles
         List<double> marks = programsToMarks.Values.ToList();
+        marks.Sort();
+        //take a note about the generated population
+        var eg = new EvolutionGeneration();
+        eg.generationIndex = -1;
+        eg.SetFittness(marks);
+        eg.setDepths(population.Select(x => x.GetDepth()).OrderBy(x => x).ToList());
+        eh.generations.Add(eg);
+
         while (currentStage != null) //has job to do
         {
             while ((marks[(int)(marks.Count * 0.9)] > currentStage.threshold && !isLastStage) || (marks[0] > currentStage.threshold && isLastStage))
             {
-                //train
+                EvolutionGeneration gen = new EvolutionGeneration();
+                gen.generationIndex = currentGeneration;
+
                 List<PRogram> newPopulation = new List<PRogram>();
                 //select zero-mark programs
                 List<PRogram> zeroMarkPrograms = programsToMarks.Where(x => x.Value == 0).Select(x => x.Key).ToList();
                 //add them to the new population
                 newPopulation.AddRange(zeroMarkPrograms);
-                //drop old population with mark infinity
-                //population = population.Where(x => !double.IsInfinity(programsToMarks[x])).ToList();
-                
+
+                gen.actions.Add(new CopyZeroAction() { count = zeroMarkPrograms.Count });
+
                 while (newPopulation.Count < popSize)
                 {
                     //select whether to crossover or mutate
@@ -61,6 +73,7 @@ public static partial class SharpGP
                         while (!newP.hasNodeOfType(typeToMutate)) typeToMutate = getTypeToMutate(newP.config);
                         newP.Mutate(typeToMutate);
                         newPopulation.Add(newP);
+                        gen.actions.Add(new MutationAction() { mutatedGene = typeToMutate.Name });
                     }
                     //crossover
                     else
@@ -72,27 +85,28 @@ public static partial class SharpGP
                             PRogram p2 = Tournament(programsToMarks, 4);
                             if (p1 != p2)
                             {
-                                var x = CrossProgramsV2(p1, p2);
+                                CrossoverAction ca = new CrossoverAction();
+                                var x = CrossProgramsV2(p1, p2, ts.config, ca);
                                 if (x != null)
                                 {
                                     newPopulation.Add(x.Value.Item1);
                                     newPopulation.Add(x.Value.Item2);
                                     crossoverSuccess = true;
+                                    gen.actions.Add(ca);
                                 }
                             }
                         }
                     }
                 }
+                population = newPopulation;
+                newPopulation=new List<PRogram>();
                 programsToMarks = evaluatedPopulation(population, ts.testCases, g, ag);
                 marks = programsToMarks.Values.ToList();
                 marks.Sort();
                 currentGeneration++;
-                Console.WriteLine("Generation index: " + currentGeneration);
-                Console.WriteLine("Best mark: " + marks[0]);
-                Console.WriteLine("90th percentile mark: " + marks[(int)(marks.Count * 0.9)]);
-                //print min and max depth
-                Console.WriteLine("Min depth: " + population.Min(x => x.GetDepth()));
-                Console.WriteLine("Max depth: " + population.Max(x => x.GetDepth()));
+                gen.SetFittness(marks);
+                gen.setDepths(population.Select(x => x.GetDepth()).OrderBy(x => x).ToList());
+                eh.generations.Add(gen);
             }
             //go to next stage
             int indexOfCurrentStage = ts.stages.IndexOf(currentStage);
@@ -108,15 +122,15 @@ public static partial class SharpGP
         }
         //print summary
         Console.WriteLine("Finished evolution");
-        Console.WriteLine("Best program:");
+        //Console.WriteLine("Best program:");
         var bestProgram = programsToMarks.OrderBy(x => x.Value).First().Key;
-        Console.WriteLine(bestProgram.ToString());
+       // Console.WriteLine(bestProgram.ToString());
         Console.WriteLine("Best mark: " + programsToMarks.OrderBy(x => x.Value).First().Value);
         Console.WriteLine("Generation: " + currentGeneration);
-        ProgramRunContext sampleContext = new ProgramRunContext() { input = ts.testCases[0].input };
-        bestProgram.Invoke(sampleContext);
-        Console.WriteLine("Sample output:");
-        Console.WriteLine(sampleContext.ToStringTabbed());
+        //ProgramRunContext sampleContext = new ProgramRunContext() { input = ts.testCases[0].input };
+        //bestProgram.Invoke(sampleContext);
+        //Console.WriteLine("Sample output:");
+        //Console.WriteLine(sampleContext.ToStringTabbed());
     }
     private static PRogram Tournament(Dictionary<PRogram, double> programsToMarks, int tournamentSize)
     {
@@ -151,17 +165,12 @@ public static partial class SharpGP
     public static Type getTypeToMutate(TreeConfig tc)
     {
         double chance = _rand.NextDouble();
-        if (chance < tc.MutateProgramChance)
-            return typeof(PRogram);
-        else if (chance < tc.MutateVariableChance)
-            return typeof(Variable);
-        else if (chance < tc.MutateConstantChance)
-            return typeof(Constant);
-        else if (chance < tc.MutateComparatorChance)
-            return typeof(Comparator);
-        else if (chance < tc.MutateOperatorChance)
-            return typeof(Operator);
-        //else if (chance < tc.MutateScopeChance) //MutationScopeChance is 1 
+        if (chance < tc.MutateProgramChance) return typeof(PRogram);
+        if (chance < tc.MutateVariableChance) return typeof(Variable);
+        if (chance < tc.MutateConstantChance) return typeof(Constant);
+        if (chance < tc.MutateComparatorChance) return typeof(Comparator);
+        if (chance < tc.MutateOperatorChance) return typeof(Operator);
+        //if (chance < tc.MutateScopeChance) //MutationScopeChance is 1 
         return typeof(Scope);
     }
 }

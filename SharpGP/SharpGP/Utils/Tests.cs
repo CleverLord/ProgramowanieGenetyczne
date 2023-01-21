@@ -30,12 +30,8 @@ public static class Tests
 
 //PRogram p = SharpGP.SharpGP.LoadProgramFromString("x_0 = (1 + 3);");
 //PRogram p2 = SharpGP.SharpGP.LoadProgramFromString("x_2 = (3 + 2);");
-        var x = SharpGP.CrossProgramsV2(p, p2);
 
-        Console.WriteLine("Parent1:\n" + p);
-        Console.WriteLine("Parent2:\n" + p2);
-        Console.WriteLine("Child1:\n" + x.Value.Item1);
-        Console.WriteLine("Child2:\n" + x.Value.Item2);
+ 
 
         ProgramRunContext prc=new ProgramRunContext();
         PRogram p3 = TreeGenerator.GenerateProgram_MaxDepth(50);
