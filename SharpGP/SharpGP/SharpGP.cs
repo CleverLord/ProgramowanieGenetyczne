@@ -1,45 +1,51 @@
-﻿using SharpGP_Structures;
+﻿using System.Runtime.InteropServices;
+using SharpGP_Structures;
 using SharpGP_Structures.TestSuite;
 using SharpGP_Structures.Tree;
 using SharpGP.Utils;
 
 namespace SharpGP;
 
-public static class SharpGP
+public static partial class SharpGP
 {
     private static Random _rand = new Random();
 
     public static void PerformEvolution(TestSet ts)
     {
         Console.WriteLine("Starting evolution");
+        //initialize all Graders and Agregraders - connect strings to functions
+        ts.stages.ForEach(stage => stage.ag.Initialize());
+        ts.stages.ForEach(stage => stage.grader.Initialize());
+
         //since this is static, make sure no variables are shared between runs (so they are declared in the method)
         int currentGeneration = 0;
         int popSize = 100; //move this to TestSet
         TestStage currentStage = ts.stages[0];
         bool isLastStage = ts.stages.Count == 1;
-        Grader g= currentStage.grader;
+        Grader g = currentStage.grader;
         Agregrader ag = currentStage.ag;
+
         //create initial population
         List<PRogram> population = new List<PRogram>();
-        for (int i = 0; i < popSize; i++)
-            population.Add(TreeGenerator.GenerateProgram_FromConfig(ts.config));
+        for (int i = 0; i < popSize; i++) population.Add(TreeGenerator.GenerateProgram_FromConfig(ts.config));
 
         //evaluate initial population
-        Dictionary<PRogram, double> programsToMarks = evaluatedPopulation(population, ts.testCases, g,ag);
+        Dictionary<PRogram, double> programsToMarks = evaluatedPopulation(population, ts.testCases, g, ag);
         //while (termination condition not met)
         //termination condition set to satisfy threshold in 90 percentiles
         List<double> marks = programsToMarks.Values.ToList();
-        marks.Sort();
         while (currentStage != null) //has job to do
         {
-            while ((marks[(int)(marks.Count * 0.9)] > currentStage.threshold && !isLastStage) || (marks[0] > currentStage.threshold && isLastStage) )
+            while ((marks[(int)(marks.Count * 0.9)] > currentStage.threshold && !isLastStage) || (marks[0] > currentStage.threshold && isLastStage))
             {
                 //train
-                List<PRogram> newPopulation= new List<PRogram>();
+                List<PRogram> newPopulation = new List<PRogram>();
                 //select zero-mark programs
                 List<PRogram> zeroMarkPrograms = programsToMarks.Where(x => x.Value == 0).Select(x => x.Key).ToList();
                 //add them to the new population
                 newPopulation.AddRange(zeroMarkPrograms);
+                //drop old population with mark infinity
+                //population = population.Where(x => !double.IsInfinity(programsToMarks[x])).ToList();
                 
                 while (newPopulation.Count < popSize)
                 {
@@ -50,10 +56,9 @@ public static class SharpGP
                         PRogram p = population[_rand.Next(population.Count)];
                         while (!p.canBeMutated()) // pray that any of the programs can be mutated
                             p = population[_rand.Next(population.Count)];
-                        PRogram newP = (PRogram) p.Clone();
+                        PRogram newP = (PRogram)p.Clone();
                         Type typeToMutate = getTypeToMutate(newP.config);
-                        while(!newP.hasNodeOfType(typeToMutate))
-                            typeToMutate = getTypeToMutate(newP.config);
+                        while (!newP.hasNodeOfType(typeToMutate)) typeToMutate = getTypeToMutate(newP.config);
                         newP.Mutate(typeToMutate);
                         newPopulation.Add(newP);
                     }
@@ -65,9 +70,9 @@ public static class SharpGP
                         {
                             PRogram p1 = Tournament(programsToMarks, 4);
                             PRogram p2 = Tournament(programsToMarks, 4);
-                            if(p1 != p2)
+                            if (p1 != p2)
                             {
-                                var x= CrossProgramsV2(p1, p2);
+                                var x = CrossProgramsV2(p1, p2);
                                 if (x != null)
                                 {
                                     newPopulation.Add(x.Value.Item1);
@@ -75,14 +80,19 @@ public static class SharpGP
                                     crossoverSuccess = true;
                                 }
                             }
-                            
                         }
-                        
                     }
                 }
-                programsToMarks = evaluatedPopulation(population, ts.testCases, g,ag);
+                programsToMarks = evaluatedPopulation(population, ts.testCases, g, ag);
+                marks = programsToMarks.Values.ToList();
+                marks.Sort();
                 currentGeneration++;
-                Console.WriteLine(currentGeneration + " " + programsToMarks.Values.Min());
+                Console.WriteLine("Generation index: " + currentGeneration);
+                Console.WriteLine("Best mark: " + marks[0]);
+                Console.WriteLine("90th percentile mark: " + marks[(int)(marks.Count * 0.9)]);
+                //print min and max depth
+                Console.WriteLine("Min depth: " + population.Min(x => x.GetDepth()));
+                Console.WriteLine("Max depth: " + population.Max(x => x.GetDepth()));
             }
             //go to next stage
             int indexOfCurrentStage = ts.stages.IndexOf(currentStage);
@@ -93,29 +103,33 @@ public static class SharpGP
                 currentStage = ts.stages[++indexOfCurrentStage];
                 g = currentStage.grader;
                 ag = currentStage.ag;
-                isLastStage =  indexOfCurrentStage == ts.stages.Count -1;
+                isLastStage = indexOfCurrentStage == ts.stages.Count - 1;
             }
         }
         //print summary
         Console.WriteLine("Finished evolution");
         Console.WriteLine("Best program:");
-        Console.WriteLine(programsToMarks.OrderBy(x => x.Value).First().Key);
+        var bestProgram = programsToMarks.OrderBy(x => x.Value).First().Key;
+        Console.WriteLine(bestProgram.ToString());
         Console.WriteLine("Best mark: " + programsToMarks.OrderBy(x => x.Value).First().Value);
         Console.WriteLine("Generation: " + currentGeneration);
+        ProgramRunContext sampleContext = new ProgramRunContext() { input = ts.testCases[0].input };
+        bestProgram.Invoke(sampleContext);
+        Console.WriteLine("Sample output:");
+        Console.WriteLine(sampleContext.ToStringTabbed());
     }
-    private static PRogram Tournament(Dictionary<PRogram,double> programsToMarks,int tournamentSize)
+    private static PRogram Tournament(Dictionary<PRogram, double> programsToMarks, int tournamentSize)
     {
         PRogram target = programsToMarks.Keys.ElementAt(_rand.Next(programsToMarks.Count));
-        for(int i=0;i<tournamentSize-1;i++)
+        for (int i = 0; i < tournamentSize - 1; i++)
         {
             PRogram p = programsToMarks.Keys.ElementAt(_rand.Next(programsToMarks.Count));
-            if (target == null || programsToMarks[p] < programsToMarks[target])
-                target = p;
+            if (target == null || programsToMarks[p] < programsToMarks[target]) target = p;
         }
         return target;
     }
 
-    private static Dictionary<PRogram, double> evaluatedPopulation(List<PRogram> population,List<TestCase> testCases, Grader g, Agregrader ag)
+    private static Dictionary<PRogram, double> evaluatedPopulation(List<PRogram> population, List<TestCase> testCases, Grader g, Agregrader ag)
     {
         var result = new Dictionary<PRogram, double>();
         foreach (PRogram p in population)
@@ -124,11 +138,11 @@ public static class SharpGP
             foreach (TestCase tc in testCases)
             {
                 ProgramRunContext prc = new ProgramRunContext(); // make a constructor that takes a test case
-                prc.input=tc.input;
+                prc.input = tc.input;
                 p.Invoke(prc);
-                grades.Add(g.Grade(tc,prc));
+                grades.Add(g.Grade(tc, prc));
             }
-            result.Add(p,ag.Agregrade(grades));
+            result.Add(p, ag.Agregrade(grades));
         }
 
         return result;
@@ -142,36 +156,45 @@ public static class SharpGP
         var subtreesCount_Lower = nodesToDepth.Count(p => p.Value < p1Depth);
         var subtreesCount_Equal = nodesToDepth.Count(p => p.Value == p1Depth);
         var subtreesCount_Greater = nodesToDepth.Count(p => p.Value > p1Depth);
-        var avgSize_Lower = nodesToDepth.Where(p => p.Value < p1Depth).Average(p => p.Value);
-        var avgSize_Greater = nodesToDepth.Where(p => p.Value > p1Depth).Average(p => p.Value);
+
 
         if (subtreesCount_Lower == 0 || subtreesCount_Greater == 0)
         {
             //zastosowanie wyjątku zgodnie ze slajdem nr.5 z wykladu
-            if (subtreesCount_Equal == 0)
-                return null;
+            if (subtreesCount_Equal == 0) return null;
             var equalNodes = nodesToDepth.Where(p => p.Value == p1Depth).ToList();
             return equalNodes[_rand.Next(0, equalNodes.Count)].Key;
         }
 
+        //Following operations moved from above due to System.InvalidOperationException: Could not get average of empty sequence.
+        var avgSize_Lower = nodesToDepth.Where(p => p.Value < p1Depth).Average(p => p.Value);
+        var avgSize_Greater = nodesToDepth.Where(p => p.Value > p1Depth).Average(p => p.Value);
+
         //Ruletka
-        
+
         //"Wszystkie poddrzewa o mniejszym rozmiarze mają takie samo prawdopodobieństwo wyboru podobnie jak o większym"
         //To po co je liczyć dla kazdego node'a?
         double factor_eq = 1.0 / p1Depth;
-        double factor_lt = (1 - p1Depth) /  (1 + avgSize_Lower / avgSize_Greater);
+        double factor_lt = (1 - p1Depth) / (1 + avgSize_Lower / avgSize_Greater);
         //double factor_gt = (1 - p1Depth) / (1 + avgSize_Greater / avgSize_Lower); //wartość nieużywana
 
+        if (subtreesCount_Equal == 0) //jeżeli nie ma podrzew o równych rozmiarach, rozdziel prawdopodobieństwo proporcjonalnie między większe i mniejsze
+        {
+            factor_eq = 0;
+            double sum = factor_lt + (1 - factor_lt - factor_eq); // factor_lt + factor_gt
+            factor_lt /= sum;
+        }
+
         double random = _rand.NextDouble();
-        if (random < factor_eq)
+        if (random < factor_eq || subtreesCount_Equal != 0)
             //wybierz losowe poddrzewo o takim samym rozmiarze
             return nodesToDepth.Where(p => p.Value == p1Depth).ToArray()[_rand.Next(0, subtreesCount_Equal)].Key;
         if (random < factor_eq + factor_lt)
             //wybierz losowe poddrzewo o mniejszym rozmiarze
-            return nodesToDepth.Where(p => p.Value < p1Depth).ToArray()[_rand.Next(0, subtreesCount_Equal)].Key;
+            return nodesToDepth.Where(p => p.Value < p1Depth).ToArray()[_rand.Next(0, subtreesCount_Lower)].Key;
         else
             //wybierz losowe poddrzewo o większym rozmiarze
-            return nodesToDepth.Where(p => p.Value > p1Depth).ToArray()[_rand.Next(0, subtreesCount_Equal)].Key;
+            return nodesToDepth.Where(p => p.Value > p1Depth).ToArray()[_rand.Next(0, subtreesCount_Greater)].Key;
 
         return null;
     }
@@ -198,7 +221,7 @@ public static class SharpGP
                 continue;
             }
 
-            var p1Depth = p1n.Max(n => n.GetDepth());
+            var p1Depth = p1Node.GetDepth();
             Node? p2Node = Getp2Node(matchingNodes, p1Depth);
             if (p2Node == null)
             {
@@ -209,7 +232,6 @@ public static class SharpGP
             Node.CrossNodes(p1Node, p2Node);
             return (p1c, p2c);
         }
-
 
         return null;
     }
@@ -228,6 +250,5 @@ public static class SharpGP
             return typeof(Operator);
         //else if (chance < tc.MutateScopeChance) //MutationScopeChance is 1 
         return typeof(Scope);
-        
     }
 }
