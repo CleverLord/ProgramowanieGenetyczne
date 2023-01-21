@@ -15,4 +15,8 @@
       <ProjectReference Include="..\SharpGP_Structures\SharpGP_Structures.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="TestSuites" />
+    </ItemGroup>
+
 </Project>

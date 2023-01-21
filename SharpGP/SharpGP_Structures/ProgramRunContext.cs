@@ -74,6 +74,20 @@ public class ProgramRunContext
             result += i.Key + " = " + i.Value + ", ";
         return result;
     }
+    public string ToStringTabbed(int tab = 1)
+    {
+        string result="";
+        string t=ManyTabs(tab);
+        ToString().Split("\n").ToList().ForEach(x => result += t + x + "\n");
+        return result;
+    }
+    private string ManyTabs(int tab)
+    {
+        string result = "";
+        for (int i = 0; i < tab; i++)
+            result += '\t';
+        return result;
+    }
     public List<double> GetOutput()
     {
         return new List<double>(output);
