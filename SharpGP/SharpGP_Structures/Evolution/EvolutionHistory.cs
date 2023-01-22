@@ -9,12 +9,18 @@ public class EvolutionHistory
 public class EvolutionGeneration
 {
     public int generationIndex = -1;
+    public DateTime generationStartTime;
+    public long generationCreationTime=-1;
+    public long generationEvaluationTime=-1;
     public List<double> fitnesses = new List<double>(); // mark for each individual in the generation
     public Dictionary<double, int> fitnesToUnits = new Dictionary<double, int>();
     public List<int> populationDepths = new List<int>(); // depth of each individual in the generation
     public Dictionary<int, int> popDepthToUnits = new Dictionary<int, int>();
     public List<GeneticAction> actions = new List<GeneticAction>(); // actions taken to create each individual in the generation]
-
+    public EvolutionGeneration()
+    {
+        generationStartTime = DateTime.Now;
+    }
     public void SetFittness(List<double> f)
     {
         fitnesses = f;

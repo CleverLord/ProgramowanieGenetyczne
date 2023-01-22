@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 using SharpGP_Structures;
 using SharpGP_Structures.Evolution;
 using SharpGP_Structures.TestSuite;
@@ -17,7 +18,8 @@ public static partial class SharpGP
         //initialize all Graders and Agregraders - connect strings to functions
         ts.stages.ForEach(stage => stage.ag.Initialize());
         ts.stages.ForEach(stage => stage.grader.Initialize());
-
+        Stopwatch sw=new Stopwatch();
+        
         //since this is static, make sure no variables are shared between runs (so they are declared in the method)
         EvolutionHistory eh = new EvolutionHistory();
         int currentGeneration = 0;
@@ -27,30 +29,36 @@ public static partial class SharpGP
         Grader g = currentStage.grader;
         Agregrader ag = currentStage.ag;
 
+        var eg = new EvolutionGeneration();
+        eg.generationIndex = -1;
+        
         //create initial population
+        sw.Start();
         List<PRogram> population = new List<PRogram>();
         for (int i = 0; i < popSize; i++) population.Add(TreeGenerator.GenerateProgram_FromConfig(ts.config));
-
+        eg.generationCreationTime = sw.ElapsedMilliseconds;
+            
         //evaluate initial population
+        sw.Restart();
         Dictionary<PRogram, double> programsToMarks = evaluatedPopulation(population, ts.testCases, g, ag);
-        //while (termination condition not met)
-        //termination condition set to satisfy threshold in 90 percentiles
+        eg.generationEvaluationTime = sw.ElapsedMilliseconds;
         List<double> marks = programsToMarks.Values.ToList();
         marks.Sort();
         //take a note about the generated population
-        var eg = new EvolutionGeneration();
-        eg.generationIndex = -1;
+   
         eg.SetFittness(marks);
         eg.setDepths(population.Select(x => x.GetDepth()).OrderBy(x => x).ToList());
         eh.generations.Add(eg);
 
+        Console.Write("Generation: ");
         while (currentStage != null) //has job to do
         {
             while ((marks[(int)(marks.Count * 0.9)] > currentStage.threshold && !isLastStage) || (marks[0] > currentStage.threshold && isLastStage))
             {
+                Console.Write(".");
                 EvolutionGeneration gen = new EvolutionGeneration();
                 gen.generationIndex = currentGeneration;
-
+                sw.Restart();
                 List<PRogram> newPopulation = new List<PRogram>();
                 //select zero-mark programs
                 List<PRogram> zeroMarkPrograms = programsToMarks.Where(x => x.Value == 0).Select(x => x.Key).ToList();
@@ -98,8 +106,11 @@ public static partial class SharpGP
                         }
                     }
                 }
+                gen.generationCreationTime = sw.ElapsedMilliseconds;
                 population = newPopulation;
+                sw.Restart();
                 programsToMarks = evaluatedPopulation(population, ts.testCases, g, ag);
+                gen.generationEvaluationTime = sw.ElapsedMilliseconds;
                 marks = programsToMarks.Values.ToList();
                 marks.Sort();
                 currentGeneration++;
@@ -120,6 +131,7 @@ public static partial class SharpGP
             }
         }
         //print summary
+        Console.WriteLine();
         Console.WriteLine("Finished evolution");
         //Console.WriteLine("Best program:");
         var bestProgram = programsToMarks.OrderBy(x => x.Value).First().Key;
