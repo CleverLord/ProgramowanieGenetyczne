@@ -11,7 +11,7 @@ public static partial class SharpGP
 {
     private static Random _rand = new Random();
 
-    public static void PerformEvolution(TestSet ts)
+    public static EvolutionHistory PerformEvolution(TestSet ts)
     {
         Console.WriteLine("Starting evolution");
         //initialize all Graders and Agregraders - connect strings to functions
@@ -130,6 +130,7 @@ public static partial class SharpGP
         //bestProgram.Invoke(sampleContext);
         //Console.WriteLine("Sample output:");
         //Console.WriteLine(sampleContext.ToStringTabbed());
+        return eh;
     }
     private static PRogram Tournament(Dictionary<PRogram, double> programsToMarks, int tournamentSize)
     {

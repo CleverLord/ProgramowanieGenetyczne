@@ -1,10 +1,11 @@
 ﻿namespace SharpGP_Structures.Evolution;
 
+[Serializable]
 public class EvolutionHistory
 {
     public List<EvolutionGeneration> generations = new List<EvolutionGeneration>();
 }
-
+[Serializable]
 public class EvolutionGeneration
 {
     public int generationIndex = -1;
@@ -35,12 +36,12 @@ public class EvolutionGeneration
         }
     }
 }
-
+[Serializable]
 public abstract class GeneticAction
 {
     public string actionType;
 }
-
+[Serializable]
 public class CrossoverAction : GeneticAction
 {
     public CrossoverAction()
@@ -53,7 +54,7 @@ public class CrossoverAction : GeneticAction
     public int child1Depth;
     public int child2Depth;
 }
-
+[Serializable]
 public class MutationAction : GeneticAction
 {
     public MutationAction()
@@ -62,7 +63,7 @@ public class MutationAction : GeneticAction
     }
     public string mutatedGene;
 }
-
+[Serializable]
 public class CopyZeroAction : GeneticAction
 {
     public CopyZeroAction()
