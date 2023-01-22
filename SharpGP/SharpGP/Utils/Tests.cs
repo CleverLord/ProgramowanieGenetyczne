@@ -24,16 +24,15 @@ public static class Tests
 
         PRogram p = TreeGenerator.GenerateProgram_MaxDepth(7);
         PRogram p2 = TreeGenerator.GenerateProgram_NodeCount();
-    //var e= TreeGenerator.LoadProgramFromFile("testProgram.txt");
+        //var e= TreeGenerator.LoadProgramFromFile("testProgram.txt");
 //PRogram p = SharpGP.SharpGP.LoadProgramFromFile("test1.txt");
 //PRogram p2 = SharpGP.SharpGP.LoadProgramFromFile("test2.txt");
 
 //PRogram p = SharpGP.SharpGP.LoadProgramFromString("x_0 = (1 + 3);");
 //PRogram p2 = SharpGP.SharpGP.LoadProgramFromString("x_2 = (3 + 2);");
 
- 
 
-        ProgramRunContext prc=new ProgramRunContext();
+        ProgramRunContext prc = new ProgramRunContext();
         PRogram p3 = TreeGenerator.GenerateProgram_MaxDepth(50);
         Console.WriteLine("P3:\n" + p3);
         p3.Invoke(prc);

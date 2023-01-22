@@ -148,7 +148,7 @@ public class Scope : Action, IGrowable, IMutable
 
     public void Mutate(PRogram ctx) //mutate program node itself
     {
-        if(children.Count == 0) return;
+        if (children.Count == 0) return;
         Random random = new Random();
         double expType = random.NextDouble();
         if (expType < ctx.config.MutationRemoveChance)

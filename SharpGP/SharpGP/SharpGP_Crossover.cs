@@ -58,14 +58,13 @@ public partial class SharpGP
 
         return null;
     }
-
     public static (PRogram, PRogram)? CrossProgramsV2(PRogram p1, PRogram p2, TreeConfig tc, CrossoverAction ca)
     {
         PRogram p1c = (PRogram)p1.Clone();
         PRogram p2c = (PRogram)p2.Clone();
         ca.parent1Depth = p1c.GetDepth();
         ca.parent2Depth = p2c.GetDepth();
-        
+
         List<Node> p1n = p1c.GetNodes(); // get the nodes of the first program
         List<Node> p2n = p2c.GetNodes(); // get the nodes of the second program
 
@@ -83,7 +82,7 @@ public partial class SharpGP
             if (matchingNodesp1n.Count > 0 && matchingNodesp2n.Count > 0) break;
         }
         if (matchingNodesp1n.Count == 0 || matchingNodesp2n.Count == 0) { return null; }
-        
+
         Node p1Node = matchingNodesp1n[_rand.Next(0, matchingNodesp1n.Count)];
         var p1Depth = p1Node.GetDepth();
         Node? p2Node = Getp2Node(matchingNodesp2n, p1Depth);
@@ -98,7 +97,6 @@ public partial class SharpGP
         throw new Exception("Should never happen");
         return null;
     }
-
     public static Type GetTypeToCross(TreeConfig tc)
     {
         double r = _rand.NextDouble();

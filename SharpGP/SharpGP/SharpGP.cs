@@ -99,7 +99,6 @@ public static partial class SharpGP
                     }
                 }
                 population = newPopulation;
-                newPopulation=new List<PRogram>();
                 programsToMarks = evaluatedPopulation(population, ts.testCases, g, ag);
                 marks = programsToMarks.Values.ToList();
                 marks.Sort();
@@ -124,7 +123,7 @@ public static partial class SharpGP
         Console.WriteLine("Finished evolution");
         //Console.WriteLine("Best program:");
         var bestProgram = programsToMarks.OrderBy(x => x.Value).First().Key;
-       // Console.WriteLine(bestProgram.ToString());
+        // Console.WriteLine(bestProgram.ToString());
         Console.WriteLine("Best mark: " + programsToMarks.OrderBy(x => x.Value).First().Value);
         Console.WriteLine("Generation: " + currentGeneration);
         //ProgramRunContext sampleContext = new ProgramRunContext() { input = ts.testCases[0].input };
@@ -142,7 +141,6 @@ public static partial class SharpGP
         }
         return target;
     }
-
     private static Dictionary<PRogram, double> evaluatedPopulation(List<PRogram> population, List<TestCase> testCases, Grader g, Agregrader ag)
     {
         var result = new Dictionary<PRogram, double>();
@@ -161,7 +159,6 @@ public static partial class SharpGP
 
         return result;
     }
-
     public static Type getTypeToMutate(TreeConfig tc)
     {
         double chance = _rand.NextDouble();
