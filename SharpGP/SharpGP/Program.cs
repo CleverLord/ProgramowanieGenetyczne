@@ -14,5 +14,5 @@ foreach (var p in problems)
 {
     EvolutionHistory eh= SharpGP.SharpGP.PerformEvolution(p);
     //Save the results
-    File.WriteAllText(ResultsDirectory + p.name + ".json", JsonConvert.SerializeObject(eh));
+    File.WriteAllText(ResultsDirectory + p.name + ".json", JsonConvert.SerializeObject(eh, Formatting.Indented));
 }

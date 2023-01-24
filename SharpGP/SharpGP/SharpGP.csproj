@@ -32,7 +32,6 @@
 
     <ItemGroup>
       <Folder Include="ArchiveSets" />
-      <Folder Include="Results" />
     </ItemGroup>
 
 </Project>
