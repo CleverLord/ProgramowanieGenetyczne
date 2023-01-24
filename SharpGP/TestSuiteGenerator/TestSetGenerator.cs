@@ -11,6 +11,7 @@ public static class TestSetGenerator
             folder = Directory.GetParent(binFolder).Parent.Parent.CreateSubdirectory("TestSuites").FullName;
         }
         string path = Path.Combine(folder, filename + fileExtension);
+        ts.name = filename;
         File.WriteAllText(path, JsonConvert.SerializeObject(ts, Formatting.Indented));
     }
     [Obsolete]

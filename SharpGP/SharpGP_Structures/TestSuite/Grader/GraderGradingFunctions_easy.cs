@@ -1,54 +1,8 @@
-﻿using System.Reflection;
-
+﻿using SharpGP_Structures;
+using SharpGP_Structures.TestSuite;
 namespace SharpGP_Structures.TestSuite;
-
-[Serializable]
-public class Grader
+public partial class Grader
 {
-    public string gradingFunctionName;
-    [NonSerialized] public Func<TestCase, ProgramRunContext, double> gradingFunctionDelegate;
-
-    public void Initialize()
-    {
-        var method = GetType().GetMethod(gradingFunctionName);
-        if (method == null) { throw new Exception("Grading function called " + gradingFunctionName + " does not exist"); }
-        //check for return type
-        if (method.ReturnType != typeof(double)) { throw new Exception("Grading function called " + gradingFunctionName + " does not return a double"); }
-        //check for params
-        var parameters = method.GetParameters();
-        if (parameters.Length != 2) { throw new Exception("Grading function called " + gradingFunctionName + " does not have 2 parameters"); }
-        if (parameters[0].ParameterType != typeof(TestCase))
-        {
-            throw new Exception("Grading function called " + gradingFunctionName + " does not have a TestCase as its first parameter");
-        }
-        if (parameters[1].ParameterType != typeof(ProgramRunContext))
-        {
-            throw new Exception("Grading function called " + gradingFunctionName + " does not have a ProgramRunContext as its second parameter");
-        }
-        //create delegate
-        gradingFunctionDelegate = method.CreateDelegate<Func<TestCase, ProgramRunContext, double>>();
-    }
-    public Grader(string gradingFunction)
-    {
-        gradingFunctionName = gradingFunction;
-        Initialize();
-    }
-    public Grader() // this is needed for deserialization
-    {
-    }
-    public double Grade(TestCase tc, ProgramRunContext prc)
-    {
-        //keep in mind, here prc is already populated with the output of the program
-        return gradingFunctionDelegate(tc, prc);
-    }
-
-    public static double bestAbsoluteError(TestCase tc, ProgramRunContext prc)
-    {
-        List<double> output = prc.GetOutput();
-        var absDiffs = output.Select((x, i) => Math.Abs(x - tc.targetOutput[i])).ToList(); //array index out of range
-        return absDiffs.Min();
-    }
-
     public static double target_1_1_A(TestCase tc, ProgramRunContext prc)
     {
         if (prc.GetOutput().Count == 0) { return Double.MaxValue; }
@@ -77,7 +31,7 @@ public class Grader
     {
         List<double> output = prc.GetOutput();
         double target = tc.targetOutput[0];
-        return Close(output[0], target) ? 0 : 1;
+        return isClose(output[0], target) ? 0 : 1;
     }
     public static double target_1_1_E__0(TestCase tc, ProgramRunContext prc)
     {
@@ -89,7 +43,7 @@ public class Grader
     {
         List<double> output = prc.GetOutput();
         double target = tc.targetOutput[0];
-        return Close(output[0], target) ? 0 : 1;
+        return isClose(output[0], target) ? 0 : 1;
     }
     public static double target_1_1_F__0(TestCase tc, ProgramRunContext prc)
     {
@@ -101,7 +55,7 @@ public class Grader
     {
         List<double> output = prc.GetOutput();
         double target = tc.targetOutput[0];
-        return Close(output[0], target) ? 0 : 1;
+        return isClose(output[0], target) ? 0 : 1;
     }
     public static double target_1_1_F__2(TestCase tc, ProgramRunContext prc)
     {
@@ -229,33 +183,4 @@ public class Grader
 
         return target - output[0];
     }
-    public static double AtFirstPlace(TestCase tc, ProgramRunContext prc)
-    {
-        List<double> output = prc.GetOutput();
-        double target = tc.targetOutput[0];
-        return Close(output[0], target) ? 0 : 1;
-    }
-    public static double justOneTargetValue(TestCase tc, ProgramRunContext prc)
-    {
-        if (prc.GetOutput().Count != 1) { return 1; }
-        return Close(prc.GetOutput()[0], tc.targetOutput[0]) ? 0 : 1;
-    }
-
-    public static bool Close(double a, double b)
-    {
-        return Math.Abs(a - b) < 0.0001;
-    }
-
-    #region helper functions
-
-    public static bool hasTargetValue(double target, List<double> output)
-    {
-        return output.Any(d => isClose(d, target));
-    }
-    public static bool isClose(double a, double b, double Threshold = 0.0001)
-    {
-        return Math.Abs(a - b) < Threshold;
-    }
-
-    #endregion
 }

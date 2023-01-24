@@ -8,7 +8,6 @@ List<TestSet> problems = new List<TestSet>();
 foreach (var file in Directory.GetFiles(ProjectDirectory + "/TestSuites/"))
 {
     problems.Add(JsonConvert.DeserializeObject<TestSet>(File.ReadAllText(file)));
-    problems[problems.Count - 1].name = Path.GetFileNameWithoutExtension(file);
 }
 var ResultsDirectory = ProjectDirectory + "/Results/";
 foreach (var p in problems)
