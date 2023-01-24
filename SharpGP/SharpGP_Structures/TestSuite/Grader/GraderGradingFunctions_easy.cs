@@ -60,7 +60,7 @@ public partial class Grader
     public static double target_1_1_F__2(TestCase tc, ProgramRunContext prc)
     {
         if (prc.GetOutput().Count != 1) { return Double.MaxValue; }
-        return prc.GetOutput()[0] - tc.targetOutput[0];
+        return Math.Abs(prc.GetOutput()[0] - tc.targetOutput[0]);
     }
     
     public static double target_1_2_A__0(TestCase tc, ProgramRunContext prc)
@@ -101,7 +101,7 @@ public partial class Grader
         if (prc.GetOutput().Count == 0) { return Double.MaxValue; }
         if (prc.GetOutput().Count != 1) { return prc.GetOutput().Count; }
         var absDiff = prc.GetOutput()[0]- tc.targetOutput[0];
-        return absDiff;
+        return Math.Abs(absDiff);
     } 
     public static double target_1_2_D__0(TestCase tc, ProgramRunContext prc)
     {
@@ -114,7 +114,7 @@ public partial class Grader
         if (prc.GetOutput().Count == 0) { return Double.MaxValue; }
         if (prc.GetOutput().Count != 1) { return prc.GetOutput().Count; }
         var absDiff = prc.GetOutput()[0]- tc.targetOutput[0];
-        return absDiff;
+        return Math.Abs(absDiff);
     } 
     public static double target_1_2_E__0(TestCase tc, ProgramRunContext prc)
     {
@@ -127,7 +127,7 @@ public partial class Grader
         if (prc.GetOutput().Count == 0) { return Double.MaxValue; }
         if (prc.GetOutput().Count != 1) { return prc.GetOutput().Count; }
         var absDiff = prc.GetOutput()[0]- tc.targetOutput[0];
-        return absDiff;
+        return Math.Abs(absDiff);
     } 
 
     public static double target_1_3_A__0(TestCase tc, ProgramRunContext prc)
@@ -141,7 +141,7 @@ public partial class Grader
         if (prc.GetOutput().Count == 0) { return Double.MaxValue; }
         if (prc.GetOutput().Count != 1) { return prc.GetOutput().Count; }
         var absDiff = prc.GetOutput()[0]- tc.targetOutput[0];
-        return absDiff;
+        return Math.Abs(absDiff);
     }
     public static double target_1_3_B__0(TestCase tc, ProgramRunContext prc)
     {
@@ -154,7 +154,7 @@ public partial class Grader
         if (prc.GetOutput().Count == 0) { return Double.MaxValue; }
         if (prc.GetOutput().Count != 1) { return prc.GetOutput().Count; }
         var absDiff = prc.GetOutput()[0]- tc.targetOutput[0];
-        return absDiff;
+        return Math.Abs(absDiff);
     } 
     
     public static double target_1_4_A__0(TestCase tc, ProgramRunContext prc)
@@ -168,7 +168,7 @@ public partial class Grader
 
         if (output.Count != 1) return double.MaxValue;
 
-        return target - output[0];
+        return Math.Abs(target - output[0]);
     }
     public static double target_1_4_B__0(TestCase tc, ProgramRunContext prc)
     {
@@ -181,6 +181,6 @@ public partial class Grader
 
         if (output.Count != 1) return double.MaxValue;
 
-        return target - output[0];
+        return Math.Abs(target - output[0]);
     }
 }
