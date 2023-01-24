@@ -45,5 +45,14 @@ Best mark: -100
 Starting evolution for testset: TestSet_1_4_B current time: 24/01/23 16:25:46.400
 Generation: . 1 generations in total, finished at 24/01/23 16:26:03.046 time elapsed: 0:00:16.64603
 Best mark: -100
+Starting evolution for testset: TestSet_Final_1 current time: 24/01/23 23:35:41.626
+Generation:  0 generations in total, finished at 24/01/23 23:36:54.745 time elapsed: 0:01:13.1195063
+Best mark: 0
+Starting evolution for testset: TestSet_Final_2 current time: 24/01/23 23:36:54.768
+Generation: .. 2 generations in total, finished at 24/01/23 23:39:28.034 time elapsed: 0:02:33.2658276
+Best mark: 0
+Starting evolution for testset: TestSet_Final_3 current time: 24/01/23 23:39:28.037
+Generation: .. 2 generations in total, finished at 24/01/23 23:40:11.140 time elapsed: 0:00:43.1030119
+Best mark: 0
 
 Process finished with exit code 0.
