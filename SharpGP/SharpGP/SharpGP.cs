@@ -14,12 +14,15 @@ public static partial class SharpGP
 
     public static EvolutionHistory PerformEvolution(TestSet ts)
     {
-        Console.WriteLine("Starting evolution");
+        DateTime startTime = DateTime.Now;
+        Console.WriteLine("Starting evolution for testset: " + ts.name + " current time: " + startTime.ToString("dd/MM/yy HH:mm:ss.fff"));
         //initialize all Graders and Agregraders - connect strings to functions
         ts.stages.ForEach(stage => stage.ag.Initialize());
         ts.stages.ForEach(stage => stage.grader.Initialize());
-        Stopwatch sw=new Stopwatch();
-        
+        Stopwatch sw = new Stopwatch();
+        Stopwatch totalTime = new Stopwatch();
+        totalTime.Start();
+
         //since this is static, make sure no variables are shared between runs (so they are declared in the method)
         EvolutionHistory eh = new EvolutionHistory();
         int currentGeneration = 0;
@@ -31,13 +34,13 @@ public static partial class SharpGP
 
         var eg = new EvolutionGeneration();
         eg.generationIndex = -1;
-        
+
         //create initial population
         sw.Start();
         List<PRogram> population = new List<PRogram>();
         for (int i = 0; i < popSize; i++) population.Add(TreeGenerator.GenerateProgram_FromConfig(ts.config));
         eg.generationCreationTime = sw.ElapsedMilliseconds;
-            
+
         //evaluate initial population
         sw.Restart();
         Dictionary<PRogram, double> programsToMarks = evaluatedPopulation(population, ts.testCases, g, ag);
@@ -45,7 +48,7 @@ public static partial class SharpGP
         List<double> marks = programsToMarks.Values.ToList();
         marks.Sort();
         //take a note about the generated population
-   
+
         eg.SetFittness(marks);
         eg.setDepths(population.Select(x => x.GetDepth()).OrderBy(x => x).ToList());
         eh.generations.Add(eg);
@@ -119,6 +122,7 @@ public static partial class SharpGP
                 eh.generations.Add(gen);
             }
             //go to next stage
+            eg.bestProgram = programsToMarks.MinBy(x => x.Value).Key.ToString();
             int indexOfCurrentStage = ts.stages.IndexOf(currentStage);
             if (indexOfCurrentStage == ts.stages.Count - 1)
                 currentStage = null;
@@ -131,17 +135,14 @@ public static partial class SharpGP
             }
         }
         //print summary
-        Console.WriteLine();
-        Console.WriteLine("Finished evolution");
-        //Console.WriteLine("Best program:");
-        var bestProgram = programsToMarks.OrderBy(x => x.Value).First().Key;
-        // Console.WriteLine(bestProgram.ToString());
-        Console.WriteLine("Best mark: " + programsToMarks.OrderBy(x => x.Value).First().Value);
-        Console.WriteLine("Generation: " + currentGeneration);
-        //ProgramRunContext sampleContext = new ProgramRunContext() { input = ts.testCases[0].input };
-        //bestProgram.Invoke(sampleContext);
-        //Console.WriteLine("Sample output:");
-        //Console.WriteLine(sampleContext.ToStringTabbed());
+        DateTime stopTime = DateTime.Now;
+        TimeSpan ts2 = stopTime - startTime;
+        eh.totalEvolutionTime = ts2.ToString("g");
+        Console.WriteLine(" " + currentGeneration + " generations in total, finished at " + stopTime.ToString("dd/MM/yy HH:mm:ss.fff") + " time elapsed: "
+                          + eh.totalEvolutionTime);
+        Console.WriteLine("Best mark: " + programsToMarks.MinBy(x => x.Value).Value);
+        eh.generations.ForEach(x => x.actionsToCount.ToList().ForEach(y => eh.AddActionToCount(y.Key, y.Value)));
+
         return eh;
     }
     private static PRogram Tournament(Dictionary<PRogram, double> programsToMarks, int tournamentSize)

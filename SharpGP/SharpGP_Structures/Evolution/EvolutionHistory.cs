@@ -1,25 +1,37 @@
-﻿namespace SharpGP_Structures.Evolution;
+﻿using SharpGP_Structures.Tree;
+
+namespace SharpGP_Structures.Evolution;
 
 [Serializable]
 public class EvolutionHistory
 {
     public List<EvolutionGeneration> generations = new List<EvolutionGeneration>();
+    public string totalEvolutionTime = "-1";
+    public Dictionary<string, int> totalActionsToCount = new Dictionary<string, int>();
+    public void AddActionToCount(string actionType, int actionCount)
+    {
+        if (!totalActionsToCount.ContainsKey(actionType)) totalActionsToCount.Add(actionType, 0);
+        totalActionsToCount[actionType] += actionCount;
+    }
 }
+
 [Serializable]
 public class EvolutionGeneration
 {
     public int generationIndex = -1;
-    public DateTime generationStartTime;
-    public long generationCreationTime=-1;
-    public long generationEvaluationTime=-1;
+    public string generationStartTime;
+    public long generationCreationTime = -1;
+    public long generationEvaluationTime = -1;
     public List<double> fitnesses = new List<double>(); // mark for each individual in the generation
     public Dictionary<double, int> fitnesToUnits = new Dictionary<double, int>();
     public List<int> populationDepths = new List<int>(); // depth of each individual in the generation
     public Dictionary<int, int> popDepthToUnits = new Dictionary<int, int>();
-    public List<GeneticAction> actions = new List<GeneticAction>(); // actions taken to create each individual in the generation]
+    public List<GeneticAction> actions = new List<GeneticAction>(); // actions taken to create each individual in the generation
+    public Dictionary<string, int> actionsToCount = new Dictionary<string, int>();
+    public string bestProgram;
     public EvolutionGeneration()
     {
-        generationStartTime = DateTime.Now;
+        generationStartTime = DateTime.Now.ToString("dd/MM/yy HH:mm:ss.fff");
     }
     public void SetFittness(List<double> f)
     {
@@ -41,12 +53,23 @@ public class EvolutionGeneration
             popDepthToUnits[i]++;
         }
     }
+    public void PostProcess()
+    {
+        foreach (var action in actions)
+        {
+            if (!actionsToCount.ContainsKey(action.actionType)) 
+                actionsToCount.Add(action.actionType, 0);
+            actionsToCount[action.actionType]++;
+        }
+    }
 }
+
 [Serializable]
 public abstract class GeneticAction
 {
     public string actionType;
 }
+
 [Serializable]
 public class CrossoverAction : GeneticAction
 {
@@ -60,6 +83,7 @@ public class CrossoverAction : GeneticAction
     public int child1Depth;
     public int child2Depth;
 }
+
 [Serializable]
 public class MutationAction : GeneticAction
 {
@@ -69,6 +93,7 @@ public class MutationAction : GeneticAction
     }
     public string mutatedGene;
 }
+
 [Serializable]
 public class CopyZeroAction : GeneticAction
 {
