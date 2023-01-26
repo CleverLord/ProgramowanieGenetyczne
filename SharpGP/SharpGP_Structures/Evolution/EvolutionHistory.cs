@@ -22,6 +22,7 @@ public class EvolutionGeneration
     public string generationStartTime;
     public long generationCreationTime = -1;
     public long generationEvaluationTime = -1;
+    public string gradingFunction;
     public List<double> fitnesses = new List<double>(); // mark for each individual in the generation
     public Dictionary<double, int> fitnesToUnits = new Dictionary<double, int>();
     public List<int> populationDepths = new List<int>(); // depth of each individual in the generation

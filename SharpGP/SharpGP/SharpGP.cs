@@ -26,7 +26,7 @@ public static partial class SharpGP
         //since this is static, make sure no variables are shared between runs (so they are declared in the method)
         EvolutionHistory eh = new EvolutionHistory();
         int currentGeneration = 0;
-        int popSize = 100; //move this to TestSet
+        int popSize = 1000; //move this to TestSet
         TestStage currentStage = ts.stages[0];
         bool isLastStage = ts.stages.Count == 1;
         Grader g = currentStage.grader;
@@ -34,29 +34,35 @@ public static partial class SharpGP
 
         var eg = new EvolutionGeneration();
         eg.generationIndex = -1;
-
+        eg.gradingFunction = g.gradingFunctionName;
+        
         //create initial population
         sw.Start();
         List<PRogram> population = new List<PRogram>();
         for (int i = 0; i < popSize; i++) population.Add(TreeGenerator.GenerateProgram_FromConfig(ts.config));
         eg.generationCreationTime = sw.ElapsedMilliseconds;
-
-        //evaluate initial population
-        sw.Restart();
-        Dictionary<PRogram, double> programsToMarks = evaluatedPopulation(population, ts.testCases, g, ag);
-        eg.generationEvaluationTime = sw.ElapsedMilliseconds;
-        List<double> marks = programsToMarks.Values.ToList();
-        marks.Sort();
-        //take a note about the generated population
-
-        eg.SetFittness(marks);
-        eg.setDepths(population.Select(x => x.GetDepth()).OrderBy(x => x).ToList());
-        eh.generations.Add(eg);
-
+        
+        
         Console.Write("Generation: ");
         while (currentStage != null) //has job to do
         {
-            while ((marks[(int)(marks.Count * 0.9)] > currentStage.threshold && !isLastStage) || (marks[0] > currentStage.threshold && isLastStage))
+            //Evaluate population before determining whether it need to be evolved
+            Dictionary<PRogram, double> programsToMarks = evaluatedPopulation(population, ts.testCases, g, ag);
+            eg.generationEvaluationTime = sw.ElapsedMilliseconds;
+            sw.Restart();
+            List<double> marks = programsToMarks.Values.ToList();
+            marks.Sort();
+
+            //take a note about the generated population
+            eg.SetFittness(marks);
+            eg.setDepths(population.Select(x => x.GetDepth()).OrderBy(x => x).ToList());
+            eh.generations.Add(eg);
+
+            //warunek podtrzymania trenowania tego samego stage'a
+            //1) nie jest ostatni stage i 90% osobników nie spełnia thresholdu
+            //  lub
+            //2) to ostatni stage i żaden osobnik nie spełnia thresholdu
+            while ((marks[(int)(marks.Count * 0.9)] > currentStage.threshold + Double.Epsilon && !isLastStage) || (marks[0] > currentStage.threshold + Double.Epsilon && isLastStage))
             {
                 Console.Write(".");
                 EvolutionGeneration gen = new EvolutionGeneration();
@@ -109,10 +115,12 @@ public static partial class SharpGP
                         }
                     }
                 }
+                
                 gen.generationCreationTime = sw.ElapsedMilliseconds;
                 population = newPopulation;
                 sw.Restart();
                 programsToMarks = evaluatedPopulation(population, ts.testCases, g, ag);
+                gen.gradingFunction = g.gradingFunctionName;
                 gen.generationEvaluationTime = sw.ElapsedMilliseconds;
                 marks = programsToMarks.Values.ToList();
                 marks.Sort();
@@ -140,7 +148,7 @@ public static partial class SharpGP
         eh.totalEvolutionTime = ts2.ToString("g");
         Console.WriteLine(" " + currentGeneration + " generations in total, finished at " + stopTime.ToString("dd/MM/yy HH:mm:ss.fff") + " time elapsed: "
                           + eh.totalEvolutionTime);
-        Console.WriteLine("Best mark: " + programsToMarks.MinBy(x => x.Value).Value);
+        //Console.WriteLine("Best mark: " + programsToMarks.MinBy(x => x.Value).Value);
         eh.generations.ForEach(x => x.actionsToCount.ToList().ForEach(y => eh.AddActionToCount(y.Key, y.Value)));
 
         return eh;
@@ -164,13 +172,12 @@ public static partial class SharpGP
             foreach (TestCase tc in testCases)
             {
                 ProgramRunContext prc = new ProgramRunContext(); // make a constructor that takes a test case
-                prc.input = tc.input;
+                prc.input = new List<double>(tc.input);
                 p.Invoke(prc);
                 grades.Add(g.Grade(tc, prc));
             }
             result.Add(p, ag.Agregrade(grades));
         }
-
         return result;
     }
     public static Type getTypeToMutate(TreeConfig tc)

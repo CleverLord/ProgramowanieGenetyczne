@@ -10,6 +10,8 @@ public class ProgramRunContext
     public long ElapsedTicks = -1;
     public Random rand = new Random();
     public int actions = 0;
+    public int  executionTime = 0;
+        
     
     enum Strategy
     {

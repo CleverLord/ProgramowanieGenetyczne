@@ -66,14 +66,14 @@ public partial class Grader
     public static double target_1_2_A__0(TestCase tc, ProgramRunContext prc)
     {
         if (prc.GetOutput().Count == 0) { return Double.MaxValue; }
-        var absDiff = prc.GetOutput().Select(x => Math.Abs(x - 1)).ToList();
-        return absDiff.Min();
+        return prc.GetOutput().Count-1;
     }
     public static double target_1_2_A__1(TestCase tc, ProgramRunContext prc)
     {
-        if (prc.GetOutput().Count == 0) { return Double.MaxValue; }
-        if (prc.GetOutput().Count != 1) { return prc.GetOutput().Count; }
+        if (prc.GetOutput().Count != 1) { return Double.MaxValue; }
+        
         var absDiff = prc.GetOutput()[0]- tc.targetOutput[0];
+        absDiff = Math.Abs(absDiff);
         return absDiff;
     } 
 
