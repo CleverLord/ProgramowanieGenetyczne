@@ -460,6 +460,123 @@ public static class TestSetGenerator
         }
         SaveTestSuite(ts, "TestSet_Final_3");
     }
+    public static void GenerateFor_Final_4_AND()
+    {
+        double range = rnd.Next(1, 100);
+        double threshold = range * 100 * 0.05;
+        TestSet ts = new TestSet();
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_final_3__0"), threshold = 0,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_final_3__1"), threshold = 0,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_final_3__2"), threshold = 5,
+            ag =  new Agregrader("sum")
+        });
+        
+        SaveTestSuite(ts, "TestSet_Final_3");
+    }
+    public static void GenerateFor_Final_4_1_1()
+    {
+        TestSet ts = new TestSet();
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_final_4_1__0"), threshold = 0,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_final_4_1__1"), threshold = 0,
+            ag =  new Agregrader("sum")
+        });
+
+        for(int i = 0; i < 100; i++)
+        {
+            double a = rnd.Next(0, 1);
+            double b = 1 - a;
+            ts.testCases.Add(new TestCase() {input = new List<double>() {a}, targetOutput = new List<double>() {b}});
+        }
+        
+        SaveTestSuite(ts, "TestSet_Final_4_1_1");
+    }
+
+    public static void GenerateFor_Final_4_2_1()
+    {
+        TestSet ts = new TestSet();
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_final_4_2_1__0"), threshold = 0,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_final_4_2_1__1"), threshold = 0,
+            ag =  new Agregrader("sum")
+        });
+        for(int i = 0; i < 100; i++)
+        {
+            double a = rnd.Next(0, 1);
+            double b = rnd.Next(0, 1);
+            double c = a * b;
+            ts.testCases.Add(new TestCase() {input = new List<double>() {a, b}, targetOutput = new List<double>() {c}});
+        }
+        
+        SaveTestSuite(ts, "TestSet_Final_4_2_1");
+    }
+    public static void GenerateFor_Final_4_2_2()
+    {
+        TestSet ts = new TestSet();
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_final_4_2_2__0"), threshold = 0,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_final_4_2_2__1"), threshold = 0,
+            ag =  new Agregrader("sum")
+        });
+        
+        for(int i = 0; i < 100; i++)
+        {
+            double a = rnd.Next(0, 1);
+            double b = rnd.Next(0, 1);
+            double c = Math.Max(a, b);
+            ts.testCases.Add(new TestCase() {input = new List<double>() {a, b}, targetOutput = new List<double>() {c}});
+        }
+        SaveTestSuite(ts, "TestSet_Final_4_2_2");
+    }
+
+    public static void GenerateFor_Final_4_2_3()
+    {
+        TestSet ts = new TestSet();
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_final_4_2_3__0"), threshold = 0,
+            ag =  new Agregrader("sum")
+        });
+        ts.stages.Add(new TestStage()
+        {
+            grader = new Grader("target_final_4_2_3__1"), threshold = 0,
+            ag =  new Agregrader("sum")
+        });
+        for(int i = 0; i < 100; i++)
+        {
+            double a = rnd.Next(0, 1);
+            double b = rnd.Next(0, 1);
+            double c = a + b == 1 ? 1 : 0;
+            ts.testCases.Add(new TestCase() {input = new List<double>() {a, b}, targetOutput = new List<double>() {c}});
+        }
+        SaveTestSuite(ts, "TestSet_Final_4_2_3");
+    }
+
 
     #region RandomRegion
     static Random rnd = new Random();

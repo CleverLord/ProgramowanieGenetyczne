@@ -50,5 +50,55 @@ public partial class Grader
         if(target == output[0]) return 0;
         return 1;
     }
+    
+    public static double target_final_4_1__0(TestCase tc, ProgramRunContext prc)
+    {
+        return Math.Abs(prc.GetOutput().Count - 1);
+    }
+    public static double target_final_4_1__1(TestCase tc, ProgramRunContext prc)
+    {
+        List<double> output = prc.GetOutput();
+        if (output.Count != 1) return double.MaxValue;
+        double target = tc.targetOutput[0];
+        if(target == output[0]) return 0;
+        return 1;
+    }
+    
+    public static double target_final_4_2_1__0(TestCase tc, ProgramRunContext prc)
+    {
+        return Math.Abs(prc.GetOutput().Count - 1);
+    }
+    public static double target_final_4_2_1__1(TestCase tc, ProgramRunContext prc)
+    {
+        List<double> output = prc.GetOutput();
+        if (output.Count != 1) return double.MaxValue;
+        double target = tc.targetOutput[0];
+        if(target == output[0]) return 0;
+        return 1;
+    }
 
+    public static double target_final_4_2_2__0(TestCase tc, ProgramRunContext prc)
+    {
+        return Math.Abs(prc.GetOutput().Count - 1);
+    }
+    public static double target_final_4_2_2__1(TestCase tc, ProgramRunContext prc)
+    {
+        List<double> output = prc.GetOutput();
+        if (output.Count != 1) return double.MaxValue;
+        double target = tc.targetOutput[0];
+        if(target == output[0]) return 0;
+        return 1;
+    }
+    public static double target_final_4_2_3__0(TestCase tc, ProgramRunContext prc)
+    {
+        return Math.Abs(prc.GetOutput().Count - 1);
+    }
+    public static double target_final_4_2_3__1(TestCase tc, ProgramRunContext prc)
+    {
+        List<double> output = prc.GetOutput();
+        if (output.Count != 1) return double.MaxValue;
+        double target = tc.targetOutput[0];
+        if(target == output[0]) return 0;
+        return 1;
+    }
 }
