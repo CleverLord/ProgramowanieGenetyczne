@@ -89,7 +89,7 @@ public partial class SharpGP
         if (p2Node != null)
         {
             Node.CrossNodes(p1Node, p2Node);
-            ca.crossedGene = toCross.Name;
+            ca.crossedType = toCross.Name;
             ca.child1Depth = p1c.GetDepth();
             ca.child2Depth = p2c.GetDepth();
             return (p1c, p2c);

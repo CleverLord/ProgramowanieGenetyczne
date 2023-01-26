@@ -77,7 +77,7 @@ public class CrossoverAction : GeneticAction
     {
         actionType = "Crossover";
     }
-    public string crossedGene;
+    public string crossedType;
     public int parent1Depth;
     public int parent2Depth;
     public int child1Depth;
