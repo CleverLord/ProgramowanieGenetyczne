@@ -440,12 +440,12 @@ public static class TestSetGenerator
         });
         ts.stages.Add(new TestStage()
         {
-            grader = new Grader("target_final_3__1"), threshold = 0,
+            grader = new Grader("target_final_3__1"), threshold = 500,
             ag =  new Agregrader("sum")
         });
         ts.stages.Add(new TestStage()
         {
-            grader = new Grader("target_final_3__2"), threshold = 5,
+            grader = new Grader("target_final_3__2"), threshold = 300,
             ag =  new Agregrader("sum")
         });
         
@@ -455,32 +455,9 @@ public static class TestSetGenerator
             double b = rnd.Next(-100, 100);
             double c = rnd.Next(-100, 100);
             double d = rnd.Next(-100, 100);
-            double min = Math.Min(Math.Min(a, b), Math.Min(c, d));
+            double min = new List<double>(){a, b, c, d}.Min();
             ts.testCases.Add(new TestCase() {input = new List<double>() {a, b, c, d}, targetOutput = new List<double>() {min}});
         }
-        SaveTestSuite(ts, "TestSet_Final_3");
-    }
-    public static void GenerateFor_Final_4_AND()
-    {
-        double range = rnd.Next(1, 100);
-        double threshold = range * 100 * 0.05;
-        TestSet ts = new TestSet();
-        ts.stages.Add(new TestStage()
-        {
-            grader = new Grader("target_final_3__0"), threshold = 0,
-            ag =  new Agregrader("sum")
-        });
-        ts.stages.Add(new TestStage()
-        {
-            grader = new Grader("target_final_3__1"), threshold = 0,
-            ag =  new Agregrader("sum")
-        });
-        ts.stages.Add(new TestStage()
-        {
-            grader = new Grader("target_final_3__2"), threshold = 5,
-            ag =  new Agregrader("sum")
-        });
-        
         SaveTestSuite(ts, "TestSet_Final_3");
     }
     public static void GenerateFor_Final_4_1_1()

@@ -27,7 +27,7 @@ public static partial class SharpGP
         //since this is static, make sure no variables are shared between runs (so they are declared in the method)
         EvolutionHistory eh = new EvolutionHistory();
         int currentGeneration = 0;
-        int popSize = 1000; //move this to TestSet
+        int popSize = 100; //move this to TestSet
         TestStage currentStage = ts.stages[0];
         bool isLastStage = ts.stages.Count == 1;
         Grader g = currentStage.grader;
@@ -132,6 +132,8 @@ public static partial class SharpGP
                 gen.setDepths(population.Select(x => x.GetDepth()).OrderBy(x => x).ToList());
                 eh.generations.Add(gen);
                 currentMaxExecutionTime = Math.Clamp((int)(currentMaxExecutionTime * 1.02), 0, 1_000_000);
+                File.WriteAllText("C:/Users/krzys/Documents/GitHub/ProgramowanieGenetyczne/SharpGP/SharpGP/" + ts.name + ".json",
+                    Newtonsoft.Json.JsonConvert.SerializeObject(eh, Newtonsoft.Json.Formatting.Indented));
             }
             //go to next stage
             gen.bestProgram = programsToMarks.MinBy(x => x.Value).Key.ToString();
@@ -145,6 +147,7 @@ public static partial class SharpGP
                 ag = currentStage.ag;
                 isLastStage = indexOfCurrentStage == ts.stages.Count - 1;
             }
+            Console.WriteLine("Going to next stage");
         }
         //print summary
         DateTime stopTime = DateTime.Now;
@@ -182,8 +185,10 @@ public static partial class SharpGP
                 if(! prc.hasTimeouted())
                     grades.Add(g.Grade(tc, prc));
                 else
-                    grades.Add(double.PositiveInfinity);
-                
+                {
+                    grades.Add(double.PositiveInfinity); 
+                    break;
+                }
             }
             result.Add(p, ag.Agregrade(grades));
         }
