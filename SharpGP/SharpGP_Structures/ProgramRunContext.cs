@@ -10,7 +10,18 @@ public class ProgramRunContext
     public long ElapsedTicks = -1;
     public Random rand = new Random();
     public int actions = 0;
-    public int  executionTime = 0;
+    public int  executedActions = 0;
+    public int maxExecutedActions = -1;
+    public bool hasTimeouted() => executedActions == maxExecutedActions;
+
+    public void IncrementExecutionTime()
+    {
+        executedActions++;
+        if (executedActions >= maxExecutedActions)
+        {
+            throw new Exception("OutOfTimeException");
+        }
+    }
         
     
     enum Strategy

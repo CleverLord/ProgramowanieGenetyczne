@@ -66,7 +66,8 @@ public class EvolutionGeneration
 }
 
 [Serializable]
-public abstract class GeneticAction
+//this is not abstract but it's not supposed to be instantiated
+public class GeneticAction
 {
     public string actionType;
 }

@@ -5,6 +5,7 @@ namespace SharpGP_Structures;
 
 public class TreeConfig
 {
+    public int maxExectionTime = 1000;
     // Tree Basic Data
     public int minNodeCount = 15; // grow trees with at least 15 nodes
     public int maxDepth = 6; // max tree depth

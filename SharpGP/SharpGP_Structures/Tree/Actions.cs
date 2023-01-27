@@ -22,6 +22,7 @@ public class Loop : Action
 
     public override void Invoke(ProgramRunContext prc)
     {
+        prc.IncrementExecutionTime();
         for (int i = 0; i < repeatTimes.value; i++) scope.Invoke(prc);
     }
 
@@ -48,6 +49,7 @@ public class IfStatement : Action
 
     public override void Invoke(ProgramRunContext prc)
     {
+        prc.IncrementExecutionTime();
         if (condition.Evaluate(prc)) scope.Invoke(prc);
     }
 
@@ -72,7 +74,11 @@ public class Assignment : Action, IGrowable
     public Assignment(Variable variable, Expression expression) => children = new List<Node> { variable, expression };
     public static Assignment NewAssignment(PRogram ctx) => new Assignment(Variable.RandomOrNew(ctx), Expression.NewExpression(ctx));
 
-    public override void Invoke(ProgramRunContext prc) => prc.variables[variable.name] = expression.Evaluate(prc);
+    public override void Invoke(ProgramRunContext prc)
+    {
+        prc.IncrementExecutionTime();
+        prc.variables[variable.name] = expression.Evaluate(prc);
+    }
     public override string ToString() => new String(PRogram.TAB, indend) + variable + " = " + expression + ';';
     public void Grow(PRogram ctx) => expression = expression.Grown(ctx);
     public override void FullGrow(PRogram ctx, int targetDepth)
@@ -88,7 +94,11 @@ public class Write : Action, IGrowable
     public Write(Expression expr) => children = new List<Node> { expr };
     public static Write NewWrite(PRogram ctx) => new Write(Expression.NewExpression(ctx));
 
-    public override void Invoke(ProgramRunContext prc) => prc.Push(expression.Evaluate(prc));
+    public override void Invoke(ProgramRunContext prc)
+    {
+        prc.IncrementExecutionTime();
+        prc.Push(expression.Evaluate(prc));
+    }
     public override string ToString() => new String(PRogram.TAB, indend) + "write(" + expression + ");";
 
     public void Grow(PRogram ctx) => expression = expression.Grown(ctx);
@@ -110,6 +120,7 @@ public class Scope : Action, IGrowable, IMutable
     public void Add(Action action) => children.Add(action);
     public override void Invoke(ProgramRunContext prc)
     {
+        prc.IncrementExecutionTime();
         foreach (var a in actions) a.Invoke(prc);
     }
     public override string ToString()

@@ -40,8 +40,11 @@ public class NestedExpression : Expression, IGrowable
     //this is unsafe but it makes antlr look nicer
     public NestedExpression(List<Node> children) => this.children = children;
 
-    public override double Evaluate(ProgramRunContext prc) =>
-        opeartor.Evaluate(expression.Evaluate(prc), expression2.Evaluate(prc));
+    public override double Evaluate(ProgramRunContext prc)
+    {
+        prc.IncrementExecutionTime();
+        return opeartor.Evaluate(expression.Evaluate(prc), expression2.Evaluate(prc));
+    }
 
     public override string ToString() => $"({expression} {opeartor} {expression2})";
 

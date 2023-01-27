@@ -48,6 +48,7 @@ public static class TreeGenerator
         var tree = parser.program();
         AntlrToProgram programVisitor = new AntlrToProgram();
         PRogram p = (PRogram)programVisitor.Visit(tree);
+        p.UpdateParents();
         return p;
     }
     private static SharpParser getParser(ICharStream input)

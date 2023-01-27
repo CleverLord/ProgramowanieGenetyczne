@@ -29,8 +29,12 @@ public class PRogram : Node, IGrowable, IMutable
     {
         Stopwatch sw = new Stopwatch();
         sw.Start();
-
-        foreach (var action in Actions) action.Invoke(prc);
+        try
+        {
+            foreach (var action in Actions) action.Invoke(prc);    
+        }
+        catch(Exception _){}
+        
 
         sw.Stop();
         prc.ElapsedMilliseconds = sw.ElapsedMilliseconds;

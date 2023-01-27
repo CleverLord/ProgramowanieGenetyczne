@@ -14,6 +14,7 @@ public static partial class SharpGP
 
     public static EvolutionHistory PerformEvolution(TestSet ts)
     {
+        int currentMaxExecutionTime = ts.config.maxExectionTime;
         DateTime startTime = DateTime.Now;
         Console.WriteLine("Starting evolution for testset: " + ts.name + " current time: " + startTime.ToString("dd/MM/yy HH:mm:ss.fff"));
         //initialize all Graders and Agregraders - connect strings to functions
@@ -32,31 +33,33 @@ public static partial class SharpGP
         Grader g = currentStage.grader;
         Agregrader ag = currentStage.ag;
 
-        var eg = new EvolutionGeneration();
-        eg.generationIndex = -1;
-        eg.gradingFunction = g.gradingFunctionName;
+        var gen = new EvolutionGeneration();
+        
         
         //create initial population
         sw.Start();
         List<PRogram> population = new List<PRogram>();
         for (int i = 0; i < popSize; i++) population.Add(TreeGenerator.GenerateProgram_FromConfig(ts.config));
-        eg.generationCreationTime = sw.ElapsedMilliseconds;
+        gen.generationCreationTime = sw.ElapsedMilliseconds;
         
         
         Console.Write("Generation: ");
         while (currentStage != null) //has job to do
         {
+            gen = new EvolutionGeneration();
+            gen.generationIndex = -1;
+            gen.gradingFunction = g.gradingFunctionName;
             //Evaluate population before determining whether it need to be evolved
-            Dictionary<PRogram, double> programsToMarks = evaluatedPopulation(population, ts.testCases, g, ag);
-            eg.generationEvaluationTime = sw.ElapsedMilliseconds;
+            Dictionary<PRogram, double> programsToMarks = evaluatedPopulation(population, ts.testCases, g, ag, currentMaxExecutionTime);
+            gen.generationEvaluationTime = sw.ElapsedMilliseconds;
             sw.Restart();
             List<double> marks = programsToMarks.Values.ToList();
             marks.Sort();
 
             //take a note about the generated population
-            eg.SetFittness(marks);
-            eg.setDepths(population.Select(x => x.GetDepth()).OrderBy(x => x).ToList());
-            eh.generations.Add(eg);
+            gen.SetFittness(marks);
+            gen.setDepths(population.Select(x => x.GetDepth()).OrderBy(x => x).ToList());
+            eh.generations.Add(gen);
 
             //warunek podtrzymania trenowania tego samego stage'a
             //1) nie jest ostatni stage i 90% osobników nie spełnia thresholdu
@@ -65,7 +68,7 @@ public static partial class SharpGP
             while ((marks[(int)(marks.Count * 0.9)] > currentStage.threshold + Double.Epsilon && !isLastStage) || (marks[0] > currentStage.threshold + Double.Epsilon && isLastStage))
             {
                 Console.Write(".");
-                EvolutionGeneration gen = new EvolutionGeneration();
+                gen = new EvolutionGeneration();
                 gen.generationIndex = currentGeneration;
                 sw.Restart();
                 List<PRogram> newPopulation = new List<PRogram>();
@@ -119,7 +122,7 @@ public static partial class SharpGP
                 gen.generationCreationTime = sw.ElapsedMilliseconds;
                 population = newPopulation;
                 sw.Restart();
-                programsToMarks = evaluatedPopulation(population, ts.testCases, g, ag);
+                programsToMarks = evaluatedPopulation(population, ts.testCases, g, ag, currentMaxExecutionTime);
                 gen.gradingFunction = g.gradingFunctionName;
                 gen.generationEvaluationTime = sw.ElapsedMilliseconds;
                 marks = programsToMarks.Values.ToList();
@@ -128,9 +131,10 @@ public static partial class SharpGP
                 gen.SetFittness(marks);
                 gen.setDepths(population.Select(x => x.GetDepth()).OrderBy(x => x).ToList());
                 eh.generations.Add(gen);
+                currentMaxExecutionTime = Math.Clamp((int)(currentMaxExecutionTime * 1.02), 0, 1_000_000);
             }
             //go to next stage
-            eg.bestProgram = programsToMarks.MinBy(x => x.Value).Key.ToString();
+            gen.bestProgram = programsToMarks.MinBy(x => x.Value).Key.ToString();
             int indexOfCurrentStage = ts.stages.IndexOf(currentStage);
             if (indexOfCurrentStage == ts.stages.Count - 1)
                 currentStage = null;
@@ -163,7 +167,7 @@ public static partial class SharpGP
         }
         return target;
     }
-    private static Dictionary<PRogram, double> evaluatedPopulation(List<PRogram> population, List<TestCase> testCases, Grader g, Agregrader ag)
+    private static Dictionary<PRogram, double> evaluatedPopulation(List<PRogram> population, List<TestCase> testCases, Grader g, Agregrader ag, int treeConfig)
     {
         var result = new Dictionary<PRogram, double>();
         foreach (PRogram p in population)
@@ -173,8 +177,13 @@ public static partial class SharpGP
             {
                 ProgramRunContext prc = new ProgramRunContext(); // make a constructor that takes a test case
                 prc.input = new List<double>(tc.input);
+                prc.maxExecutedActions = treeConfig;
                 p.Invoke(prc);
-                grades.Add(g.Grade(tc, prc));
+                if(! prc.hasTimeouted())
+                    grades.Add(g.Grade(tc, prc));
+                else
+                    grades.Add(double.PositiveInfinity);
+                
             }
             result.Add(p, ag.Agregrade(grades));
         }

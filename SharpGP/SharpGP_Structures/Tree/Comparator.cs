@@ -9,6 +9,7 @@ public class Condition : Node, IGrowable {
 	public override string ToString() => expression + " " + Comparator + " " + expression2;
 	public bool Evaluate(ProgramRunContext prc)
 	{
+		prc.IncrementExecutionTime();
 		switch (Comparator.op)
 		{
 			case "==": return Math.Abs(expression.Evaluate(prc) - expression2.Evaluate(prc)) < TOLERANCE;

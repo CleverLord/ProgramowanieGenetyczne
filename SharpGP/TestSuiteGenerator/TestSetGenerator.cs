@@ -46,7 +46,7 @@ public static class TestSetGenerator
         TestSet ts = new TestSet();
         ts.stages.Add(new TestStage()
         {
-            grader = new Grader("target_1_1_A"), threshold = threshold,
+            grader = new Grader("target_1_1_A"), threshold = 0.1,
             ag =  new Agregrader("sum")
         });
         ts.testCases.Add(new TestCase() {targetOutput = new List<double>() {1}});
@@ -58,7 +58,7 @@ public static class TestSetGenerator
 
     public static void GenerateFor_1_1_B()
     { 
-        double threshold = 0;
+        double threshold = 789*0.05;
         TestSet ts = new TestSet();
         ts.stages.Add(new TestStage()
         {
@@ -75,7 +75,7 @@ public static class TestSetGenerator
     }
     public static void GenerateFor_1_1_C()
     {
-        double threshold = 0;
+        double threshold = 31415*0.05;
         TestSet ts = new TestSet();
         ts.stages.Add(new TestStage()
         {
@@ -110,7 +110,7 @@ public static class TestSetGenerator
     }
     public static void GenerateFor_1_1_E()
     {
-        double threshold = 0;
+        double threshold = 789*0.05;
         TestSet ts = new TestSet();
         ts.stages.Add(new TestStage()
         {
@@ -162,7 +162,7 @@ public static class TestSetGenerator
             grader = new Grader("target_1_2_A__1"), threshold = threshold,
             ag =  new Agregrader("sum")
         });
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 20; i++)
         {
             double a = getRandomDouble(0, 9);
             double b = getRandomDouble(0, 9);
@@ -582,7 +582,10 @@ public static class TestSetGenerator
     static Random rnd = new Random();
     public static double getRandomDouble(double min, double max)
     {
-        return rnd.NextDouble() % (max - min) + min;
+        double x = rnd.NextDouble();
+        x *= (max - min);
+        x += min;
+        return x;
     }
     #endregion
 
