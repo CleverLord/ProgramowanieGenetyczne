@@ -14,8 +14,8 @@ public partial class Grader
     public static double target_1_1_B(TestCase tc, ProgramRunContext prc)
     {
         if (prc.GetOutput().Count == 0) { return Double.MaxValue; }
-        var absDiff = prc.GetOutput().Select(x => Math.Abs(x - 789)).ToList();
-        return absDiff.Min();
+        var absDiff = prc.GetOutput().Select(x => Math.Abs(x - 766)).ToList();
+        return absDiff.Min() + (prc.GetOutput().Count-1);
     }
     public static double target_1_1_C(TestCase tc, ProgramRunContext prc)
     {

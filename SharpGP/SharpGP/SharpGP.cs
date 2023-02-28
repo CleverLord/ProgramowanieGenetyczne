@@ -132,8 +132,6 @@ public static partial class SharpGP
                 gen.setDepths(population.Select(x => x.GetDepth()).OrderBy(x => x).ToList());
                 eh.generations.Add(gen);
                 currentMaxExecutionTime = Math.Clamp((int)(currentMaxExecutionTime * 1.02), 0, 1_000_000);
-                File.WriteAllText("C:/Users/krzys/Documents/GitHub/ProgramowanieGenetyczne/SharpGP/SharpGP/" + ts.name + ".json",
-                    Newtonsoft.Json.JsonConvert.SerializeObject(eh, Newtonsoft.Json.Formatting.Indented));
             }
             //go to next stage
             gen.bestProgram = programsToMarks.MinBy(x => x.Value).Key.ToString();

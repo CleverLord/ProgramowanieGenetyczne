@@ -58,19 +58,14 @@ public static class TestSetGenerator
 
     public static void GenerateFor_1_1_B()
     { 
-        double threshold = 789*0.05;
+        double threshold = 766*0.05;
         TestSet ts = new TestSet();
         ts.stages.Add(new TestStage()
         {
             grader = new Grader("target_1_1_B"), threshold = threshold ,
             ag =  new Agregrader("sum")
         });
-        ts.testCases.Add(new TestCase() { targetOutput = new List<double>() { 789 } });
-        ts.testCases.Add(new TestCase() { input = new List<double>(), targetOutput = new List<double>() { 789 } });
-        ts.testCases.Add(new TestCase()
-            { input = new List<double>() { 1 }, targetOutput = new List<double>() { 789 } });
-        ts.testCases.Add(new TestCase()
-            { input = new List<double>() { 123 }, targetOutput = new List<double>() { 789 } });
+        ts.testCases.Add(new TestCase() { targetOutput = new List<double>() { 766 } });
         SaveTestSuite(ts, "TestSet_1_1_B");
     }
     public static void GenerateFor_1_1_C()
