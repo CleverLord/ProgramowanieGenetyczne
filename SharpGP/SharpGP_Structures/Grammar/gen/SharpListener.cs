@@ -161,23 +161,23 @@ public interface ISharpListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitConstant([NotNull] SharpParser.ConstantContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="SharpParser.operand"/>.
+	/// Enter a parse tree produced by <see cref="SharpParser.operator"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterOperand([NotNull] SharpParser.OperandContext context);
+	void EnterOperator([NotNull] SharpParser.OperatorContext context);
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="SharpParser.operand"/>.
+	/// Exit a parse tree produced by <see cref="SharpParser.operator"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitOperand([NotNull] SharpParser.OperandContext context);
+	void ExitOperator([NotNull] SharpParser.OperatorContext context);
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="SharpParser.compareOp"/>.
+	/// Enter a parse tree produced by <see cref="SharpParser.comparator"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void EnterCompareOp([NotNull] SharpParser.CompareOpContext context);
+	void EnterComparator([NotNull] SharpParser.ComparatorContext context);
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="SharpParser.compareOp"/>.
+	/// Exit a parse tree produced by <see cref="SharpParser.comparator"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	void ExitCompareOp([NotNull] SharpParser.CompareOpContext context);
+	void ExitComparator([NotNull] SharpParser.ComparatorContext context);
 }

@@ -1,0 +1,42 @@
+﻿TODO:
+Dodanie operatorów porównania ( || && )
+
+Dodanie balansu generowania drzew -> więcej nowych forów i ifów, mniej zagnieżdzonych expression
+
+Dodanie przełączania na nową funkcję oceniającą przy pewnym progu dokładności. Dorobić stage trenowania
+
+Dodanie zliczania czasu programu i przerywania jeśli przekroczy pewien limit
+
+Dodanie drzew o w miarę równych gałęziach
+
+Niespójność między systemami w kwestji variabli - to raczej zostaje
+
+
+Stages:
+{
+gradertarget: "contains close value" 
+graderMetric: "msv"
+agregrader: "sum"
+upTo: 0.95
+}
+{
+gradertarget: "contains value"
+graderMetric: bool
+agregrader: "sum"
+upTo: 0.95
+}
+{
+grader: "contains value at first place"
+agregrader: "max"
+upTo: 0.95
+}
+{
+grader: "just target value"
+agregrader: "sum" //<-proporcjonalny do accuracy
+upTo: 0.95
+}
+{
+grader: "fast target value"
+agregrader: "sum" //<-proporcjonalny do accuracy
+upTo: 0.95
+}

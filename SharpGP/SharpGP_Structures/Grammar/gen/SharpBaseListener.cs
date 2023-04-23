@@ -192,29 +192,29 @@ public partial class SharpBaseListener : ISharpListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitConstant([NotNull] SharpParser.ConstantContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="SharpParser.operand"/>.
+	/// Enter a parse tree produced by <see cref="SharpParser.operator"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterOperand([NotNull] SharpParser.OperandContext context) { }
+	public virtual void EnterOperator([NotNull] SharpParser.OperatorContext context) { }
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="SharpParser.operand"/>.
+	/// Exit a parse tree produced by <see cref="SharpParser.operator"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitOperand([NotNull] SharpParser.OperandContext context) { }
+	public virtual void ExitOperator([NotNull] SharpParser.OperatorContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="SharpParser.compareOp"/>.
+	/// Enter a parse tree produced by <see cref="SharpParser.comparator"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterCompareOp([NotNull] SharpParser.CompareOpContext context) { }
+	public virtual void EnterComparator([NotNull] SharpParser.ComparatorContext context) { }
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="SharpParser.compareOp"/>.
+	/// Exit a parse tree produced by <see cref="SharpParser.comparator"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitCompareOp([NotNull] SharpParser.CompareOpContext context) { }
+	public virtual void ExitComparator([NotNull] SharpParser.ComparatorContext context) { }
 
 	/// <inheritdoc/>
 	/// <remarks>The default implementation does nothing.</remarks>

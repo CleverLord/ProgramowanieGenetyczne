@@ -3,13 +3,14 @@
 public class Condition : Node, IGrowable {
 	private const double TOLERANCE = 0.00001;
 	protected Expression expression { get { return (Expression) children[0]; } set { children[0] = value; } }
-	CompareOp compareOp => (CompareOp) children[1];
+	Comparator Comparator => (Comparator) children[1];
 	protected Expression expression2 { get { return (Expression) children[2]; } set { children[2] = value; } }
 
-	public override string ToString() => expression + " " + compareOp + " " + expression2;
+	public override string ToString() => expression + " " + Comparator + " " + expression2;
 	public bool Evaluate(ProgramRunContext prc)
 	{
-		switch (compareOp.op)
+		prc.IncrementExecutionTime();
+		switch (Comparator.op)
 		{
 			case "==": return Math.Abs(expression.Evaluate(prc) - expression2.Evaluate(prc)) < TOLERANCE;
 			case "!=": return Math.Abs(expression.Evaluate(prc) - expression2.Evaluate(prc)) > TOLERANCE;
@@ -20,8 +21,8 @@ public class Condition : Node, IGrowable {
 		}
 		return false; // should never happen
 	}
-	public static Condition NewCondition(PRogram ctx) => new Condition(Expression.NewExpression(ctx), CompareOp.NewCompareOp(ctx), Expression.NewExpression(ctx));
-	public Condition(Expression expression, CompareOp compareOp, Expression expression2) => children = new List<Node>() {expression, compareOp, expression2};
+	public static Condition NewCondition(PRogram ctx) => new Condition(Expression.NewExpression(ctx), Comparator.NewCompareOp(ctx), Expression.NewExpression(ctx));
+	public Condition(Expression expression, Comparator comparator, Expression expression2) => children = new List<Node>() {expression, comparator, expression2};
 	//this is unsafe, but makes AntlrToProgram look nicer
 	public Condition(Node expression, Node compareOp, Node expression2) => children = new List<Node>() {expression, compareOp, expression2};
 	public void Grow(PRogram ctx)
@@ -33,7 +34,7 @@ public class Condition : Node, IGrowable {
 	}
 }
 
-public class CompareOp : Node, IMutable {
+public class Comparator : Node, IMutable {
 	public string op;
 	public static List<String> comparatorStrings = new List<String>()
 	{
@@ -47,13 +48,13 @@ public class CompareOp : Node, IMutable {
 	public override string ToString() => op;
 
 	//public CompareOp() => op = comparatorStrings[Program.rand.Next(0, comparatorStrings.Count)];
-	public CompareOp(string op)
+	public Comparator(string op)
 	{
 		if (comparatorStrings.Contains(op))
 			this.op = op;
 		else
 			throw new Exception("Invalid comparator string");
 	}
-	public static CompareOp NewCompareOp(PRogram ctx) => new CompareOp(comparatorStrings[ctx.rand.Next(0, comparatorStrings.Count)]);
+	public static Comparator NewCompareOp(PRogram ctx) => new Comparator(comparatorStrings[ctx.rand.Next(0, comparatorStrings.Count)]);
 	public void Mutate(PRogram ctx) => op = comparatorStrings[ctx.rand.Next(0, comparatorStrings.Count)];
 }
