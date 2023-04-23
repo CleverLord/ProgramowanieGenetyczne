@@ -10,7 +10,7 @@ public class ProgramRunContext
     public long ElapsedTicks = -1;
     public Random rand = new Random();
     public int actions = 0;
-    public int  executedActions = 0;
+    public int executedActions = 0;
     public int maxExecutedActions = -1;
     public bool hasTimeouted() => executedActions == maxExecutedActions;
 
@@ -22,8 +22,7 @@ public class ProgramRunContext
             throw new Exception("OutOfTimeException");
         }
     }
-        
-    
+
     enum Strategy
     {
         InputOrZero,

@@ -14,7 +14,7 @@ public class PRogram : Node, IGrowable, IMutable
     public int VariableCount => Variables.Count;
     private List<Node> Nodes => GetNestedNodes();
 
-    //waning, following function gives access to all nodes, and makes it possible to destroy the tree structure
+    //warning, following function gives access to all nodes, and makes it possible to destroy the tree structure
     public List<Node> GetNodes() => Nodes;
     public List<IGrowable> Growables => Nodes.Where(x => x is IGrowable).Cast<IGrowable>().ToList();
     private List<IMutable> Mutables => Nodes.Where(x => x is IMutable).Cast<IMutable>().ToList();

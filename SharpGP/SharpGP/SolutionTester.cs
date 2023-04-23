@@ -7,7 +7,6 @@ using SharpGP.Utils;
 
 namespace SharpGP;
 
-
 public static class SolutionTester
 {
     public static void Main()

@@ -1,9 +1,38 @@
 # Programowanie Genetyczne
 Repozytorium na potrzeby Programowania Genetycznego Informatyki i Systemów Inteligentnych, 5 semestr
 
-## TinyGP
+## Sharp GP
 ### Content
-Repozytorium składa się z 4 pipeline'ów. 
+- SharpGP/SharpGP_Structures - zawiera wszystkie struktury danych używane w projekcie
+  - /Tree - zawiera struktury obiektów ewolucji, czyli programów
+  - /Grammar - zawiera pliki Antlerowe oraz naszą gramatykę
+  - /Generator - zawiera naszą implementację Antlerowego Visitora, który generuje Abstract Syntax Tree, czyli konwertuje ze stringa do PRogramu
+  - /Evolution - zawiera struktury do zapisywania przebiegu ewolucji
+  - ProgramRunContext - Struktura która jest RAM'em dla naszego programu. Zawiera dane we/wyjścia oraz metryki.
+- SharpGP/SharpGP - zawiera skrypty związane z samym procesem ewolucji
+  - /Program.cs - trigger do głównego skryptu. Pobiera rzeczy z /TestSuites i wrzuca wyniki do /Results
+  - /TestSuites - zawiera pliki testowe do wytrenowania. Każdy plik to instancja klasy `TestSet`
+  - /Results - zawiera wyniki trenowania. Każdy plik to instancja klasy `EvolutionHistory`
+  - /Utils/TreeGenerator.cs - zawiera funkcje do generowania drzew na różne sposoby
+  - /SharpGP.cs - główny skrypt, zawierający core procesu trenowania
+  - /SharpGP_Crossover.cs - skrypt pomocniczy zawierający funkcję decydującą o elemencie crossującym. Funkcja implementuje Fair-size Crossover
+  - /SolutionTester.cs - pozwala na szybkie zajrzenie do wyników. Skrypt pobieraja wyniki z Result i uruchamia programy z poszczególnych etapów, tak żeby móc zobaczyć output najlepszego programu z każdej epoki.
+### Code smells
+- Plan był taki żeby nic nie edytowało drzewa z zewnątrz - żeby nie dało się zepsuć struktury. Nauczyłem każdy element mutacji i grow, ale w przypadku crossowania, nie chciałem żeby drzewo samo się crossowało. Dlatego na samym końcu musiałem wyprowadzić referencję do listy node'ów na zewnątrz `PRogram, l.18: public List<Node> GetNodes() => Nodes;` Można się zastanowić nad naprawą tej niekonsystencji
+- SharpGP/Program.cs pobiera EvolutionHistory, ale powinien go zapisywać częściej, bo nie zawsze trenowanie się uda.
+- SharpGP.cs funkcja PerformEvolution. To była ostatnia funkcja pisana w tym projekcie. Została zrobiona na szybko, są w środku rzeczy whardkodowane, a cała funkcja powinna być rozbita na podfunkcje dla przejrzystości. Przydałaby się też struktura ogólnego procesu ewolucji, żeby z funkcji wewnętrznych, po postawieniu np. breakpointa, było wiadomo np. która generacja jest liczona.
+- SharpGP_crossover.cs linijka 23. Kiedy brakuje albo node'ów mniejszych albo większych, powinien być wybrany o takim samym rozmiarze. Jednak zwracany jest random, ponieważ zwrócenie nulla rzucało exception i tak było łatwiej to załatać. 
+- EvolutionHistory zawiera sobie listy zamiast agregat. O ile przy 100 osobnikach w populacji może nie wygląda to na konieczne, tak na (docelowo) większych populacjach wystarczy zebrać średnią, medianę, kilka percentyli, może też odchylenie standardowe i inne.
+- AntlrToProgram.cs w linijce 19 jest Substring(2). Nie pamiętam dlaczego tak jest, ale był do tego powód. Najlepiej zostawić wszystkie konsekutywne cyfry.
+- Mamy większą kontrolę nad problemami, kiedy możemy zedytować funkcję oceniającą dokładnie jednego z nich. Jednak ostatecznie nie zakończyło się to dobrze. Bardzo dużo etapów współdzieliło funkcje oceniające.
+- Nie wszystkie funkcje są poprawnie skonfigurowane do przykładów! W trakcie kopiowania wkradły się błędy.
+- Funkcje `GetTypeToCross`, ... powinny przyjmować listę typów istniejących nodeów, i rozdystrybuować prawdopodobieństwo pomiędzy nie, a następnie zwrócić któryś z istniejących elementów
+
+
+## TinyGP
+Ten paragraf powstał jako rozwiązanie zadania na potrzeby samego przedmiotu i nie ma większego związku z esencją repozytorium.
+### Content
+Repozytorium składa się z 4 pipeline'ów.
 - TinyGP/Data/DataGenerator.py - Służy do wygenerowania plików .dat
 - TinyGP/src/tiny_gp.java - Wykonuje algorytm programowania genetycznego
 - TinyGP/Data/SolutionOptimizer.ipynb - Optymalizuje wynik działania tinyGP przy pomocy scipy
@@ -18,7 +47,7 @@ Struktura folderów
   - pliki z dopiskiem time zawierają czas upraszczania w sekundach
 - TinyGP/Results/Generated/\*/Logs\* zawiera wynik z konsoli, które zawierają m.in. informację o ilości generacji i czasie obliczeń
 - TinyGP/Data/*.xlsx - zawierają zagregowane wyniki ewolucji z danej konfiguracji
-Na końcu należy ręcznie, przy pomocy excela przekopiować zawartość plików csv do plików .xlsx. Wykresy zostaną zaktualizowane automatycznie
+  Na końcu należy ręcznie, przy pomocy excela przekopiować zawartość plików csv do plików .xlsx. Wykresy zostaną zaktualizowane automatycznie
 
 ### Podsumowanie zadania 1 i zadania dodatkowego
 Ze względu na automatyzację procesu ewolucji, TinyGP był uruchamiany w każdej z 3 konfiguracji (Basic, Basic+Sin+Cos, Basic+Exp) dla wszystkich zadanych problemów.
