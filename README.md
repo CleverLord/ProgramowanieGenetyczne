@@ -27,7 +27,7 @@ Repozytorium na potrzeby Programowania Genetycznego Informatyki i Systemów Inte
 - Mamy większą kontrolę nad problemami, kiedy możemy zedytować funkcję oceniającą dokładnie jednego z nich. Jednak ostatecznie nie zakończyło się to dobrze. Bardzo dużo etapów współdzieliło funkcje oceniające.
 - Nie wszystkie funkcje są poprawnie skonfigurowane do przykładów! W trakcie kopiowania wkradły się błędy.
 - Funkcje `GetTypeToCross`, ... powinny przyjmować listę typów istniejących nodeów, i rozdystrybuować prawdopodobieństwo pomiędzy nie, a następnie zwrócić któryś z istniejących elementów
-
+- I pewnie parę innych, ale nie miałem czasu już tego przeglądać. Rozpoczął się nowy rok akademicki i jak znalazłeś to repo to pewnie go potrzebujesz, także częstuj się :)
 
 ## TinyGP
 Ten paragraf powstał jako rozwiązanie zadania na potrzeby samego przedmiotu i nie ma większego związku z esencją repozytorium.
